@@ -107,16 +107,26 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: { params: { slug: string } }) {
   const service = services.find((s) => s.slug === params.slug);
-  
+
   if (!service) {
-    return {
-      title: 'Service Not Found',
-    };
+    return { title: 'Service Not Found' };
   }
 
   return {
-    title: `${service.title} - Keel`,
+    title: `${service.title} - AI Solutions | Keel`,
     description: service.description,
+    alternates: { canonical: `https://saykeel.com/services/${service.slug}` },
+    openGraph: {
+      title: `${service.title} - Keel`,
+      description: service.description,
+      url: `https://saykeel.com/services/${service.slug}`,
+      type: 'website' as const,
+    },
+    twitter: {
+      card: 'summary_large_image' as const,
+      title: `${service.title} - Keel`,
+      description: service.description,
+    },
   };
 }
 
@@ -126,6 +136,26 @@ export default function ServicePage({ params }: { params: { slug: string } }) {
   if (!service) {
     notFound();
   }
+
+  const serviceSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    name: service.title,
+    description: service.description,
+    provider: { '@type': 'Organization', name: 'Keel', url: 'https://saykeel.com' },
+    url: `https://saykeel.com/services/${service.slug}`,
+    audience: { '@type': 'BusinessAudience', audienceType: service.useCases.join(', ') },
+  };
+
+  const breadcrumbSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://saykeel.com' },
+      { '@type': 'ListItem', position: 2, name: 'Services', item: 'https://saykeel.com/services' },
+      { '@type': 'ListItem', position: 3, name: service.title, item: `https://saykeel.com/services/${service.slug}` },
+    ],
+  };
 
   const isVoiceAI = service.slug === 'voice-ai';
   const isAgenticAutomations = service.slug === 'agentic-automations';
@@ -464,8 +494,31 @@ export default function ServicePage({ params }: { params: { slug: string } }) {
     </>
   );
 
+  const schemaScripts = (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
+    </>
+  );
+
   if (isVoiceAI) {
-    return <VoiceAIServicePage service={service} />;
+    return (
+      <>
+        {schemaScripts}
+        <VoiceAIServicePage service={service} />
+      </>
+    );
   }
-  return pageContent;
+  return (
+    <>
+      {schemaScripts}
+      {pageContent}
+    </>
+  );
 }

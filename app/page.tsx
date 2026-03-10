@@ -3,12 +3,25 @@
 import { useEffect } from 'react';
 import Hero from '@/components/Hero';
 import ServicesSection from '@/components/ui/services';
-import { services } from '@/config/content';
+import { services, faqs } from '@/config/content';
 import HowItWorks from '@/components/HowItWorks';
 import FAQ from '@/components/FAQ';
 import CTA from '@/components/CTA';
 
 const NAV_OFFSET = 64; // navbar height
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqs.map((faq) => ({
+    '@type': 'Question',
+    name: faq.question,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: faq.answer,
+    },
+  })),
+};
 
 function scrollToServices() {
   const el = document.getElementById('services');
@@ -42,6 +55,10 @@ export default function Home() {
 
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
       <Hero />
       <div className="h-full min-h-[120px] bg-white" aria-hidden />
       <ServicesSection services={services} />

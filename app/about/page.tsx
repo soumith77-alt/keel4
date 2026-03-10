@@ -2,13 +2,44 @@ import Link from 'next/link';
 import { calendlyLink } from '@/config/content';
 
 export const metadata = {
-  title: 'About - Keel',
-  description: 'Learn about Keel, an Agentic AI Solutions Studio building premium AI solutions that drive measurable results.',
+  title: 'About Keel - Agentic AI Solutions Studio',
+  description: 'Keel is an Agentic AI Solutions Studio building Voice AI systems, business automations, UGC content, AI video, and high-converting websites. Real results in 2–4 weeks.',
+  alternates: { canonical: 'https://saykeel.com/about' },
+  openGraph: {
+    title: 'About Keel - Agentic AI Solutions Studio',
+    description: 'We build Voice AI, automations, UGC content, and websites for businesses that scale. Real measurable results.',
+    url: 'https://saykeel.com/about',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'About Keel - Agentic AI Solutions Studio',
+    description: 'Voice AI, automations, UGC content, and websites for businesses that scale.',
+  },
+};
+
+const aboutSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'AboutPage',
+  name: 'About Keel',
+  url: 'https://saykeel.com/about',
+  description: 'Keel is an Agentic AI Solutions Studio building Voice AI, automations, UGC content, AI video, and websites.',
+  mainEntity: {
+    '@type': 'Organization',
+    name: 'Keel',
+    url: 'https://saykeel.com',
+    email: 'hello@saykeel.com',
+    description: 'We build premium AI solutions that drive measurable business outcomes. Voice AI, automations, UGC ads, AI video, and websites.',
+  },
 };
 
 export default function AboutPage() {
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(aboutSchema) }}
+      />
     <div className="pt-32 pb-20 px-4 sm:px-6 lg:px-8">
       <div className="max-w-4xl mx-auto">
         {/* Header */}

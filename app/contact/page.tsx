@@ -2,12 +2,49 @@ import ContactForm from '@/components/ContactForm';
 import { calendlyLink } from '@/config/content';
 
 export const metadata = {
-  title: 'Contact - Keel',
-  description: 'Get in touch with Keel. Book a call or send us a message to discuss your AI solution needs.',
+  title: 'Contact Keel - Book a Free AI Discovery Call',
+  description: 'Get in touch with Keel. Book a free 30-minute discovery call to discuss how AI voice agents, automations, or UGC content can grow your business.',
+  alternates: { canonical: 'https://saykeel.com/contact' },
+  openGraph: {
+    title: 'Contact Keel - Book a Free AI Discovery Call',
+    description: 'Book a free 30-minute discovery call. AI voice agents, automations, UGC content, and websites.',
+    url: 'https://saykeel.com/contact',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Contact Keel - Book a Free AI Discovery Call',
+    description: 'Book a free 30-minute call with Keel to discuss AI solutions for your business.',
+  },
+};
+
+const contactSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'ContactPage',
+  name: 'Contact Keel',
+  url: 'https://saykeel.com/contact',
+  description: 'Book a free 30-minute discovery call or send a message to discuss your AI solution needs.',
+  mainEntity: {
+    '@type': 'Organization',
+    name: 'Keel',
+    url: 'https://saykeel.com',
+    email: 'hello@saykeel.com',
+    contactPoint: {
+      '@type': 'ContactPoint',
+      contactType: 'sales',
+      email: 'hello@saykeel.com',
+      availableLanguage: 'English',
+    },
+  },
 };
 
 export default function ContactPage() {
   return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(contactSchema) }}
+      />
     <div className="pt-32 pb-20 px-4 sm:px-6 lg:px-8">
       <div className="max-w-4xl mx-auto">
         {/* Header */}
@@ -73,5 +110,6 @@ export default function ContactPage() {
         </div>
       </div>
     </div>
+    </>
   );
 }

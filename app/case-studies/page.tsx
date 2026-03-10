@@ -2,13 +2,70 @@ import Link from "next/link";
 import { caseStudies } from "@/config/content";
 
 export const metadata = {
-  title: "Case Studies - Keel",
+  title: "Case Studies - Real AI Results | Keel",
   description:
-    "Real results from real clients. See how Keel has helped businesses with Voice AI, automations, UGC, and more.",
+    "Real results from real clients. Keel's Voice AI reduced no-shows by 18%, automations cut onboarding from 2 hours to 15 minutes, and UGC campaigns achieved 3x ROAS.",
+  alternates: { canonical: 'https://saykeel.com/case-studies' },
+  openGraph: {
+    title: 'Case Studies - Real AI Results | Keel',
+    description: 'Voice AI, automations, and UGC results: 40% more bookings, 80% less manual work, 3x ROAS.',
+    url: 'https://saykeel.com/case-studies',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Case Studies - Real AI Results | Keel',
+    description: 'Real results: 40% more bookings, 80% less manual work, 3x ROAS.',
+  },
+};
+
+const caseStudiesSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'ItemList',
+  name: 'Keel AI Case Studies',
+  description: "Real results from businesses using Keel's AI voice agents, automations, and UGC campaigns.",
+  url: 'https://saykeel.com/case-studies',
+  itemListElement: [
+    {
+      '@type': 'ListItem',
+      position: 1,
+      item: {
+        '@type': 'Article',
+        name: 'Dental Clinic Increases Bookings by 40%',
+        description: "Premier Dental Care implemented a 24/7 AI receptionist. Result: 40% increase in appointments booked, 87% call-to-booking conversion rate, 18% reduction in no-shows.",
+        url: 'https://saykeel.com/case-studies#dental-clinic',
+      },
+    },
+    {
+      '@type': 'ListItem',
+      position: 2,
+      item: {
+        '@type': 'Article',
+        name: 'SaaS Platform Automates 80% of Onboarding',
+        description: "TechFlow Inc. used Keel's agentic AI to automate end-to-end customer onboarding. Result: 80% reduction in manual work, 2-hour process reduced to 15 minutes.",
+        url: 'https://saykeel.com/case-studies#saas-platform',
+      },
+    },
+    {
+      '@type': 'ListItem',
+      position: 3,
+      item: {
+        '@type': 'Article',
+        name: 'E-commerce Brand Achieves 3x ROAS with UGC Campaign',
+        description: "StyleCo launched an authentic UGC ad campaign with Keel. Result: 3x return on ad spend, 45% lower cost per acquisition, 2.5x higher conversion rates.",
+        url: 'https://saykeel.com/case-studies#ecommerce-brand',
+      },
+    },
+  ],
 };
 
 export default function CaseStudiesPage() {
   return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(caseStudiesSchema) }}
+      />
     <div className="pt-28 pb-20 px-4 sm:px-6 lg:px-8 bg-white">
       <div className="max-w-4xl mx-auto">
         <div className="text-center mb-16">
@@ -61,5 +118,6 @@ export default function CaseStudiesPage() {
         </div>
       </div>
     </div>
+    </>
   );
 }
