@@ -1,0 +1,232 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ==========================================================================
+   Design tokens — dark premium studio
+   Brand navy #253c80 is LOCKED. It measures 1.9:1 against the dark canvas,
+   so it is a FILL only (buttons, CTA band, active states) — never text.
+   On-dark text and accents use lighter tints of the same hue (brand-300+).
+   ========================================================================== */
+
+:root {
+  /* Surfaces */
+  --surface-base: #07080c;
+  --surface-raised: #0e1018;
+  --surface-overlay: #141826;
+
+  /* Borders */
+  --border-subtle: 255 255 255 / 0.08;
+  --border-strong: 255 255 255 / 0.14;
+
+  /* Brand ramp — hue locked ~226deg */
+  --brand-900: #0e1836;
+  --brand-800: #16244f;
+  --brand-700: #1e3170;
+  --brand-600: #253c80; /* LOCKED — fills only */
+  --brand-500: #3d5aa0;
+  --brand-400: #5b77c9;
+  --brand-300: #8ba3e0; /* accent text on dark — 8.6:1 */
+  --brand-200: #b9c8f0;
+
+  /* Text on dark */
+  --text-primary: #f5f7fa; /* 19:1 */
+  --text-secondary: #a3abbd; /* 8:1  */
+  --text-tertiary: #8b93a6; /* 6.1:1 */
+
+  /* Motion */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --dur-fast: 150ms;
+  --dur-base: 240ms;
+  --dur-slow: 400ms;
+
+  /* shadcn-compatible aliases (consumed by components/ui/button.tsx) */
+  --background: 230 30% 4%;
+  --foreground: 214 25% 97%;
+  --primary: 224 55% 33%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 230 22% 10%;
+  --secondary-foreground: 214 25% 97%;
+  --muted: 230 22% 10%;
+  --muted-foreground: 222 11% 69%;
+  --destructive: 0 72% 51%;
+  --destructive-foreground: 0 0% 100%;
+  --border: 0 0% 100%;
+  --input: 0 0% 100%;
+  --ring: 221 60% 71%;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    /* Framer Motion measures scroll offsets against the scroll container and
+       warns when it is position:static. For window-scrolled targets that
+       container is <html>. Positioning it is layout-neutral and silences a
+       warning that would otherwise ship. */
+    position: relative;
+  }
+
+  body {
+    @apply antialiased bg-surface text-fg-muted;
+  }
+
+  /* Never remove focus affordance — restyle it. */
+  :focus-visible {
+    outline: 2px solid var(--brand-300);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  ::selection {
+    background: var(--brand-600);
+    color: #fff;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .text-pretty {
+    text-wrap: pretty;
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Type scale — see tailwind.config.ts for the token definitions */
+  .type-display {
+    font-family: var(--font-display), var(--font-sans), sans-serif;
+    font-size: clamp(2.5rem, 6vw, 5.25rem);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    line-height: 0.98;
+  }
+
+  .type-h1 {
+    font-family: var(--font-display), var(--font-sans), sans-serif;
+    font-size: clamp(2.25rem, 5vw, 4rem);
+    font-weight: 600;
+    letter-spacing: -0.015em;
+    line-height: 1.05;
+  }
+
+  .type-h2 {
+    font-family: var(--font-display), var(--font-sans), sans-serif;
+    font-size: clamp(1.875rem, 3.5vw, 3rem);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+  }
+
+  .type-h3 {
+    font-family: var(--font-display), var(--font-sans), sans-serif;
+    font-size: 1.25rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    line-height: 1.3;
+  }
+
+  .type-body-lg {
+    font-size: 1.125rem;
+    font-weight: 400;
+    line-height: 1.6;
+  }
+
+  .type-body {
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.65;
+  }
+
+  .type-label {
+    font-family: var(--font-mono), ui-monospace, monospace;
+    font-size: 0.75rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+  }
+
+  /* Readable measure for long-form copy */
+  .measure {
+    max-width: 68ch;
+  }
+
+  .measure-tight {
+    max-width: 52ch;
+  }
+}
+
+/* ==========================================================================
+   Entrance reveals
+   Content is VISIBLE BY DEFAULT. The hidden state is applied only when the
+   `js` class is present (set synchronously in <head> before first paint), so
+   if JavaScript fails, is blocked, or IntersectionObserver never fires, every
+   section still renders. Previously these used inline opacity:0 from Framer,
+   which shipped an invisible page in the SSR HTML.
+   ========================================================================== */
+.reveal {
+  opacity: 1;
+}
+
+html.js .reveal {
+  opacity: 0;
+  transform: translateY(16px);
+  transition:
+    opacity 600ms var(--ease-out),
+    transform 600ms var(--ease-out);
+  will-change: opacity, transform;
+}
+
+html.js .reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html.js .reveal,
+  html.js .reveal.is-visible {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+}
+
+/* Gradient mesh / orb backgrounds */
+.gradient-orb {
+  border-radius: 50%;
+  filter: blur(90px);
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+/* Subtle grain overlay for depth */
+.grain-overlay::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  opacity: 0.035;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Respect the user's motion preference globally.
+   Individual components also branch on useReducedMotion(); this is the net. */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
