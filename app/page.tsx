@@ -8,14 +8,19 @@ import { services } from "@/config/content";
 import FeaturedWork from "@/components/FeaturedWork";
 import DeliveryTrust from "@/components/DeliveryTrust";
 import CTA from "@/components/CTA";
-import SceneShift from "@/components/ui/scene-shift";
 
 const NAV_OFFSET = 72; // navbar height
 
 /**
  * Five sections, alternating light and navy:
- *   Hero (light) → Services (light) → divider → Proof (DARK) → Work (light)
+ *   Hero (light) → Services (light) → Proof (DARK) → Work (light)
  *   → CTA (DARK)
+ *
+ * The light/dark boundaries are HARD CUTS. A SceneShift band used to sit at
+ * each one, wiping navy up over the canvas as you scrolled. In practice it
+ * rendered as an empty full-width navy strip — 128px and 160px of stretched
+ * dead colour, twice — which read as filler rather than as a transition. The
+ * abrupt inversion is the effect; it does not need a runway.
  *
  * Testimonials and FAQ were removed from this page — the testimonials are
  * placeholders, and the FAQ (with its FAQPage JSON-LD) moved to /contact
@@ -56,11 +61,9 @@ export default function Home() {
     <>
       <Hero />
       <ServicesSection services={services} />
-      <SceneShift />
       <ProofStrip />
       <DeliveryTrust />
       <FeaturedWork />
-      <SceneShift height="h-20 sm:h-32" />
       <CTA />
     </>
   );

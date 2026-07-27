@@ -18,11 +18,10 @@ export default function CTA() {
     <Section tone="brand" spacing="lg" className="overflow-hidden">
       {/* Depth so the flat navy doesn't read as a solid slab.
           Centred INSIDE the band, not at `50% 0%`. Anchored to the top edge
-          the highlight was at full 0.16 strength on its first pixel row, and
-          since SceneShift lays 128px of identical flat ink directly above,
-          that produced a hard step — measured (14,24,54) -> (57,64,88) across
-          a single row — which read as a rectangular patch pasted on the navy.
-          Peaking mid-band means the gradient never meets either boundary. */}
+          the highlight was at full 0.16 strength on its first pixel row, so it
+          landed a bright dome directly on the light/navy cut and blunted it.
+          Peaking mid-band means the gradient reaches zero before either
+          boundary, leaving the inversion to read as the hard edge it is. */}
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0 bg-[radial-gradient(70%_60%_at_50%_55%,rgba(255,255,255,0.07),transparent_70%)]"
