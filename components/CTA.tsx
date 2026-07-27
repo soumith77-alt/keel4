@@ -16,10 +16,16 @@ import { Button } from '@/components/ui/button';
 export default function CTA() {
   return (
     <Section tone="brand" spacing="lg" className="overflow-hidden">
-      {/* Depth so the flat navy doesn't read as a solid slab */}
+      {/* Depth so the flat navy doesn't read as a solid slab.
+          Centred INSIDE the band, not at `50% 0%`. Anchored to the top edge
+          the highlight was at full 0.16 strength on its first pixel row, and
+          since SceneShift lays 128px of identical flat ink directly above,
+          that produced a hard step — measured (14,24,54) -> (57,64,88) across
+          a single row — which read as a rectangular patch pasted on the navy.
+          Peaking mid-band means the gradient never meets either boundary. */}
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0 bg-[radial-gradient(60%_120%_at_50%_0%,rgba(255,255,255,0.16),transparent_70%)]"
+        className="pointer-events-none absolute inset-0 bg-[radial-gradient(70%_60%_at_50%_55%,rgba(255,255,255,0.07),transparent_70%)]"
       />
       <div
         aria-hidden

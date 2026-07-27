@@ -38,11 +38,21 @@ export default function SceneShift({
   const lineY = useTransform(scrollYProgress, [0.15, 0.85], ['100%', '0%']);
 
   if (reduceMotion) {
-    return <div className={`w-full bg-ink ${height}`} aria-hidden />;
+    return <div className={`-mb-px w-full bg-ink ${height}`} aria-hidden />;
   }
 
   return (
-    <div ref={ref} className={`relative w-full overflow-hidden ${height}`} aria-hidden>
+    // -mb-px: the wipe plane is a clipped layer over a TRANSPARENT wrapper, so
+    // the off-white page background sits directly behind it. When the band's
+    // box lands on a fractional pixel the bottom edge rasterises as partial
+    // coverage and that light background bleeds through as a full-width
+    // hairline — measured (71,79,100) against (14,24,54) ink. Overlapping the
+    // next section by 1px puts its navy under the seam so nothing can show.
+    <div
+      ref={ref}
+      className={`relative -mb-px w-full overflow-hidden ${height}`}
+      aria-hidden
+    >
       <motion.div className="absolute inset-0 bg-ink" style={{ clipPath: clip }} />
       <motion.div
         className="absolute inset-x-0 h-px bg-accent-500"
