@@ -21,10 +21,10 @@ type CardProps = {
 } & React.HTMLAttributes<HTMLDivElement>;
 
 export const cardBaseClasses =
-  "relative overflow-hidden rounded-card border border-white/[0.08] bg-white/[0.03]";
+  "relative overflow-hidden rounded-card border border-line/10 bg-fg/[0.03]";
 
 export const cardInteractiveClasses =
-  "transition duration-base ease-out hover:-translate-y-1 hover:border-white/[0.16] hover:bg-white/[0.05] hover:shadow-glow-md";
+  "transition duration-base ease-out hover:-translate-y-1 hover:border-line/20 hover:bg-fg/[0.05] hover:shadow-glow-md";
 
 export function Card({
   children,
@@ -37,7 +37,7 @@ export function Card({
     <div
       className={cn(
         cardBaseClasses,
-        emphasis && "bg-white/[0.05] border-white/[0.12]",
+        emphasis && "bg-fg/[0.05] border-line/15",
         interactive && cardInteractiveClasses,
         className
       )}

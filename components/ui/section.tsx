@@ -13,12 +13,24 @@ const WIDTHS = {
   bleed: "max-w-none", // edge-to-edge; caller handles insets
 } as const;
 
+/**
+ * Tones carry a theme scope, not just a background. `theme-light` and
+ * `theme-dark` re-point the --canvas / --fg / --line variables for the whole
+ * subtree, so inverting a band costs one prop and every child follows.
+ *
+ * `dark` is the BIDATA mid-scroll inversion — deep navy, full bleed, abrupt.
+ * Do not soften the boundary with a gradient; the hard cut is the effect.
+ */
 const TONES = {
-  base: "bg-surface",
-  raised: "bg-surface-raised",
-  overlay: "bg-surface-overlay",
-  brand: "bg-brand-600",
+  light: "theme-light bg-surface text-fg",
+  raised: "theme-light bg-surface-raised text-fg",
+  dark: "theme-dark bg-surface text-fg",
+  brand: "theme-dark bg-ink text-fg",
   none: "",
+  /** @deprecated alias kept so pre-inversion call sites keep compiling */
+  base: "theme-light bg-surface text-fg",
+  /** @deprecated alias — was a dark elevated surface */
+  overlay: "theme-light bg-surface-raised text-fg",
 } as const;
 
 const SPACING = {

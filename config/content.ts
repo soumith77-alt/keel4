@@ -16,11 +16,7 @@ export const services = [
       'Custom call flows & routing',
       'Analytics dashboard'
     ],
-    outcomes: [
-      { metric: '40%', label: 'More appointments captured' },
-      { metric: '87%', label: 'Conversion rate' },
-      { metric: '18%', label: 'Fewer no shows' }
-    ],
+    outcomes: [],
     useCases: [
       'Medical & dental practices',
       'Service businesses',
@@ -48,11 +44,7 @@ export const services = [
       'Custom logic & rules',
       'Performance monitoring'
     ],
-    outcomes: [
-      { metric: '80%', label: 'Time saved on manual tasks' },
-      { metric: '99.9%', label: 'Automation reliability' },
-      { metric: '24/7', label: 'Continuous operation' }
-    ],
+    outcomes: [],
     useCases: [
       'Data processing pipelines',
       'Customer onboarding flows',
@@ -77,19 +69,15 @@ export const services = [
       'Performance tracking & ROAS reporting',
       'Product demos, tutorials & brand storytelling'
     ],
-    outcomes: [
-      { metric: '3x', label: 'Higher engagement rates' },
-      { metric: '45%', label: 'Lower cost per acquisition' },
-      { metric: '60%', label: 'Higher video completion rates' }
-    ],
+    outcomes: [],
     useCases: [
       'SaaS products & mobile apps',
       'Product launches & marketing campaigns',
       'Educational content & social media'
     ],
     demoVideoUrl: '/video/demo-video.mp4',
-    image: '/ugc-ads.webp',
-    overlayImage: '/ugc-ads.webp',
+    image: '/ai-video-creative.webp',
+    overlayImage: '/ai-video-creative.webp',
     outcomeStatement: 'Performance driven content at scale.',
   },
   {
@@ -104,11 +92,7 @@ export const services = [
       'Mobile first responsive design',
       'Fast load times & performance'
     ],
-    outcomes: [
-      { metric: '50%', label: 'Faster load times' },
-      { metric: '35%', label: 'Higher conversion rates' },
-      { metric: '90+', label: 'Lighthouse score' }
-    ],
+    outcomes: [],
     useCases: [
       'SaaS landing pages',
       'Ecommerce stores',
@@ -117,56 +101,34 @@ export const services = [
     image: '/websites.webp',
     overlayImage: '/websites.webp',
     outcomeStatement: 'High converting websites engineered for growth.',
+  },
+  {
+    id: 'saas-products',
+    title: 'SaaS Products',
+    slug: 'saas-products',
+    description: 'End to end SaaS product development, from product strategy and UX through engineering, integrations, launch, and iteration.',
+    shortDescription: 'Launch ready SaaS products designed, built, and shipped as one system.',
+    icon: 'code',
+    features: [
+      'Product strategy & technical architecture',
+      'UX, interface design & prototyping',
+      'Full stack product engineering',
+      'AI features & third party integrations',
+      'Authentication, billing & analytics',
+      'Launch support & continuous iteration'
+    ],
+    outcomes: [],
+    useCases: [
+      'New SaaS ventures',
+      'Internal operations products',
+      'AI native software'
+    ],
+    image: '/football-intelligence-os.png',
+    overlayImage: '/football-intelligence-os.png',
+    outcomeStatement: 'From product logic to launch ready software.',
   }
 ];
 
-export const caseStudies = [
-  {
-    id: 'dental-clinic',
-    title: 'Dental Clinic Increases Bookings by 40%',
-    client: 'Premier Dental Care',
-    industry: 'Healthcare',
-    service: 'Voice AI',
-    challenge: 'Missing 30% of after hours calls, leading to lost patients.',
-    solution: 'Implemented 24/7 AI receptionist with calendar integration.',
-    results: [
-      '40% increase in appointments booked',
-      '87% call to booking conversion rate',
-      '18% reduction in no shows'
-    ],
-    image: '/placeholder-case-study-1.jpg'
-  },
-  {
-    id: 'saas-platform',
-    title: 'SaaS Platform Automates 80% of Onboarding',
-    client: 'TechFlow Inc.',
-    industry: 'SaaS',
-    service: 'Agentic AI Automations',
-    challenge: 'Manual onboarding process taking 2+ hours per customer.',
-    solution: 'Built autonomous AI agent handling end to end onboarding.',
-    results: [
-      '80% reduction in manual work',
-      'two hour process reduced to 15 minutes',
-      '99.9% automation reliability'
-    ],
-    image: '/placeholder-case-study-2.jpg'
-  },
-  {
-    id: 'ecommerce-brand',
-    title: 'Ecommerce Brand 3x ROAS with UGC Campaign',
-    client: 'StyleCo',
-    industry: 'Ecommerce',
-    service: 'UGC Ads & AI Video',
-    challenge: 'Underperforming ad creative with high acquisition costs.',
-    solution: 'Launched authentic UGC ad campaign across platforms.',
-    results: [
-      '3x return on ad spend',
-      '45% lower cost per acquisition',
-      '2.5x higher conversion rates'
-    ],
-    image: '/placeholder-case-study-3.jpg'
-  }
-];
 
 export const testimonials = [
   {
@@ -213,14 +175,6 @@ export const faqs = [
     question: 'Do you provide ongoing support?',
     answer: 'Yes. We offer maintenance plans, performance monitoring, and optimization services to ensure your solutions continue delivering value.'
   }
-];
-
-export const socialProof = [
-  { name: 'TechFlow', logo: '/logo-placeholder-1.svg' },
-  { name: 'Premier Dental', logo: '/logo-placeholder-2.svg' },
-  { name: 'StyleCo', logo: '/logo-placeholder-3.svg' },
-  { name: 'HealthPlus', logo: '/logo-placeholder-4.svg' },
-  { name: 'CloudSync', logo: '/logo-placeholder-5.svg' }
 ];
 
 export const calendlyLink = process.env.NEXT_PUBLIC_CALENDLY_LINK || 'https://cal.com/manyam-soumith-reddy-eba1qt/ai-voice-agent-demo';
@@ -280,6 +234,14 @@ export const serviceFeatureCards: Record<
     { title: 'Ecommerce stores', desc: 'Online stores that are fast, secure, and built to grow with your catalog.', icon: 'cart' },
     { title: 'Portfolio sites', desc: 'Clean, professional portfolios that showcase your work and win clients.', icon: 'briefcase' },
   ],
+  'saas-products': [
+    { title: 'Product strategy & architecture', desc: 'Define the users, jobs, data model, and technical shape before engineering begins.', icon: 'branch' },
+    { title: 'UX & interface design', desc: 'Turn complex product logic into clear flows, prototypes, and a scalable interface system.', icon: 'window' },
+    { title: 'Full stack engineering', desc: 'Build the application, APIs, database, and deployment layer as one maintainable product.', icon: 'code' },
+    { title: 'AI features & integrations', desc: 'Add useful AI capabilities and connect the tools your product depends on.', icon: 'sparkles' },
+    { title: 'Authentication, billing & analytics', desc: 'The commercial product foundation: users, permissions, subscriptions, events, and reporting.', icon: 'chart' },
+    { title: 'Launch & iteration', desc: 'Ship the first version, observe real usage, and turn what users do into the next build cycle.', icon: 'rocket' },
+  ],
 };
 
 /**
@@ -296,7 +258,22 @@ export type Project = {
   client?: string;
   service: string;
   year: string;
+  /**
+   * The one-line version, 12 words max. This is what cards render — the
+   * summaries below run to 85-122 words each, which is what made the site
+   * read as text heavy. `summary` is now detail, shown only on /work.
+   */
+  claim: string;
   summary: string;
+  /**
+   * Project visual. A real interface crop, render, diagram or branded still —
+   * this is what should carry the composition. Until one exists the card
+   * falls back to the Keel system object keyed to `service`, which is an
+   * honest diagram rather than a fabricated screenshot.
+   */
+  image?: string;
+  /** Optional looping clip; takes precedence over `image`. */
+  video?: string;
   results?: { metric: string; label: string }[];
   featured?: boolean;
   /** Set false once the entry describes real, shippable work. */
@@ -306,20 +283,26 @@ export type Project = {
 export const projects: Project[] = [
   {
     slug: 'football-intelligence-os',
-    title: 'Football Intelligence OS: the operations and intelligence layer for lower league clubs',
-    service: 'Conversion Websites',
+    title: 'Football Intelligence OS',
+    claim:
+      'Squads, training, matchday and finances in one operations layer.',
+    service: 'SaaS Products',
     year: '2026',
     summary:
       'A platform for football clubs and academies that runs the whole operation in one place: squads, calendar, training, matchday, attendance, availability, finances and messaging. Clubs without a performance department have no reliable picture of a player, so every event logged here builds one, turning attendance, wellness and match data into a living player profile with a confidence score attached. Access is enforced at the data layer rather than in the interface, so sensitive medical information stays visible only to the people entitled to see it.',
+    image: '/football-intelligence-os.png',
     featured: true,
   },
   {
     slug: 'ivr-audit-engine',
-    title: 'University IVR audit engine: mapping phone trees with a voice agent',
+    title: 'University IVR audit engine',
+    claim:
+      'A voice agent maps a whole phone tree, then scores caller friction.',
     service: 'Voice AI',
     year: '2026',
     summary:
       'A voice agent calls a university switchboard, presses every option until the whole menu tree is mapped, scores how much pain a real caller goes through, and turns that into a single page report with a booking link at the end. A phone tree cannot be scraped: there is no API and no sitemap, only dial, listen, press and hang up, so every branch is a separate live call and the shape of the tree is unknown until you are already inside it. A weighted friction model scores only the paths that were genuinely walked, and options that were announced but never dialled are excluded from every number.',
+    image: '/ivr-audit-engine.webp',
     results: [
       { metric: '39', label: 'Institutions audited' },
       { metric: '405', label: 'Live call minutes crawled' },
@@ -329,16 +312,21 @@ export const projects: Project[] = [
   },
   {
     slug: 'artizyn',
-    title: 'Artizyn: a marketplace for the building trades across PACA',
-    service: 'Conversion Websites',
+    title: 'Artizyn',
+    claim:
+      'A two-way trades marketplace across PACA, on subscriptions not commission.',
+    service: 'SaaS Products',
     year: '2026',
     summary:
       'A marketplace connecting building professionals with clients across the PACA region, working in both directions. Clients post projects for free and receive offers, while artisans also publish their own available services for clients to browse and contact directly. Most trade marketplaces run one way and take a cut of every job, which pushes artisans off the platform the moment a relationship forms, so this one earns from monthly subscriptions across three tiers and takes no commission at all. Matching, messaging, reviews and payment all sit inside the platform, across nineteen trades.',
+    image: '/artizyn-marketplace.webp',
     featured: true,
   },
   {
     slug: 'oxacan',
-    title: 'Oxacan: one platform for Swiss construction and electrical firms',
+    title: 'Oxacan',
+    claim:
+      'Quote to cash for Swiss contractors, without leaving the tool.',
     service: 'Conversion Websites',
     year: '2026',
     summary:
@@ -347,7 +335,9 @@ export const projects: Project[] = [
   },
   {
     slug: 'amitsells',
-    title: 'Amitsells: a business website built to convert',
+    title: 'Amitsells',
+    claim:
+      'A phone-first marketing site built to turn visitors into enquiries.',
     service: 'Conversion Websites',
     year: '2026',
     summary:
@@ -355,7 +345,9 @@ export const projects: Project[] = [
   },
   {
     slug: 'virtual-try-on',
-    title: 'Virtual try on for clothing and eyewear',
+    title: 'Virtual try on',
+    claim:
+      'Shoppers see garments and eyewear on themselves from one photo.',
     service: 'Agentic AI Automations',
     year: '2026',
     summary:
@@ -363,7 +355,9 @@ export const projects: Project[] = [
   },
   {
     slug: 'rfq-automation',
-    title: 'RFQ automation, from inbound request to priced quote',
+    title: 'RFQ automation',
+    claim:
+      'Inbound request in, priced structured quote out, no retyping.',
     service: 'Agentic AI Automations',
     year: '2026',
     summary:
@@ -371,7 +365,9 @@ export const projects: Project[] = [
   },
   {
     slug: 'salon-voice-agent',
-    title: 'Voice agent for hair salons',
+    title: 'Salon voice agent',
+    claim:
+      'Answers every call around the clock and books while they wait.',
     service: 'Voice AI',
     year: '2026',
     summary:
@@ -379,7 +375,9 @@ export const projects: Project[] = [
   },
   {
     slug: 'real-estate-lead-followup',
-    title: 'Real estate lead follow up automation',
+    title: 'Real estate lead follow up',
+    claim:
+      'Every property enquiry qualified, nurtured and routed automatically.',
     service: 'Agentic AI Automations',
     year: '2026',
     summary:

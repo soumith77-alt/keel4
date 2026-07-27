@@ -68,7 +68,7 @@ export default function ContactForm() {
             required
             value={formData.name}
             onChange={handleChange}
-            className="w-full px-4 py-3 border-2 border-white/[0.1] rounded-control focus:border-brand-500 focus:outline-none transition-colors"
+            className="w-full px-4 py-3 border-2 border-line/15 rounded-control focus:border-accent-600 focus:outline-none transition-colors"
             placeholder="Your name"
           />
         </div>
@@ -85,7 +85,7 @@ export default function ContactForm() {
             required
             value={formData.email}
             onChange={handleChange}
-            className="w-full px-4 py-3 border-2 border-white/[0.1] rounded-control focus:border-brand-500 focus:outline-none transition-colors"
+            className="w-full px-4 py-3 border-2 border-line/15 rounded-control focus:border-accent-600 focus:outline-none transition-colors"
             placeholder="you@company.com"
           />
         </div>
@@ -101,7 +101,7 @@ export default function ContactForm() {
             name="company"
             value={formData.company}
             onChange={handleChange}
-            className="w-full px-4 py-3 border-2 border-white/[0.1] rounded-control focus:border-brand-500 focus:outline-none transition-colors"
+            className="w-full px-4 py-3 border-2 border-line/15 rounded-control focus:border-accent-600 focus:outline-none transition-colors"
             placeholder="Your company name"
           />
         </div>
@@ -117,7 +117,7 @@ export default function ContactForm() {
             required
             value={formData.service}
             onChange={handleChange}
-            className="w-full px-4 py-3 border-2 border-white/[0.1] rounded-control focus:border-brand-500 focus:outline-none transition-colors bg-surface"
+            className="w-full px-4 py-3 border-2 border-line/15 rounded-control focus:border-accent-600 focus:outline-none transition-colors bg-surface"
           >
             <option value="">Select a service</option>
             {serviceOptions.map((option) => (
@@ -139,7 +139,7 @@ export default function ContactForm() {
             rows={5}
             value={formData.details}
             onChange={handleChange}
-            className="w-full px-4 py-3 border-2 border-white/[0.1] rounded-control focus:border-brand-500 focus:outline-none transition-colors resize-none"
+            className="w-full px-4 py-3 border-2 border-line/15 rounded-control focus:border-accent-600 focus:outline-none transition-colors resize-none"
             placeholder="Tell us about your project, goals, or questions..."
           />
         </div>
@@ -148,7 +148,7 @@ export default function ContactForm() {
         <button
           type="submit"
           disabled={isSubmitting}
-          className="w-full bg-brand-600 text-white px-8 py-4 rounded-card font-semibold text-lg hover:bg-brand-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          className="w-full bg-ink text-white px-8 py-4 rounded-card font-semibold text-lg hover:bg-brand-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {isSubmitting ? 'Sending...' : 'Send Message'}
         </button>

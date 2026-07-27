@@ -49,8 +49,12 @@ export default function Navbar() {
     <header
       className={cn(
         'fixed inset-x-0 top-0 z-nav transition-colors duration-base ease-out',
+        // Opaque, not bg-surface/80. The bar is navy-on-off-white, and the
+        // page crosses several full-bleed dark bands — at 80% the navy band
+        // showed through and the navy wordmark went invisible against it.
+        // That is worst on mobile, where the bar is pinned the whole scroll.
         scrolled || isOpen
-          ? 'border-b border-white/[0.08] bg-surface/80 backdrop-blur-xl'
+          ? 'border-b border-line/10 bg-surface'
           : 'border-b border-transparent bg-transparent'
       )}
     >
@@ -83,7 +87,7 @@ export default function Navbar() {
           <button
             type="button"
             onClick={() => setIsOpen((open) => !open)}
-            className="inline-flex h-11 w-11 items-center justify-center rounded-control text-fg-muted transition-colors duration-base hover:bg-white/[0.06] hover:text-fg md:hidden"
+            className="inline-flex h-11 w-11 items-center justify-center rounded-control text-fg-muted transition-colors duration-base hover:bg-fg/[0.05] hover:text-fg md:hidden"
             aria-label={isOpen ? 'Close menu' : 'Open menu'}
             aria-expanded={isOpen}
             aria-controls="mobile-menu"
@@ -108,13 +112,13 @@ export default function Navbar() {
               transition={{ duration: 0.24, ease: [0.22, 1, 0.36, 1] }}
               className="overflow-hidden md:hidden"
             >
-              <div className="flex flex-col gap-1 border-t border-white/[0.08] py-4">
+              <div className="flex flex-col gap-1 border-t border-line/10 py-4">
                 {NAV_LINKS.map((link) => (
                   <Link
                     key={link.href}
                     href={link.href}
                     onClick={() => setIsOpen(false)}
-                    className="flex min-h-[44px] items-center rounded-control px-2 text-base font-medium text-fg-muted transition-colors duration-base hover:bg-white/[0.06] hover:text-fg"
+                    className="flex min-h-[44px] items-center rounded-control px-2 text-base font-medium text-fg-muted transition-colors duration-base hover:bg-fg/[0.05] hover:text-fg"
                   >
                     {link.label}
                   </Link>

@@ -38,9 +38,11 @@ export default function CTA() {
           </p>
         </Reveal>
 
-        <Reveal delay={0.08} className="shrink-0">
-          <div className="flex flex-col gap-3 sm:flex-row">
-            <Button asChild size="lg" variant="inverse">
+        <Reveal delay={0.08} className="w-full shrink-0 lg:w-auto">
+          {/* Full-bleed below `sm`. Stacked auto-width buttons left-aligned in
+              a full-width band read as a layout bug on a phone. */}
+          <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row">
+            <Button asChild size="lg" variant="inverse" className="w-full sm:w-auto">
               <a href={calendlyLink} target="_blank" rel="noopener noreferrer">
                 Design my AI system
                 <ArrowRight className="h-4 w-4" aria-hidden />
@@ -50,7 +52,7 @@ export default function CTA() {
               asChild
               size="lg"
               variant="secondary"
-              className="border-white/25 bg-white/10 text-white hover:border-white/40 hover:bg-white/20"
+              className="w-full border-white/25 bg-white/10 text-white hover:border-white/40 hover:bg-white/20 sm:w-auto"
             >
               <Link href="/contact">Get in touch</Link>
             </Button>

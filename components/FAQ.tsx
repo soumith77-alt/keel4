@@ -31,7 +31,7 @@ export default function FAQ() {
         </div>
 
         <div className="lg:col-span-8">
-          <dl className="divide-y divide-white/[0.08] border-y border-white/[0.08]">
+          <dl className="divide-y divide-white/[0.08] border-y border-line/10">
             {faqs.map((faq, index) => {
               const isOpen = openIndex === index;
               const panelId = `faq-panel-${index}`;
@@ -55,7 +55,7 @@ export default function FAQ() {
                           reduceMotion ? undefined : { rotate: isOpen ? 45 : 0 }
                         }
                         transition={{ duration: 0.24, ease: [0.22, 1, 0.36, 1] }}
-                        className="mt-0.5 shrink-0 text-brand-300"
+                        className="mt-0.5 shrink-0 text-accent-700"
                       >
                         <Plus className="h-5 w-5" strokeWidth={1.5} />
                       </motion.span>

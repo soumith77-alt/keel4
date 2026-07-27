@@ -127,11 +127,14 @@ export const VoicePoweredOrb: FC<VoicePoweredOrbProps> = ({
       return vec4(colorIn.rgb / (a + 1e-5), a);
     }
 
-    // Brand palette derived from the locked navy #253c80:
-    //   brand-300 #8BA3E0, brand-400 #5B77C9, brand-700 #1E3170
-    vec3 brandColor1 = vec3(0.545098, 0.639216, 0.878431);
-    vec3 brandColor2 = vec3(0.356863, 0.466667, 0.788235);
-    vec3 brandColor3 = vec3(0.117647, 0.192157, 0.439216);
+    // Palette: the site runs on ONE navy plus ONE green. The orb used to
+    // introduce three further blues (brand-300/400/700), which was part of
+    // what made the blue look like it kept changing. Now it ramps from the
+    // accent green through to the structural ink.
+    //   accent-400 #3FE0A0, accent-500 #00C776, ink #0E1836
+    vec3 brandColor1 = vec3(0.247059, 0.878431, 0.627451);
+    vec3 brandColor2 = vec3(0.000000, 0.780392, 0.462745);
+    vec3 brandColor3 = vec3(0.054902, 0.094118, 0.211765);
 
     vec3 baseColor1 = useWhite > 0.5 ? vec3(1.0, 1.0, 1.0) : (useBrand > 0.5 ? brandColor1 : vec3(0.611765, 0.262745, 0.996078));
     vec3 baseColor2 = useWhite > 0.5 ? vec3(0.98, 0.99, 1.0) : (useBrand > 0.5 ? brandColor2 : vec3(0.298039, 0.760784, 0.913725));

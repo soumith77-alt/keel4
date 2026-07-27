@@ -10,7 +10,7 @@ export default function NotFound() {
       <GlowBackdrop variant="hero" className="z-base" />
 
       <div className="relative z-raised mx-auto w-full max-w-content">
-        <span className="type-label text-brand-300">Error 404</span>
+        <span className="type-label text-accent-700">Error 404</span>
         <h1 className="type-display mt-6 max-w-3xl text-fg text-balance">
           That page doesn&apos;t exist.
         </h1>

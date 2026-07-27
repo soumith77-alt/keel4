@@ -1,12 +1,12 @@
 import { ArrowRight, Clock, Mail, MessageCircle } from 'lucide-react';
 
 import ContactForm from '@/components/ContactForm';
-import { calendlyLink, whatsappLink } from '@/config/content';
+import FAQ from '@/components/FAQ';
+import { calendlyLink, whatsappLink, faqs } from '@/config/content';
 import { Section } from '@/components/ui/section';
-import { Reveal } from '@/components/ui/reveal';
+import PageHero from '@/components/ui/page-hero';
 import { Button } from '@/components/ui/button';
 import { GlowCard } from '@/components/ui/glow-card';
-import GlowBackdrop from '@/components/ui/glow-backdrop';
 
 export const metadata = {
   title: 'Contact Keel - Book a Free AI Discovery Call',
@@ -26,6 +26,24 @@ export const metadata = {
     description:
       'Book a free 30 minute call with Keel to discuss AI solutions for your business.',
   },
+};
+
+/**
+ * Moved here from the homepage along with the FAQ section itself. The schema
+ * must stay on the same page as the visible Q&A — Google treats FAQPage
+ * markup without matching on-page content as a violation.
+ */
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqs.map((faq) => ({
+    '@type': 'Question',
+    name: faq.question,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: faq.answer,
+    },
+  })),
 };
 
 const contactSchema = {
@@ -56,33 +74,17 @@ export default function ContactPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(contactSchema) }}
       />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
 
-      <section className="relative isolate overflow-hidden bg-surface px-5 pb-20 pt-36 sm:px-8 sm:pt-44">
-        <div
-          aria-hidden
-          className="absolute inset-0 z-base opacity-[0.4] [background-image:linear-gradient(to_right,rgba(91,119,201,0.16)_1px,transparent_1px),linear-gradient(to_bottom,rgba(91,119,201,0.16)_1px,transparent_1px)] [background-size:72px_72px] [mask-image:radial-gradient(ellipse_70%_60%_at_50%_20%,black,transparent)]"
-        />
-        <GlowBackdrop variant="hero" className="z-base" />
-
-        <div className="relative z-raised mx-auto w-full max-w-content">
-          <Reveal>
-            <span className="type-label inline-flex items-center gap-2.5 border border-white/[0.12] bg-white/[0.04] px-3.5 py-2 text-brand-200">
-              Contact
-            </span>
-          </Reveal>
-          <Reveal delay={0.05}>
-            <h1 className="type-display mt-7 max-w-3xl text-fg text-balance">
-              Let&apos;s scope your system.
-            </h1>
-          </Reveal>
-          <Reveal delay={0.1}>
-            <p className="type-body-lg measure mt-7 text-fg-muted text-pretty">
-              Book a call or send a message. We reply within one business day,
-              and we&apos;ll tell you if AI isn&apos;t the right answer.
-            </p>
-          </Reveal>
-        </div>
-      </section>
+      <PageHero
+        eyebrow="Contact"
+        title="Let’s scope your system."
+        lead="Book a call or send a message. We reply within one business day, and we’ll tell you if AI isn’t the right answer."
+        className="pb-20"
+      />
 
       <Section spacing="lg">
         <div className="grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-14">
@@ -125,11 +127,11 @@ export default function ContactPage() {
                 </div>
               </GlowCard>
 
-              <div className="rounded-panel border border-white/[0.1] bg-white/[0.02] p-7">
+              <div className="rounded-panel border border-line/15 bg-fg/[0.02] p-7">
                 <ul className="space-y-6">
                   <li className="flex gap-4">
                     <Mail
-                      className="mt-0.5 h-5 w-5 shrink-0 text-brand-300"
+                      className="mt-0.5 h-5 w-5 shrink-0 text-accent-700"
                       strokeWidth={1.5}
                       aria-hidden
                     />
@@ -137,7 +139,7 @@ export default function ContactPage() {
                       <span className="type-label block text-fg-subtle">Email</span>
                       <a
                         href="mailto:hello@saykeel.com"
-                        className="mt-1 block text-sm text-fg transition-colors duration-base hover:text-brand-200"
+                        className="mt-1 inline-flex min-h-[44px] items-center text-sm text-fg transition-colors duration-base hover:text-accent-600 sm:min-h-0"
                       >
                         hello@saykeel.com
                       </a>
@@ -145,7 +147,7 @@ export default function ContactPage() {
                   </li>
                   <li className="flex gap-4">
                     <MessageCircle
-                      className="mt-0.5 h-5 w-5 shrink-0 text-brand-300"
+                      className="mt-0.5 h-5 w-5 shrink-0 text-accent-700"
                       strokeWidth={1.5}
                       aria-hidden
                     />
@@ -157,7 +159,7 @@ export default function ContactPage() {
                         href={whatsappLink}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="mt-1 block text-sm text-fg transition-colors duration-base hover:text-brand-200"
+                        className="mt-1 inline-flex min-h-[44px] items-center text-sm text-fg transition-colors duration-base hover:text-accent-600 sm:min-h-0"
                       >
                         Message us directly
                       </a>
@@ -165,7 +167,7 @@ export default function ContactPage() {
                   </li>
                   <li className="flex gap-4">
                     <Clock
-                      className="mt-0.5 h-5 w-5 shrink-0 text-brand-300"
+                      className="mt-0.5 h-5 w-5 shrink-0 text-accent-700"
                       strokeWidth={1.5}
                       aria-hidden
                     />
@@ -184,6 +186,8 @@ export default function ContactPage() {
           </div>
         </div>
       </Section>
+
+      <FAQ />
     </>
   );
 }

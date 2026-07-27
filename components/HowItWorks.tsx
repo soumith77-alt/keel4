@@ -73,10 +73,10 @@ export default function HowItWorks() {
               lead="A deliberately short path. You should know whether this is working in weeks, not quarters."
             />
 
-            <div className="mt-7 rounded-panel border border-white/[0.1] bg-surface-raised/70 p-6">
+            <div className="mt-7 rounded-panel border border-line/15 bg-surface-raised/70 p-6">
               <div className="flex items-baseline justify-between">
                 <span className="type-label text-fg-subtle">Current stage</span>
-                <span className="font-mono text-xs tabular-nums text-brand-300">
+                <span className="font-mono text-xs tabular-nums text-accent-700">
                   {steps[active].number} / {steps[steps.length - 1].number}
                 </span>
               </div>
@@ -96,10 +96,10 @@ export default function HowItWorks() {
                 {steps.map((s, i) => (
                   <span
                     key={s.number}
-                    className="h-1 flex-1 overflow-hidden bg-white/[0.08]"
+                    className="h-1 flex-1 overflow-hidden bg-fg/[0.06]"
                   >
                     <motion.span
-                      className="block h-full bg-brand-400"
+                      className="block h-full bg-accent-500"
                       initial={false}
                       animate={{ scaleX: i <= active ? 1 : 0 }}
                       style={{ originX: 0 }}
@@ -127,11 +127,11 @@ export default function HowItWorks() {
                 animate={{ opacity: reduceMotion || index <= active ? 1 : 0.7 }}
                 transition={{ duration: 0.35 }}
                 className={cn(
-                  'flex gap-5 border-t border-white/[0.08] py-5 sm:gap-8 sm:py-12',
-                  index === active && !reduceMotion && 'border-brand-500/40'
+                  'flex gap-5 border-t border-line/10 py-5 sm:gap-8 sm:py-12',
+                  index === active && !reduceMotion && 'border-accent-500/40'
                 )}
               >
-                <span className="type-label pt-1.5 tabular-nums text-brand-300">
+                <span className="type-label pt-1.5 tabular-nums text-accent-700">
                   {step.number}
                 </span>
                 <div>

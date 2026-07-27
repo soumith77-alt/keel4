@@ -3,36 +3,113 @@
 @tailwind utilities;
 
 /* ==========================================================================
-   Design tokens — dark premium studio
-   Brand navy #253c80 is LOCKED. It measures 1.9:1 against the dark canvas,
-   so it is a FILL only (buttons, CTA band, active states) — never text.
-   On-dark text and accents use lighter tints of the same hue (brand-300+).
+   Design tokens — light editorial studio, navy ink, single green accent
+
+   The canvas is off-white. Navy is the INK and the inversion-band surface;
+   green is the one accent. Surfaces and foregrounds resolve through CSS
+   variables so a section inverts by swapping one class, not by restyling
+   every child. `.theme-light` / `.theme-dark` are emitted by <Section>.
+
+   TWO CONTRAST RULES, and they are mirrors of each other:
+     · Navy brand-600 is 1.9:1 on dark  → FILL only inside .theme-dark.
+     · Green accent-500 is ~2:1 on the off-white canvas → FILL only on
+       light. Green TEXT on light must be accent-700 (#00794a, 5.4:1).
+       On navy, accent-500 clears ~7:1 and is safe for text and hairlines.
    ========================================================================== */
 
-:root {
+/* Surface and foreground tokens are SPACE-SEPARATED RGB CHANNELS, not hex.
+   Tailwind composes them as rgb(var(--token) / <alpha-value>) so opacity
+   modifiers (bg-surface/50, border-line/20) keep working across themes. */
+
+:root,
+.theme-light {
+  color-scheme: light;
+
   /* Surfaces */
-  --surface-base: #07080c;
-  --surface-raised: #0e1018;
-  --surface-overlay: #141826;
+  --canvas: 242 242 240; /* #f2f2f0 — BIDATA off-white */
+  --canvas-raised: 255 255 255;
+  --canvas-overlay: 231 231 228;
 
-  /* Borders */
-  --border-subtle: 255 255 255 / 0.08;
-  --border-strong: 255 255 255 / 0.14;
+  /* Foreground — navy as ink, never pure black */
+  --fg: 14 24 54; /* #0e1836 — 15.8:1 on canvas */
+  --fg-muted: 74 82 104; /* 7.4:1 */
+  --fg-subtle: 107 114 133; /* 4.8:1 */
 
-  /* Brand ramp — hue locked ~226deg */
+  /* Hairline base; alpha applied at use site */
+  --line: 14 24 54;
+
+  /* shadcn aliases (consumed by components/ui/button.tsx) */
+  --background: 60 7% 95%;
+  --foreground: 226 59% 13%;
+  --secondary: 0 0% 100%;
+  --secondary-foreground: 226 59% 13%;
+  --muted: 60 5% 90%;
+  --muted-foreground: 226 16% 35%;
+  --border: 226 59% 13%;
+  --input: 226 59% 13%;
+  --ring: 158 100% 24%;
+}
+
+.theme-dark {
+  color-scheme: dark;
+
+  --canvas: 14 24 54; /* #0e1836 brand-900 — the inversion band */
+  --canvas-raised: 22 36 79;
+  --canvas-overlay: 30 49 112;
+
+  --fg: 245 247 250; /* 15.8:1 */
+  --fg-muted: 163 171 189;
+  --fg-subtle: 139 147 166;
+
+  --line: 255 255 255;
+
+  --background: 226 59% 13%;
+  --foreground: 214 25% 97%;
+  --secondary: 224 54% 20%;
+  --secondary-foreground: 214 25% 97%;
+  --muted: 224 54% 20%;
+  --muted-foreground: 222 11% 69%;
+  --border: 0 0% 100%;
+  --input: 0 0% 100%;
+  --ring: 158 100% 39%;
+}
+
+:root {
+  /**
+   * THE SINGLE STRUCTURAL NAVY.
+   *
+   * Every dark surface on the site is this one value: the inversion bands,
+   * the CTA band, primary buttons, and body ink. Previously the CTA band and
+   * buttons ran on brand-600 (#253c80) while the ink and inversion bands ran
+   * on #0e1836 — two different blues, with the brighter one covering 3.5x
+   * more area. That is what read as "the blue keeps changing".
+   *
+   * Do not paint a large field in any other blue. brand-600 survives as a
+   * hover/active state only, so the locked brand colour still appears.
+   */
+  --ink: 14 24 54; /* #0e1836 — 15.8:1 on the canvas */
+
+  /* Brand ramp — navy, hue locked ~226deg. Unchanged. */
   --brand-900: #0e1836;
   --brand-800: #16244f;
   --brand-700: #1e3170;
   --brand-600: #253c80; /* LOCKED — fills only */
   --brand-500: #3d5aa0;
   --brand-400: #5b77c9;
-  --brand-300: #8ba3e0; /* accent text on dark — 8.6:1 */
+  --brand-300: #8ba3e0;
   --brand-200: #b9c8f0;
 
-  /* Text on dark */
-  --text-primary: #f5f7fa; /* 19:1 */
-  --text-secondary: #a3abbd; /* 8:1  */
-  --text-tertiary: #8b93a6; /* 6.1:1 */
+  /* Accent ramp — the single green */
+  --accent-400: #3fe0a0;
+  --accent-500: #00c776; /* fill only on light; text-safe on navy */
+  --accent-600: #00a862;
+  --accent-700: #00794a; /* green text on light — 5.4:1 */
+
+  /* Primary button uses the structural ink, not brand-600 */
+  --primary: 226 59% 13%;
+  --primary-foreground: 0 0% 100%;
+  --destructive: 0 72% 51%;
+  --destructive-foreground: 0 0% 100%;
 
   /* Motion */
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
@@ -40,21 +117,6 @@
   --dur-fast: 150ms;
   --dur-base: 240ms;
   --dur-slow: 400ms;
-
-  /* shadcn-compatible aliases (consumed by components/ui/button.tsx) */
-  --background: 230 30% 4%;
-  --foreground: 214 25% 97%;
-  --primary: 224 55% 33%;
-  --primary-foreground: 0 0% 100%;
-  --secondary: 230 22% 10%;
-  --secondary-foreground: 214 25% 97%;
-  --muted: 230 22% 10%;
-  --muted-foreground: 222 11% 69%;
-  --destructive: 0 72% 51%;
-  --destructive-foreground: 0 0% 100%;
-  --border: 0 0% 100%;
-  --input: 0 0% 100%;
-  --ring: 221 60% 71%;
 }
 
 @layer base {
@@ -67,13 +129,16 @@
     position: relative;
   }
 
+  /* :root already carries the light-theme variables, so the default document
+     is light without needing a .theme-light class here. */
   body {
     @apply antialiased bg-surface text-fg-muted;
   }
 
-  /* Never remove focus affordance — restyle it. */
+  /* Never remove focus affordance — restyle it. The ring is theme-scoped so
+     it stays visible on both the off-white canvas and the navy bands. */
   :focus-visible {
-    outline: 2px solid var(--brand-300);
+    outline: 2px solid hsl(var(--ring));
     outline-offset: 2px;
     border-radius: 4px;
   }
@@ -104,6 +169,39 @@
     font-weight: 600;
     letter-spacing: -0.02em;
     line-height: 0.98;
+  }
+
+  /**
+   * Hero headline only. Capped below .type-display so "We build AI systems"
+   * fits a 7-column measure on ONE line down to 1280px — at the display size
+   * it wrapped again and the headline stacked four deep, which is what made
+   * the left column read as a dense block.
+   *
+   * The 1.75rem floor is a MOBILE fix, not a taste call: at the old 2.5rem
+   * floor "We build AI systems" was ~20px wider than a 360px column, so it
+   * wrapped and the explicit <br/> pushed the headline to three lines on every
+   * phone. The steep 8vw middle term still reaches full size by ~900px.
+   */
+  .type-hero {
+    font-family: var(--font-display), var(--font-sans), sans-serif;
+    font-size: clamp(1.75rem, 8vw, 4.5rem);
+    font-weight: 600;
+    letter-spacing: -0.025em;
+    line-height: 1;
+  }
+
+  /**
+   * The one band where viewport width and HEADLINE width move in opposite
+   * directions: at `lg` the hero switches to a 7-of-12 grid, so crossing
+   * 1024px drops the measure from ~836px to ~543px while the clamp is already
+   * pinned at its 4.5rem maximum. Sizing off the column instead of the
+   * viewport here is what keeps it at two lines; without it 1024–1180px is
+   * the only range on the site that wraps to three.
+   */
+  @media (min-width: 1024px) and (max-width: 1279px) {
+    .type-hero {
+      font-size: clamp(3.4rem, 5.3vw, 4.5rem);
+    }
   }
 
   .type-h1 {

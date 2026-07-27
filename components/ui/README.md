@@ -1,6 +1,6 @@
 # `components/ui` – shadcn-style UI primitives
 
-This folder holds **reusable UI components** (e.g. from shadcn/ui or custom primitives like `animated-gradient-background`). Keeping them under `components/ui`:
+This folder holds **reusable UI components** (e.g. from shadcn/ui or custom primitives like `glow-card` and `marquee`). Keeping them under `components/ui`:
 
 - Matches the standard **shadcn** project layout so you can add more components with the shadcn CLI.
 - Keeps **page/section components** in `components/` and **primitives** in `components/ui`.

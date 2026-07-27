@@ -34,12 +34,12 @@ export default function ServicesPageGrid({ services }: { services: Service[] }) 
                 <h3 className="type-h3 text-fg">{service.title}</h3>
                 <ArrowUpRight
                   aria-hidden
-                  className="h-5 w-5 shrink-0 text-fg-subtle transition duration-base ease-out group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-brand-300"
+                  className="h-5 w-5 shrink-0 text-fg-subtle transition duration-base ease-out group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-accent-600"
                 />
               </div>
 
               {service.image && (
-                <div className="relative aspect-[4/3] w-full overflow-hidden rounded-control border border-white/[0.06] bg-white/[0.02]">
+                <div className="relative aspect-[4/3] w-full overflow-hidden rounded-control border border-line/10 bg-fg/[0.02]">
                   {/* eslint-disable-next-line @next/next/no-img-element --
                       next/image's default loader is incompatible with
                       output: 'export'; these are pre-optimized WebP already. */}
@@ -50,7 +50,11 @@ export default function ServicesPageGrid({ services }: { services: Service[] }) 
                     height={900}
                     loading="lazy"
                     decoding="async"
-                    className="h-full w-full object-cover transition-transform duration-slow ease-out group-hover:scale-[1.03]"
+                    className={
+                      service.slug === "agentic-automations"
+                        ? "h-full w-full object-contain p-4 transition-transform duration-slow ease-out group-hover:scale-[1.01] sm:p-6"
+                        : "h-full w-full object-cover transition-transform duration-slow ease-out group-hover:scale-[1.03]"
+                    }
                   />
                 </div>
               )}

@@ -5,11 +5,14 @@ import * as React from "react";
 import { cn } from "@/lib/utils";
 
 /**
- * Button variants tuned for the dark canvas.
+ * Button variants. Theme-aware: `secondary` and `ghost` resolve through the
+ * fg/line variables, so they invert automatically inside a `theme-dark` band.
  *
- * `primary` is the locked brand navy as a FILL with white text — 10.3:1, the
- * one place #253c80 runs at full strength. Navy is never applied as text on a
- * dark surface (1.9:1).
+ * `primary` is the locked brand navy as a FILL with white text — 10.3:1, and
+ * the one place #253c80 runs at full strength. It reads on both themes.
+ *
+ * `link` uses accent-700, not accent-500: green text on the off-white canvas
+ * needs the darker step to clear 4.5:1. See the contrast rule in tailwind.config.
  *
  * All sizes meet the 44px minimum touch target. Use `asChild` to render an
  * anchor or a next/link while keeping the styling.
@@ -20,13 +23,13 @@ const buttonVariants = cva(
     variants: {
       variant: {
         primary:
-          "bg-brand-600 text-white shadow-glow-sm hover:bg-brand-700 hover:shadow-glow-md active:scale-[0.98]",
+          "bg-ink text-white shadow-glow-sm hover:bg-brand-600 hover:shadow-glow-md active:scale-[0.98]",
         secondary:
-          "border border-white/[0.14] bg-white/[0.06] text-fg backdrop-blur-sm hover:border-white/[0.24] hover:bg-white/[0.1] active:scale-[0.98]",
-        ghost: "text-fg-muted hover:bg-white/[0.06] hover:text-fg",
+          "border border-line/20 bg-fg/[0.05] text-fg backdrop-blur-sm hover:border-line/25 hover:bg-fg/[0.06] active:scale-[0.98]",
+        ghost: "text-fg-muted hover:bg-fg/[0.05] hover:text-fg",
         // On the full-strength navy CTA band, invert: white fill on navy.
-        inverse: "bg-white text-brand-700 hover:bg-brand-200 active:scale-[0.98]",
-        link: "text-brand-300 underline-offset-4 hover:text-brand-200 hover:underline",
+        inverse: "bg-white text-ink hover:bg-fg/10 active:scale-[0.98]",
+        link: "text-accent-700 underline-offset-4 hover:text-accent-600 hover:underline",
         destructive:
           "bg-destructive text-destructive-foreground hover:bg-destructive/90",
       },

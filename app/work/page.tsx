@@ -3,9 +3,9 @@ import { ArrowRight } from 'lucide-react';
 
 import { projects, calendlyLink } from '@/config/content';
 import { Section } from '@/components/ui/section';
+import PageHero from '@/components/ui/page-hero';
 import { Reveal } from '@/components/ui/reveal';
 import { Button } from '@/components/ui/button';
-import GlowBackdrop from '@/components/ui/glow-backdrop';
 import ProjectCard from '@/components/ProjectCard';
 
 export const metadata = {
@@ -44,32 +44,11 @@ export default function WorkPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(workSchema) }}
       />
 
-      <section className="relative isolate overflow-hidden bg-surface px-5 pb-16 pt-36 sm:px-8 sm:pt-44">
-        <div
-          aria-hidden
-          className="absolute inset-0 z-base opacity-[0.4] [background-image:linear-gradient(to_right,rgba(91,119,201,0.16)_1px,transparent_1px),linear-gradient(to_bottom,rgba(91,119,201,0.16)_1px,transparent_1px)] [background-size:72px_72px] [mask-image:radial-gradient(ellipse_70%_60%_at_50%_20%,black,transparent)]"
-        />
-        <GlowBackdrop variant="hero" className="z-base" />
-
-        <div className="relative z-raised mx-auto w-full max-w-content">
-          <Reveal>
-            <span className="type-label inline-flex items-center gap-2.5 border border-white/[0.12] bg-white/[0.04] px-3.5 py-2 text-brand-200">
-              Work
-            </span>
-          </Reveal>
-          <Reveal delay={0.05}>
-            <h1 className="type-display mt-7 max-w-4xl text-fg text-balance">
-              Systems we&apos;ve shipped.
-            </h1>
-          </Reveal>
-          <Reveal delay={0.1}>
-            <p className="type-body-lg measure mt-7 text-fg-muted text-pretty">
-              Each engagement scoped to a metric, built end to end, and measured
-              against what it was supposed to move.
-            </p>
-          </Reveal>
-        </div>
-      </section>
+      <PageHero
+        eyebrow="Work"
+        title="Systems we’ve shipped."
+        lead="Each engagement scoped to a metric, built end to end, and measured against what it was supposed to move."
+      />
 
       <Section spacing="lg">
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
@@ -89,7 +68,7 @@ export default function WorkPage() {
               </a>
             </Button>
             <Button asChild size="lg" variant="secondary">
-              <Link href="/case-studies">Read the case studies</Link>
+              <Link href="/services">See what we build</Link>
             </Button>
           </div>
         </Reveal>

@@ -3,12 +3,12 @@ import { ArrowRight } from 'lucide-react';
 
 import { calendlyLink } from '@/config/content';
 import { Section } from '@/components/ui/section';
+import PageHero from '@/components/ui/page-hero';
 import { SectionHeading } from '@/components/ui/section-heading';
 import { Reveal } from '@/components/ui/reveal';
 import { Button } from '@/components/ui/button';
 import { GlowCard } from '@/components/ui/glow-card';
 import { Icon } from '@/components/ui/icon';
-import GlowBackdrop from '@/components/ui/glow-backdrop';
 
 export const metadata = {
   title: 'About Keel - Agentic AI Solutions Studio',
@@ -79,33 +79,12 @@ export default function AboutPage() {
       />
 
       {/* Hero */}
-      <section className="relative isolate overflow-hidden bg-surface px-5 pb-20 pt-36 sm:px-8 sm:pt-44">
-        <div
-          aria-hidden
-          className="absolute inset-0 z-base opacity-[0.4] [background-image:linear-gradient(to_right,rgba(91,119,201,0.16)_1px,transparent_1px),linear-gradient(to_bottom,rgba(91,119,201,0.16)_1px,transparent_1px)] [background-size:72px_72px] [mask-image:radial-gradient(ellipse_70%_60%_at_50%_20%,black,transparent)]"
-        />
-        <GlowBackdrop variant="hero" className="z-base" />
-
-        <div className="relative z-raised mx-auto w-full max-w-content">
-          <Reveal>
-            <span className="type-label inline-flex items-center gap-2.5 border border-white/[0.12] bg-white/[0.04] px-3.5 py-2 text-brand-200">
-              About
-            </span>
-          </Reveal>
-          <Reveal delay={0.05}>
-            <h1 className="type-display mt-7 max-w-4xl text-fg text-balance">
-              We build AI that moves a number.
-            </h1>
-          </Reveal>
-          <Reveal delay={0.1}>
-            <p className="type-body-lg measure mt-7 text-fg-muted text-pretty">
-              Keel started with a simple mission: help businesses use AI to solve
-              real problems and get real results. We&apos;re not here to sell
-              buzzwords or ship experiments that are half finished.
-            </p>
-          </Reveal>
-        </div>
-      </section>
+      <PageHero
+        eyebrow="About"
+        title="We build AI that moves a number."
+        lead="We solve real problems with AI. No buzzwords, no half-finished experiments."
+        className="pb-20"
+      />
 
       {/* Approach */}
       <Section tone="raised" spacing="lg">
@@ -118,25 +97,21 @@ export default function AboutPage() {
             />
           </div>
           <div className="lg:col-span-7">
+            {/* Was three paragraphs of 29, 36 and 20 words. The same three
+                ideas, as statements you can read at a glance. */}
             <Reveal>
-              <div className="space-y-6 type-body-lg text-fg-muted text-pretty">
-                <p>
-                  We begin by understanding your goals, your current bottlenecks,
-                  and the numbers that actually matter to the business. Then we
-                  design and build around that, clean execution, measurable
-                  impact.
-                </p>
-                <p>
-                  Our expertise spans Voice AI, autonomous automations, UGC
-                  content, AI video, and modern web development. Every build is
-                  made with conversion, performance, and clarity in mind, so it
-                  doesn&apos;t just look impressive, it moves your numbers.
-                </p>
-                <p className="text-fg">
-                  We move fast, iterate quickly, and hold a high bar. Most
-                  clients start seeing results in weeks, not months.
-                </p>
-              </div>
+              <dl className="divide-y divide-line/10 border-y border-line/10">
+                {[
+                  ['We find the number first', 'Goals and bottlenecks before tools.'],
+                  ['We build the whole system', 'Voice, automation, video and web.'],
+                  ['We move in weeks', 'Not months.'],
+                ].map(([term, detail]) => (
+                  <div key={term} className="py-6">
+                    <dt className="type-h3 text-fg">{term}</dt>
+                    <dd className="mt-1.5 type-body text-fg-muted">{detail}</dd>
+                  </div>
+                ))}
+              </dl>
             </Reveal>
           </div>
         </div>
@@ -155,7 +130,7 @@ export default function AboutPage() {
             <Reveal key={p.title} delay={i * 0.05}>
               <GlowCard className="h-full">
                 <div className="flex h-full flex-col gap-4 p-7">
-                  <span className="inline-flex h-10 w-10 items-center justify-center rounded-control border border-white/[0.1] bg-brand-600/25 text-brand-200">
+                  <span className="inline-flex h-10 w-10 items-center justify-center rounded-control border border-line/15 bg-ink/10 text-accent-700">
                     <Icon name={p.icon} size={20} />
                   </span>
                   <h3 className="type-h3 text-fg">{p.title}</h3>

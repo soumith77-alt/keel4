@@ -39,14 +39,14 @@ export default function Testimonials() {
             <GlowCard className="h-full">
               <figure className="flex h-full flex-col gap-5 p-6 sm:gap-6 sm:p-7">
                 <Quote
-                  className="h-5 w-5 shrink-0 text-brand-400"
+                  className="h-5 w-5 shrink-0 text-accent-700"
                   strokeWidth={1.5}
                   aria-hidden
                 />
                 <blockquote className="type-body flex-1 text-fg text-pretty">
                   {t.content}
                 </blockquote>
-                <figcaption className="border-t border-white/[0.08] pt-5">
+                <figcaption className="border-t border-line/10 pt-5">
                   <span className="block text-sm font-medium text-fg">
                     {t.name}
                   </span>

@@ -23,8 +23,8 @@ export function Waveform({
   active = true,
   className,
   bars = 44,
-  color = "#8ba3e0",
-  idleColor = "#3d5aa0",
+  color = "#00c776",
+  idleColor = "#0e1836",
 }: WaveformProps) {
   const canvasRef = React.useRef<HTMLCanvasElement>(null);
   const activeRef = React.useRef(active);

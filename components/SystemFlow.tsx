@@ -72,23 +72,23 @@ export default function SystemFlow() {
   const isActive = (i: number) => (reduceMotion ? false : i === step);
 
   return (
-    <div className="relative w-full rounded-panel border border-white/[0.1] bg-surface-raised/80 backdrop-blur-sm shadow-panel">
+    <div className="relative w-full rounded-panel border border-line/15 bg-surface-raised/80 backdrop-blur-sm shadow-panel">
       {/* Panel chrome.
           Labelled as a simulation on purpose: "live / connected" on an
           animation implies a running system and would be misleading. */}
-      <div className="flex items-center justify-between border-b border-white/[0.08] px-5 py-3.5">
+      <div className="flex items-center justify-between border-b border-line/10 px-5 py-3.5">
         <span className="type-label text-fg-muted">Voice agent workflow</span>
         <span className="type-label flex items-center gap-2 text-fg-muted">
           <span
             aria-hidden
-            className="inline-flex h-1.5 w-1.5 rounded-full bg-brand-300"
+            className="inline-flex h-1.5 w-1.5 rounded-full bg-accent-500"
           />
           Simulation
         </span>
       </div>
 
       {/* Waveform, the incoming call itself */}
-      <div className="border-b border-white/[0.08] px-5 py-5">
+      <div className="border-b border-line/10 px-5 py-5">
         <div className="h-14 w-full">
           <Waveform active={reduceMotion ? true : step === 0 || step === 1} />
         </div>
@@ -114,10 +114,10 @@ export default function SystemFlow() {
               {i < STEPS.length - 1 && (
                 <span
                   aria-hidden
-                  className="absolute left-[15px] top-[34px] h-[calc(100%-16px)] w-px bg-white/[0.1]"
+                  className="absolute left-[15px] top-[34px] h-[calc(100%-16px)] w-px bg-fg/[0.06]"
                 >
                   <motion.span
-                    className="absolute inset-x-0 top-0 bg-brand-300"
+                    className="absolute inset-x-0 top-0 bg-accent-500"
                     initial={false}
                     animate={{ height: done || active ? '100%' : '0%' }}
                     transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
@@ -129,16 +129,16 @@ export default function SystemFlow() {
                 className={cn(
                   'relative z-raised flex h-8 w-8 shrink-0 items-center justify-center rounded-control border transition-colors duration-base',
                   active
-                    ? 'border-brand-300/60 bg-brand-600 text-white'
+                    ? 'border-ink/50 bg-ink text-white'
                     : done
-                      ? 'border-brand-400/40 bg-brand-600/25 text-brand-200'
-                      : 'border-white/[0.1] bg-white/[0.03] text-fg-subtle'
+                      ? 'border-ink/25 bg-ink/10 text-accent-700'
+                      : 'border-line/15 bg-fg/[0.03] text-fg-subtle'
                 )}
               >
                 <Icon className="h-4 w-4" strokeWidth={1.5} aria-hidden />
                 {active && !reduceMotion && (
                   <motion.span
-                    className="absolute inset-0 rounded-control ring-1 ring-brand-300"
+                    className="absolute inset-0 rounded-control ring-1 ring-accent-500"
                     initial={{ opacity: 0.9, scale: 1 }}
                     animate={{ opacity: 0, scale: 1.5 }}
                     transition={{ duration: 1.1, ease: 'easeOut' }}

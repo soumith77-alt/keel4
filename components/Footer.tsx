@@ -7,18 +7,17 @@ import { Wordmark } from '@/components/ui/wordmark';
 
 const COMPANY_LINKS = [
   { href: '/work', label: 'Work' },
-  { href: '/case-studies', label: 'Case studies' },
   { href: '/about', label: 'About' },
   { href: '/contact', label: 'Contact' },
 ];
 
 export default function Footer() {
   return (
-    <footer className="relative border-t border-white/[0.08] bg-surface-raised">
+    <footer className="relative border-t border-line/10 bg-surface-raised">
       {/* Navy hairline ties the footer back to the brand without a flat slab */}
       <div
         aria-hidden
-        className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-brand-500/60 to-transparent"
+        className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-accent-500/50 to-transparent"
       />
 
       <div className="mx-auto w-full max-w-content px-5 py-16 sm:px-8 sm:py-20">
@@ -41,12 +40,14 @@ export default function Footer() {
 
           <div>
             <h2 className="type-label mb-5 text-fg-subtle">Services</h2>
-            <ul className="space-y-3">
+            {/* No gap below `md` — the links carry their own 44px touch
+                height instead, which the 17px text rows did not meet. */}
+            <ul className="space-y-0 md:space-y-3">
               {services.map((service) => (
                 <li key={service.slug}>
                   <Link
                     href={`/services/${service.slug}`}
-                    className="text-sm text-fg-muted transition-colors duration-base hover:text-fg"
+                    className="flex min-h-[44px] items-center text-sm text-fg-muted transition-colors duration-base hover:text-fg md:min-h-0"
                   >
                     {service.title}
                   </Link>
@@ -57,12 +58,14 @@ export default function Footer() {
 
           <div>
             <h2 className="type-label mb-5 text-fg-subtle">Company</h2>
-            <ul className="space-y-3">
+            {/* No gap below `md` — the links carry their own 44px touch
+                height instead, which the 17px text rows did not meet. */}
+            <ul className="space-y-0 md:space-y-3">
               {COMPANY_LINKS.map((link) => (
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className="text-sm text-fg-muted transition-colors duration-base hover:text-fg"
+                    className="flex min-h-[44px] items-center text-sm text-fg-muted transition-colors duration-base hover:text-fg md:min-h-0"
                   >
                     {link.label}
                   </Link>
@@ -72,13 +75,13 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="mt-14 flex flex-col gap-3 border-t border-white/[0.08] pt-8 sm:flex-row sm:items-center sm:justify-between">
+        <div className="mt-14 flex flex-col gap-3 border-t border-line/10 pt-8 sm:flex-row sm:items-center sm:justify-between">
           <p className="text-sm text-fg-subtle">
             © {new Date().getFullYear()} keel. All rights reserved.
           </p>
           <a
             href="mailto:hello@saykeel.com"
-            className="text-sm text-fg-muted transition-colors duration-base hover:text-fg"
+            className="inline-flex min-h-[44px] items-center self-start text-sm text-fg-muted transition-colors duration-base hover:text-fg sm:min-h-0"
           >
             hello@saykeel.com
           </a>
