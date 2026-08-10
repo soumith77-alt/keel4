@@ -165,11 +165,23 @@ export default function ServicesSection({
         </Reveal>
       </div>
 
-      {/* The grid intentionally does NOT sit inside the centred container: the
-          right column runs to the viewport edge. */}
-      <div className="mt-8 grid gap-8 lg:mt-10 lg:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)] lg:items-start lg:gap-12">
+      {/**
+        * THE STAGE NO LONGER BLEEDS OFF THE RIGHT EDGE.
+        *
+        * It used to sit outside the centred container so the demonstration ran
+        * to the viewport edge — a deliberate choice, meant to give the section
+        * a different shape to its neighbours. In practice it read as the panel
+        * falling out of the page: every other block on the site stops at the
+        * same gutter, and this one alone had a right margin of zero, so it
+        * looked clipped rather than composed.
+        *
+        * The grid now sits INSIDE the same `max-w-wide` container as the
+        * section label above it, so the stage's right edge lines up with the
+        * eyebrow, the headline and the footer.
+        */}
+      <div className="mx-auto mt-8 grid w-full max-w-wide gap-8 px-5 sm:px-8 lg:mt-10 lg:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)] lg:items-start lg:gap-12">
         {/* ── The index. The type is the control. ── */}
-        <div className="mx-auto w-full max-w-wide px-5 sm:px-8 lg:mx-0 lg:max-w-none lg:pr-0">
+        <div className="w-full min-w-0">
           <div
             role="tablist"
             aria-label="Services"
@@ -282,7 +294,7 @@ export default function ServicesSection({
           </AnimatePresence>
         </div>
 
-        {/* ── The stage. Bleeds off the right edge from `lg`. ── */}
+        {/* ── The stage. Aligned to the container gutter, both sides. ── */}
         <div
           id="service-panel"
           role="tabpanel"
@@ -291,7 +303,7 @@ export default function ServicesSection({
           // the stage, so without this the demonstration scrolls away while
           // the visitor is still reading the service it belongs to — and it
           // left ~500px of empty paper beside the capabilities list.
-          className="px-5 sm:px-8 lg:sticky lg:top-24 lg:px-0"
+          className="min-w-0 lg:sticky lg:top-24"
         >
           <AnimatePresence mode="wait" initial={false}>
             <motion.div
@@ -310,7 +322,7 @@ export default function ServicesSection({
                 duration: reduceMotion ? 0 : 0.42,
                 ease: [0.22, 1, 0.36, 1],
               }}
-              className="overflow-hidden rounded-l-panel border border-line/12 bg-surface-raised lg:rounded-r-none lg:border-r-0"
+              className="overflow-hidden rounded-panel border border-line/12 bg-surface-raised"
             >
               <ServiceVisual
                 slug={active.slug}

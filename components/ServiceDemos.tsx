@@ -296,7 +296,18 @@ export function VideoDemo({
 }
 
 /* ── Websites ──────────────────────────────────────────────────────────
-   Browser chrome whose content assembles itself.                          */
+   Two browser frames: where the visitor came from, and what they were
+   shown. Same form as before — the content is no longer placeholder.
+
+   WHY THIS CHANGED. The front frame used to be four grey bars and a green
+   circle standing in for a headline, body copy and an image. Beside the Voice
+   panel, which shows a real conversation, a visitor clicking through the five
+   services read "voice is the real business, web is a side line". A wireframe
+   is a fine way to draw a website and a bad way to argue you build good ones.
+
+   Nothing here is a metric. The labels describe the mechanism — intent read,
+   proof surfaced, enquiry attributed — in the same words the hero uses. No
+   invented conversion rate, no fabricated client.                            */
 
 export function WebsiteDemo({ className }: { className?: string }) {
   const reduceMotion = useReducedMotion();
@@ -311,59 +322,83 @@ export function WebsiteDemo({ className }: { className?: string }) {
         className,
       )}
     >
+      {/* Where they came from. */}
       <motion.div
         initial={reduceMotion ? false : { opacity: 0, y: 18, rotate: -2 }}
         animate={
           reduceMotion || inView ? { opacity: 1, y: 0, rotate: -2 } : undefined
         }
         transition={{ duration: 0.65, ease: EASE_OUT }}
-        className="absolute left-[6%] top-[14%] h-[68%] w-[56%] overflow-hidden rounded-control border border-line/15 bg-surface opacity-55"
+        className="absolute left-[5%] top-[12%] h-[52%] w-[52%] overflow-hidden rounded-control border border-line/15 bg-surface"
       >
-        <div className="flex gap-1 border-b border-line/10 p-2">
+        <div className="flex items-center gap-1 border-b border-line/10 px-2 py-1.5">
           <span className="h-1.5 w-1.5 rounded-full bg-fg/20" />
           <span className="h-1.5 w-1.5 rounded-full bg-fg/20" />
         </div>
-        <div className="grid h-full grid-cols-[0.34fr_1fr] gap-2 p-3">
-          <span className="rounded-sm bg-fg/[0.06]" />
-          <span className="rounded-sm bg-fg/[0.1]" />
+        <div className="space-y-2 p-3">
+          <span className="type-mono-sm block text-fg-subtle">Paid search</span>
+          <span className="block text-[13px] font-medium leading-snug text-fg">
+            “ai receptionist pricing”
+          </span>
+          <span className="block h-1 w-2/3 rounded-full bg-fg/12" />
+          <span className="block h-1 w-1/2 rounded-full bg-fg/12" />
         </div>
       </motion.div>
 
+      {/* What they were shown. */}
       <motion.div
         initial={reduceMotion ? false : { opacity: 0, y: 24, rotate: 2 }}
         animate={
           reduceMotion || inView ? { opacity: 1, y: 0, rotate: 2 } : undefined
         }
         transition={{ duration: 0.75, delay: 0.12, ease: EASE_OUT }}
-        className="absolute bottom-[10%] right-[5%] h-[74%] w-[66%] overflow-hidden rounded-control border border-accent-500/30 bg-surface shadow-glow-lg"
+        className="absolute bottom-[14%] right-[4%] h-[72%] w-[62%] overflow-hidden rounded-control border border-accent-500/30 bg-surface shadow-glow-lg"
       >
         <div className="flex items-center gap-1.5 border-b border-line/10 px-3 py-2">
           <span className="h-1.5 w-1.5 rounded-full bg-accent-500" />
           <span className="h-1.5 w-1.5 rounded-full bg-fg/20" />
-          <span className="h-1.5 w-1.5 rounded-full bg-fg/20" />
           <span className="ml-2 h-3 flex-1 rounded-full bg-fg/[0.07]" />
         </div>
-        <div className="grid h-[calc(100%-2rem)] grid-cols-[1.1fr_0.9fr] gap-4 p-5">
-          <div className="flex flex-col justify-center gap-3">
-            <span className="h-2 w-1/3 rounded-full bg-accent-500" />
-            <span className="h-4 w-full rounded-sm bg-fg/55" />
-            <span className="h-4 w-4/5 rounded-sm bg-fg/55" />
-            <span className="h-2 w-3/4 rounded-full bg-fg/15" />
-            <span className="h-8 w-28 rounded-sm bg-accent-500" />
+
+        <div className="flex h-[calc(100%-2.25rem)] flex-col gap-2.5 p-4">
+          <span className="type-mono-sm text-signal">Intent · pricing</span>
+          <span className="text-[15px] font-semibold leading-tight text-fg">
+            What it costs, and what it replaces
+          </span>
+
+          {/* The proof that matches the intent — the section's whole point. */}
+          <div className="rounded-control border border-line/12 bg-fg/[0.03] px-2.5 py-2">
+            <span className="type-mono-sm block text-fg-subtle">
+              Proof surfaced
+            </span>
+            <span className="mt-1 block text-[12px] leading-snug text-fg-muted">
+              The case that matches this intent, not the homepage reel
+            </span>
           </div>
-          <div className="my-auto aspect-square rounded-full bg-gradient-to-br from-accent-500/60 via-accent-500/20 to-transparent" />
+
+          <span className="mt-auto inline-flex w-fit items-center rounded-control bg-accent-500 px-3 py-1.5 text-[12px] font-semibold text-ink">
+            Book a call
+          </span>
         </div>
       </motion.div>
 
+      {/* The outcome, in the same green the hero reserves for results. */}
       <motion.div
         initial={reduceMotion ? false : { opacity: 0, scale: 0.9 }}
         animate={reduceMotion || inView ? { opacity: 1, scale: 1 } : undefined}
         transition={{ duration: 0.5, delay: 0.45, ease: EASE_OUT }}
-        className="absolute bottom-6 left-6 z-raised border border-accent-500/30 bg-ink px-4 py-3 shadow-glow-md"
+        /**
+         * Anchored BOTTOM-LEFT under the back frame, and the CTA sits at the
+         * bottom of the front frame on the right. A `max-w` cap was not enough:
+         * at 1024 the panel narrows, the frames slide together, and the two
+         * still collided. Pinning the callout below the back frame's footprint
+         * means no width can bring them into the same row.
+         */
+        className="absolute bottom-4 left-4 z-raised max-w-[46%] rounded-control border border-accent-500/30 bg-ink px-3 py-2 shadow-glow-md"
       >
-        <span className="type-label block text-fg-subtle">Measurement</span>
-        <span className="mt-1 block font-mono text-lg text-accent-500">
-          Ready to test
+        <span className="type-mono-sm block text-white/55">Outcome</span>
+        <span className="mt-0.5 block font-mono text-[13px] leading-snug text-accent-500">
+          Attributed to source
         </span>
       </motion.div>
     </div>
@@ -409,22 +444,46 @@ export function SaaSDemo({ className }: { className?: string }) {
           </div>
 
           <div className="grid grid-cols-3 gap-2">
-            {["Live", "Synced", "Owned"].map((metric) => (
+            {/* These read "Live / Synced / Owned" with a grey bar under each —
+                three words that describe nothing a visitor can act on. They
+                are now the SaaS run from the hero, in the same order and the
+                same language, so the panel says what the product does rather
+                than gesturing at a dashboard.
+
+                Deliberately no numbers. A fabricated metric in a demo is still
+                a fabricated metric. */}
+            {[
+              { state: "User action", detail: "In-product event" },
+              { state: "Context", detail: "Loaded and attributed" },
+              { state: "AI assist", detail: "Offered at drop-off" },
+            ].map((tile, i) => (
               <div
-                key={metric}
-                className="border border-line/10 bg-fg/[0.025] p-3"
+                key={tile.state}
+                className={cn(
+                  "border p-3",
+                  i === 2
+                    ? "border-accent-500/35 bg-accent-500/[0.06]"
+                    : "border-line/10 bg-fg/[0.025]",
+                )}
               >
-                <span className="block font-mono text-lg text-fg">
-                  {metric}
+                <span
+                  className={cn(
+                    "block text-[13px] font-semibold leading-tight",
+                    i === 2 ? "text-signal" : "text-fg",
+                  )}
+                >
+                  {tile.state}
                 </span>
-                <span className="mt-1 block h-1 w-10 rounded-full bg-fg/15" />
+                <span className="mt-1 block text-[11px] leading-snug text-fg-muted">
+                  {tile.detail}
+                </span>
               </div>
             ))}
           </div>
 
           <div className="grid min-h-0 flex-1 grid-cols-[1fr_0.7fr] gap-2">
             <div className="relative overflow-hidden border border-line/10 p-3">
-              <span className="type-label text-fg-subtle">Growth</span>
+              <span className="type-label text-fg-subtle">Product events</span>
               <div className="absolute inset-x-3 bottom-3 flex h-16 items-end gap-1">
                 {[35, 58, 45, 72, 62, 88, 78, 96].map((height, i) => (
                   <motion.span
@@ -441,17 +500,25 @@ export function SaaSDemo({ className }: { className?: string }) {
                 ))}
               </div>
             </div>
-            <div className="space-y-2 border border-line/10 p-3">
+            {/* Was four grey bars beside four dots. Same shape, but each row
+                now names a step the product actually completed. */}
+            <div className="space-y-2.5 border border-line/10 p-3">
               <span className="type-label text-fg-subtle">Activity</span>
-              {[0, 1, 2, 3].map((n) => (
-                <span key={n} className="flex items-center gap-2">
+              {[
+                "Workflow completed",
+                "Event recorded",
+                "Insight generated",
+              ].map((row, n) => (
+                <span key={row} className="flex items-start gap-2">
                   <span
                     className={cn(
-                      "h-2 w-2 rounded-full",
-                      n === 0 ? "bg-accent-500" : "bg-fg/15",
+                      "mt-[5px] h-1.5 w-1.5 shrink-0 rounded-full",
+                      n === 0 ? "bg-accent-500" : "bg-fg/25",
                     )}
                   />
-                  <span className="h-1.5 flex-1 rounded-full bg-fg/12" />
+                  <span className="text-[11px] leading-snug text-fg-muted">
+                    {row}
+                  </span>
                 </span>
               ))}
             </div>
