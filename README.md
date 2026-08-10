@@ -1,4 +1,4 @@
-# Keel - Agentic AI Solutions Studio
+# Keeel - Agentic AI Solutions Studio
 
 A premium, conversion-focused marketing website built with Next.js, TypeScript, and TailwindCSS.
 
@@ -23,7 +23,7 @@ Open [http://localhost:3000](http://localhost:3000) to view the site.
 ## 📁 Project Structure
 
 ```
-KEEL/
+KEEEL/
 ├── app/                    # Next.js App Router pages
 │   ├── page.tsx           # Homepage
 │   ├── layout.tsx         # Root layout with Navbar/Footer

@@ -7,7 +7,7 @@ import { Reveal } from '@/components/ui/reveal';
 import { cn } from '@/lib/utils';
 
 /**
- * HOW KEEL THINKS — one connected sequence, not four blocks.
+ * HOW KEEEL THINKS — one connected sequence, not four blocks.
  *
  * The previous version was four stacked rows, each with a panel beside it. It
  * was honest, and it was also the same shape four times — the pattern this
@@ -98,7 +98,7 @@ export default function ProcessLog() {
       <Reveal>
         <span className="flex items-baseline gap-3">
           <span aria-hidden className="h-px w-8 translate-y-[-0.35rem] bg-accent-500" />
-          <span className="type-mono-sm text-fg-subtle">How Keel thinks</span>
+          <span className="type-mono-sm text-fg-subtle">How Keeel thinks</span>
         </span>
         <h2 className="type-h2 mt-5 max-w-3xl text-fg text-balance">
           One signal, four stages, and every one leaves{' '}

@@ -104,7 +104,7 @@ export default function WhatsAppFloatingButton() {
          *
          * The affordance is unchanged: same position, same size, same icon,
          * still obviously a chat button. It is now painted in the site's own
-         * ink with a Keel-green hairline, so it reads as part of the interface
+         * ink with a Keeel-green hairline, so it reads as part of the interface
          * rather than as a widget bolted onto it.
          */
         'fixed bottom-6 right-4 z-float flex h-11 w-11 items-center justify-center rounded-full border border-accent-500/45 bg-ink text-white shadow-lg transition-all duration-base ease-out sm:bottom-8 sm:right-8 sm:h-12 sm:w-12',

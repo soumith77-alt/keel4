@@ -5,18 +5,18 @@ import { Section } from '@/components/ui/section';
 import PageHero from '@/components/ui/page-hero';
 
 export const metadata = {
-  title: 'AI Services - Voice, Automations, Video, Websites & SaaS | Keel',
-  description: 'Keel builds Voice AI agents, agentic business automations, UGC and AI video, conversion websites, and launch ready SaaS products.',
+  title: 'AI Services - Voice, Automations, Video, Websites & SaaS',
+  description: 'Keeel builds Voice AI agents, agentic business automations, UGC and AI video, conversion websites, and launch ready SaaS products.',
   alternates: { canonical: 'https://saykeel.com/services' },
   openGraph: {
-    title: 'AI Services - Voice, Automations, Video, Websites & SaaS | Keel',
+    title: 'AI Services - Voice, Automations, Video, Websites & SaaS | Keeel',
     description: 'Five connected disciplines: Voice AI, automations, AI video, conversion websites, and SaaS products.',
     url: 'https://saykeel.com/services',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'AI Services | Keel',
+    title: 'AI Services | Keeel',
     description: 'Voice AI, automations, AI video, conversion websites, and SaaS products.',
   },
 };
@@ -24,8 +24,8 @@ export const metadata = {
 const serviceCatalogSchema = {
   '@context': 'https://schema.org',
   '@type': 'ItemList',
-  name: 'Keel AI Services',
-  description: 'Voice AI, Agentic AI Automations, UGC Ads & AI Video, Conversion Websites, and SaaS Product Development by Keel.',
+  name: 'Keeel AI Services',
+  description: 'Voice AI, Agentic AI Automations, UGC Ads & AI Video, Conversion Websites, and SaaS Product Development by Keeel.',
   url: 'https://saykeel.com/services',
   numberOfItems: 5,
   itemListElement: [

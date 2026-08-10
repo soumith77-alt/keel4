@@ -4,12 +4,12 @@ import { Reveal, RevealGroup, RevealItem } from '@/components/ui/reveal';
 import FinalCTA from '@/components/FinalCTA';
 
 export const metadata = {
-  title: 'About Keel - Agentic AI Solutions Studio',
+  title: 'About - Agentic AI Solutions Studio',
   description:
-    'Keel is an Agentic AI Solutions Studio building Voice AI systems, business automations, UGC content, AI video, and high converting websites. Real results in 2 to 4 weeks.',
+    'Keeel is an Agentic AI Solutions Studio building Voice AI systems, business automations, UGC content, AI video, and high converting websites. Real results in 2 to 4 weeks.',
   alternates: { canonical: 'https://saykeel.com/about' },
   openGraph: {
-    title: 'About Keel - Agentic AI Solutions Studio',
+    title: 'About Keeel - Agentic AI Solutions Studio',
     description:
       'We build Voice AI, automations, UGC content, and websites for businesses that scale. Real measurable results.',
     url: 'https://saykeel.com/about',
@@ -17,7 +17,7 @@ export const metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'About Keel - Agentic AI Solutions Studio',
+    title: 'About Keeel - Agentic AI Solutions Studio',
     description:
       'Voice AI, automations, UGC content, and websites for businesses that scale.',
   },
@@ -26,13 +26,13 @@ export const metadata = {
 const aboutSchema = {
   '@context': 'https://schema.org',
   '@type': 'AboutPage',
-  name: 'About Keel',
+  name: 'About Keeel',
   url: 'https://saykeel.com/about',
   description:
-    'Keel is an Agentic AI Solutions Studio building Voice AI, automations, UGC content, AI video, and websites.',
+    'Keeel is an Agentic AI Solutions Studio building Voice AI, automations, UGC content, AI video, and websites.',
   mainEntity: {
     '@type': 'Organization',
-    name: 'Keel',
+    name: 'Keeel',
     url: 'https://saykeel.com',
     email: 'hello@saykeel.com',
     description:

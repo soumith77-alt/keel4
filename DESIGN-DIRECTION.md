@@ -1,4 +1,4 @@
-# Keel — Signal System redesign
+# Keeel — Signal System redesign
 
 Pre-implementation deliverables. Written against the live local build at
 `http://localhost:3000` (commit `32fbba6`), audited at 1440×900 and 390×844.
@@ -30,13 +30,13 @@ Pre-implementation deliverables. Written against the live local build at
 - **The hero visual is decoration, not evidence.** The morphing `KeelSystem`
   SVG is a well-made abstract shape, but it shows no input, no decision and no
   outcome. A waveform floating in space is what every voice-AI site ships. It
-  fails the brief's central test: a visitor cannot tell what Keel *does* by
+  fails the brief's central test: a visitor cannot tell what Keeel *does* by
   looking at it.
 - **Selected Work is three equal cards.** Explicitly the pattern the brief
   rules out. Worse, `object-cover object-top` crops a 1600px-wide dashboard
   into a 4:3 box, so the Football Intelligence OS screenshot — the stated
   visual benchmark — renders as illegible pixel soup.
-- **No process section.** "How Keel Thinks" does not exist. There is a
+- **No process section.** "How Keeel Thinks" does not exist. There is a
   four-word `ProcessRow` under Services with no artefacts attached, which
   asserts a methodology rather than showing one.
 - **The final CTA is another oversized promo headline**, the third H1-scale
@@ -111,7 +111,7 @@ Pre-implementation deliverables. Written against the live local build at
 
 ### Recommended route — **Signal Editorial**
 
-Keel's work is invisible: a call that got answered, a lead that got routed, an
+Keeel's work is invisible: a call that got answered, a lead that got routed, an
 agent that made a decision. The site's job is to make the invisible legible.
 
 So the site is built as **an instrument panel wrapped in an editorial page.**
@@ -136,7 +136,7 @@ Invert the page: navy as the dominant canvas, off-white reserved for evidence
 panels, green as the only light source. Reads as more "AI lab", photographs
 well, and makes screenshots pop. Rejected because (a) it discards the warm
 off-white the brief asks to preserve, (b) dark-dominant is the *default* AI
-agency look the brief rules out, and (c) Keel's real assets are already dark
+agency look the brief rules out, and (c) Keeel's real assets are already dark
 dashboards — on a navy page they lose all separation.
 
 ### Color system
@@ -231,7 +231,7 @@ WORK CHAPTER            ┌ 7 cols ──────────────┬
 | 3 | Proof rail | ~340px / auto | dark | 4 rows: PROJECT · SYSTEM · OBSERVABLE · STATUS | signal rule draws left→right on entry; rows link to work |
 | 4 | Services stage | ~720px / auto | dark | 5-item rail, one proposition, 3 capabilities, live demo, service CTA | desktop: click/arrow-key rail (no hover-select); mobile: scroll-snap segmented selector, one panel |
 | 5 | Selected work | 3 × ~560px / 3 × auto | light | 3 chapters, alternating; contained frame; challenge / system / status | image reveal on entry; annotation dots on desktop, listed below on mobile |
-| 6 | How Keel Thinks | ~640px / auto | dark | 01 Diagnose · 02 Model · 03 Build · 04 Measure, each with an artefact | steps reveal on entry; artefacts are static readouts |
+| 6 | How Keeel Thinks | ~640px / auto | dark | 01 Diagnose · 02 Model · 03 Build · 04 Measure, each with an artefact | steps reveal on entry; artefacts are static readouts |
 | 7 | Trust & capability | ~380px / auto | raised | 3 handoff commitments (compressed), integration surface list | none — static, updateable from the data layer |
 | 8 | Final brief | ~420px / auto | brand navy | "What should your next system improve?" · 5 chips · one line · 2 actions | chip select + validated input → `/contact` prefilled |
 | 9 | Footer | existing | light | unchanged | — |
@@ -247,7 +247,7 @@ wrap to two rows at 44px minimum.
 
 | Component | Inspiration | Purpose | Customisation | Desktop | Mobile | Perf risk | A11y fallback |
 |---|---|---|---|---|---|---|---|
-| `SystemConsole` (hero) | Manus product-in-hero | Show input→outcome for 5 services | Keel navy panel, mono payloads, green marker; no chrome dressing | auto-run + segmented switch | trace below copy, selector scroll-snaps | **Low** — DOM + CSS, no canvas/WebGL | all 5 rows render lit and complete under reduced motion; `aria-live="polite"` on the active step |
+| `SystemConsole` (hero) | Manus product-in-hero | Show input→outcome for 5 services | Keeel navy panel, mono payloads, green marker; no chrome dressing | auto-run + segmented switch | trace below copy, selector scroll-snaps | **Low** — DOM + CSS, no canvas/WebGL | all 5 rows render lit and complete under reduced motion; `aria-live="polite"` on the active step |
 | `SignalRail` | Motion Primitives in-view | The recurring motif | 1px rule + green segment, `IntersectionObserver`, no library | draws on entry | draws on entry, shorter | Low | decorative, `aria-hidden`; never carries information |
 | `ServiceStage` (existing, reworked) | 21st.dev tabs | One active service | fix contrast; roving tabindex; progressive-blur on switch | click + ←/→ keys | segmented control, one panel | Low | full `tablist`/`tabpanel` wiring; blur is CSS-only and drops out under reduced motion |
 | `WorkChapter` | Awwwards editorial case study | Make work the protagonist | contained frame, alternating sides, mono metadata rail | hover annotation dots | annotations listed below image | Medium — large images; mitigated by WebP + `sizes` + `loading="lazy"` | annotations are real list items, not tooltips |
@@ -420,7 +420,7 @@ static ring fallback is shown instead.
 
 ---
 
-# v2 — KEEL SIGNAL / EDITORIAL SYSTEMS STUDIO
+# v2 — KEEEL SIGNAL / EDITORIAL SYSTEMS STUDIO
 
 v1 fixed the content and the credibility but kept the visual grammar: warm-white
 grid, left headline, dark dashboard right, pale green glow, repeated for seven
@@ -468,7 +468,7 @@ A focused correction against a visual review of v2. Four problems, all real.
 **What was wrong.** The hero animated Signal → Context → Decision → Action →
 Outcome at 1.4s a step and then auto-rotated to the next service. A visitor who
 arrived and scrolled within five seconds — most of them — never reached an
-outcome, saw four of five states dimmed, and left believing Keel sells
+outcome, saw four of five states dimmed, and left believing Keeel sells
 appointment booking. The hero's meaning depended on the visitor standing still.
 
 **What it is now.**
@@ -531,7 +531,7 @@ to the surface a chapter sits on and how its frame is lit — no new palettes.
   service pages). One band, one set of tokens, one piece of copy. The entry is
   prepared with a green hairline and a tonal step rather than a one-pixel cut
   from off-white to navy.
-- **WhatsApp** is now navy with a Keel-green hairline. `#25D366` on a 56px
+- **WhatsApp** is now navy with a Keeel-green hairline. `#25D366` on a 56px
   circle was the most saturated thing on the site by a wide margin.
 - **Navigation** has three verified states: dark-overlay over the obsidian hero,
   light on interior pages, warm-white once scrolled.

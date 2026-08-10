@@ -131,9 +131,9 @@ export const services = [
 
 
 /**
- * THE KEEL SIGNAL SYSTEM — system traces.
+ * THE KEEEL SIGNAL SYSTEM — system traces.
  *
- * Every service Keel sells is the same five states applied to a different
+ * Every service Keeel sells is the same five states applied to a different
  * business event, and these five words are the spine of the whole site:
  *
  *   SIGNAL → CONTEXT → DECISION → ACTION → OUTCOME
@@ -333,7 +333,7 @@ export const testimonials = [
     name: 'Sarah Chen',
     role: 'CEO',
     company: 'Premier Dental Care',
-    content: 'Keel transformed our patient booking process. We never miss a call, and our conversion rate speaks for itself.',
+    content: 'Keeel transformed our patient booking process. We never miss a call, and our conversion rate speaks for itself.',
     avatar: '/placeholder-avatar-1.jpg'
   },
   {
@@ -481,7 +481,7 @@ export type Project = {
   /**
    * Project visual. A real interface crop, render, diagram or branded still —
    * this is what should carry the composition. Until one exists the card
-   * falls back to the Keel system object keyed to `service`, which is an
+   * falls back to the Keeel system object keyed to `service`, which is an
    * honest diagram rather than a fabricated screenshot.
    */
   image?: string;

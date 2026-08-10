@@ -4,12 +4,12 @@ import { ProjectChapter } from '@/components/FeaturedWork';
 import FinalCTA from '@/components/FinalCTA';
 
 export const metadata = {
-  title: 'Work - AI Systems We’ve Built | Keel',
+  title: 'Work - AI Systems We’ve Built',
   description:
-    'Selected Keel engagements: AI voice agents, business automations, UGC campaigns, and conversion focused websites, with the outcomes each delivered.',
+    'Selected Keeel engagements: AI voice agents, business automations, UGC campaigns, and conversion focused websites, with the outcomes each delivered.',
   alternates: { canonical: 'https://saykeel.com/work' },
   openGraph: {
-    title: 'Work - AI Systems We’ve Built | Keel',
+    title: 'Work - AI Systems We’ve Built | Keeel',
     description:
       'Selected engagements across voice AI, automations, video, and websites.',
     url: 'https://saykeel.com/work',
@@ -17,7 +17,7 @@ export const metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Work | Keel',
+    title: 'Work | Keeel',
     description:
       'Selected engagements across voice AI, automations, video, and websites.',
   },
@@ -26,9 +26,9 @@ export const metadata = {
 const workSchema = {
   '@context': 'https://schema.org',
   '@type': 'CollectionPage',
-  name: 'Keel Work',
+  name: 'Keeel Work',
   url: 'https://saykeel.com/work',
-  description: 'Selected AI engagements delivered by Keel.',
+  description: 'Selected AI engagements delivered by Keeel.',
 };
 
 export default function WorkPage() {
@@ -53,7 +53,7 @@ export default function WorkPage() {
         * two-column grid of white cards with a cropped thumbnail in each. It
         * showed the same projects as the homepage in a completely different
         * visual language, which made the homepage chapters look like a
-        * one-off rather than like how Keel presents work.
+        * one-off rather than like how Keeel presents work.
         *
         * It now uses the SAME `<ProjectChapter>` the homepage does — same
         * 16:10 stage, same fact structure, same alternation, same rhythm. The

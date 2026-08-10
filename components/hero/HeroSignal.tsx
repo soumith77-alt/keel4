@@ -17,7 +17,7 @@ import { CoreArea, Form, SignalObject } from './TraceFragment';
  *
  * TWO ROUNDS OF CORRECTION LIVE IN THIS FILE. Round one removed a five-step
  * sequential reveal and an 8s auto-rotation: a visitor who scrolled within a
- * few seconds never reached an outcome and left thinking Keel sells
+ * few seconds never reached an outcome and left thinking Keeel sells
  * appointment booking. Round two removed what replaced it, which was still
  * wrong in a different way — three absolutely-positioned objects scattered
  * across a 92svh field, each measured in JavaScript and faded in from zero.
@@ -96,7 +96,7 @@ export default function HeroSignal() {
       // and must invert. Pages with a light hero carry no such attribute.
       data-hero-tone="obsidian"
       className="theme-obsidian relative isolate overflow-hidden bg-surface text-fg"
-      aria-label="What Keel builds"
+      aria-label="What Keeel builds"
     >
       <SignalField
         // The field breathes around the middle of the row rather than tracking
@@ -175,7 +175,7 @@ export default function HeroSignal() {
        *
        * A 3+2 GRID BELOW `sm`, not a horizontal scroller. The scrolling rail
        * clipped "Web" and "SaaS" off the right edge of every phone, so two of
-       * the five things Keel sells were invisible unless you happened to swipe
+       * the five things Keeel sells were invisible unless you happened to swipe
        * a strip that gave no indication it could be swiped. A grid shows all
        * five at once and needs no affordance to discover.
        */}

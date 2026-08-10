@@ -17,7 +17,7 @@ const NAV_OFFSET = 72; // navbar height
  *   1 Hero            light   headline + the system console
  *   2 Services        light   the five surfaces, one stage
  *   3 Selected work   light   three cinematic chapters
- *   4 How Keel thinks raised  the process, with an artefact per step
+ *   4 How Keeel thinks raised  the process, with an artefact per step
  *   5 Trust           light   handoff commitments + deployment surfaces
  *   6 Brief           NAVY    the compact intake form
  *

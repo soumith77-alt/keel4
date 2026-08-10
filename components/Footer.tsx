@@ -26,7 +26,7 @@ export default function Footer() {
             <Link
               href="/"
               className="inline-flex min-h-[44px] items-center text-fg"
-              aria-label="Keel, home"
+              aria-label="Keeel, home"
             >
               <Wordmark />
             </Link>
@@ -81,7 +81,7 @@ export default function Footer() {
 
         <div className="mt-14 flex flex-col gap-3 border-t border-line/10 pt-8 sm:flex-row sm:items-center sm:justify-between">
           <p className="type-small text-fg-subtle">
-            © {new Date().getFullYear()} keel. All rights reserved.
+            © {new Date().getFullYear()} keeel. All rights reserved.
           </p>
           <a
             href="mailto:hello@saykeel.com"

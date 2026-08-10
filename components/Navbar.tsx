@@ -127,7 +127,7 @@ export default function Navbar() {
           <Link
             href="/"
             className={cn('flex min-h-[44px] items-center', inverted ? 'text-white' : 'text-fg')}
-            aria-label="Keel, home"
+            aria-label="Keeel, home"
           >
             <Wordmark />
           </Link>

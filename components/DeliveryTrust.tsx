@@ -7,7 +7,7 @@ import { Reveal, RevealGroup, RevealItem } from "@/components/ui/reveal";
  * The previous version spent 78 words and a five-line ragged headline making
  * one point: when the engagement ends, you own a working system. It now makes
  * that point in a headline and three short lines, and uses the space it saved
- * to state the surfaces Keel actually deploys into — which is the question a
+ * to state the surfaces Keeel actually deploys into — which is the question a
  * serious buyer asks next and which the page did not answer anywhere.
  *
  * `SURFACES` is deliberately generic-by-category rather than a logo wall. A

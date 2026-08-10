@@ -2,7 +2,7 @@ import * as React from "react";
 import { cn } from "@/lib/utils";
 
 /**
- * Keel wordmark.
+ * Keeel wordmark.
  *
  * The letterforms are the ORIGINAL artwork — not retyped in a lookalike UI
  * face. `public/brand-logo-mask.png` is generated from `brand_logo.webp` by
@@ -20,6 +20,12 @@ import { cn } from "@/lib/utils";
  * rest of the site uses. To restore the exact original colour instead, drop
  * the mask and render `public/brand-logo.png` (same letterforms, transparent
  * background, original navy) as a plain <img>.
+ *
+ * SPELLING: the mark reads "keeel", three e's. The site text and the artwork
+ * disagreed for one commit — the copy was renamed before the logo existed —
+ * and both now match. If either is ever changed again, change the other in
+ * the same commit: a wordmark that contradicts the <title> is worse than
+ * either spelling on its own.
  */
 
 /** Intrinsic aspect of the trimmed artwork: 318 x 135. */
@@ -38,7 +44,7 @@ export function Wordmark({
   return (
     <span
       role="img"
-      aria-label="Keel"
+      aria-label="Keeel"
       className={cn("inline-block h-9 shrink-0 bg-fg", className)}
       style={{
         width: `${9 * 0.25 * ASPECT}rem`,

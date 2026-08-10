@@ -3,10 +3,10 @@
 import { motion, useReducedMotion } from 'framer-motion';
 
 /**
- * The Keel system object.
+ * The Keeel system object.
  *
  * One set of 20 elements that changes FORM — not just position — between the
- * five things Keel builds. The previous version moved identical circles
+ * five things Keeel builds. The previous version moved identical circles
  * around, which read as a loading spinner and said nothing about voice or
  * video. Here the primitives themselves morph:
  *

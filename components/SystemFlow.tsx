@@ -15,7 +15,7 @@ import { Waveform } from '@/components/ui/waveform';
 
 /**
  * The hero's "live product moment": one signal travelling through the system
- * Keel actually builds — call in, agent handles it, CRM updates, follow up
+ * Keeel actually builds — call in, agent handles it, CRM updates, follow up
  * sends, appointment books.
  *
  * This replaces an abstract decorative visual. The motion is the explanation:

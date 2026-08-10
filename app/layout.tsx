@@ -48,11 +48,11 @@ const plexMono = IBM_Plex_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL("https://saykeel.com"),
   title: {
-    default: "Keel - Agentic AI Solutions Studio",
-    template: "%s | Keel",
+    default: "Keeel - Agentic AI Solutions Studio",
+    template: "%s | Keeel",
   },
   description:
-    "Keel builds AI voice agents, autonomous business automations, UGC ad campaigns, AI video, and high converting websites for businesses that scale. Most projects launch in 2 to 4 weeks.",
+    "Keeel builds AI voice agents, autonomous business automations, UGC ad campaigns, AI video, and high converting websites for businesses that scale. Most projects launch in 2 to 4 weeks.",
   keywords: [
     "AI voice agent",
     "agentic AI automation",
@@ -67,7 +67,7 @@ export const metadata: Metadata = {
     "conversational AI",
     "AI receptionist",
   ],
-  authors: [{ name: "Keel", url: "https://saykeel.com" }],
+  authors: [{ name: "Keeel", url: "https://saykeel.com" }],
   robots: {
     index: true,
     follow: true,
@@ -78,25 +78,28 @@ export const metadata: Metadata = {
     apple: "/favicon-256.png",
   },
   openGraph: {
-    title: "Keel - Agentic AI Solutions Studio",
+    title: "Keeel - Agentic AI Solutions Studio",
     description:
       "AI voice agents, business automations, UGC ads & AI video, and websites. The complete AI stack for businesses that scale.",
     type: "website",
     url: "https://saykeel.com",
-    siteName: "Keel",
+    siteName: "Keeel",
     locale: "en_US",
     images: [
       {
         url: "/brand_logo_og.jpg",
+        // The asset is SQUARE. This said 630 while the file has always been
+        // 1200x1200, so every platform that trusts the declared box was
+        // reserving the wrong shape and letterboxing the mark.
         width: 1200,
-        height: 630,
-        alt: "Keel - Agentic AI Solutions Studio",
+        height: 1200,
+        alt: "Keeel - Agentic AI Solutions Studio",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Keel - Agentic AI Solutions Studio",
+    title: "Keeel - Agentic AI Solutions Studio",
     description:
       "AI voice agents, business automations, UGC ads & AI video, and websites that scale.",
     images: ["/brand_logo_og.jpg"],
@@ -109,7 +112,7 @@ export const metadata: Metadata = {
 const organizationSchema = {
   "@context": "https://schema.org",
   "@type": "Organization",
-  name: "Keel",
+  name: "Keeel",
   alternateName: "Saykeel",
   url: "https://saykeel.com",
   logo: "https://saykeel.com/brand_logo_og.jpg",
@@ -179,7 +182,7 @@ const organizationSchema = {
 const websiteSchema = {
   "@context": "https://schema.org",
   "@type": "WebSite",
-  name: "Keel",
+  name: "Keeel",
   url: "https://saykeel.com",
   description:
     "Agentic AI Solutions Studio, Voice AI, automations, UGC ads, AI video, and websites for businesses that scale.",

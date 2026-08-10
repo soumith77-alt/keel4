@@ -20,18 +20,18 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   }
 
   return {
-    title: `${service.title} - AI Solutions | Keel`,
+    title: `${service.title} - AI Solutions`,
     description: service.description,
     alternates: { canonical: `https://saykeel.com/services/${service.slug}` },
     openGraph: {
-      title: `${service.title} - Keel`,
+      title: `${service.title} - Keeel`,
       description: service.description,
       url: `https://saykeel.com/services/${service.slug}`,
       type: 'website' as const,
     },
     twitter: {
       card: 'summary_large_image' as const,
-      title: `${service.title} - Keel`,
+      title: `${service.title} - Keeel`,
       description: service.description,
     },
   };
@@ -53,7 +53,7 @@ export default function ServicePage({ params }: { params: { slug: string } }) {
     description: service.description,
     provider: {
       '@type': 'Organization',
-      name: 'Keel',
+      name: 'Keeel',
       url: 'https://saykeel.com',
     },
     url: `https://saykeel.com/services/${service.slug}`,

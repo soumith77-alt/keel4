@@ -9,12 +9,12 @@ import { Button } from '@/components/ui/button';
 import { GlowCard } from '@/components/ui/glow-card';
 
 export const metadata = {
-  title: 'Contact Keel - Book a Free AI Discovery Call',
+  title: 'Contact - Book a Free AI Discovery Call',
   description:
-    'Get in touch with Keel. Book a free 30 minute discovery call to discuss how AI voice agents, automations, or UGC content can grow your business.',
+    'Get in touch with Keeel. Book a free 30 minute discovery call to discuss how AI voice agents, automations, or UGC content can grow your business.',
   alternates: { canonical: 'https://saykeel.com/contact' },
   openGraph: {
-    title: 'Contact Keel - Book a Free AI Discovery Call',
+    title: 'Contact Keeel - Book a Free AI Discovery Call',
     description:
       'Book a free 30 minute discovery call. AI voice agents, automations, UGC content, and websites.',
     url: 'https://saykeel.com/contact',
@@ -22,9 +22,9 @@ export const metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Contact Keel - Book a Free AI Discovery Call',
+    title: 'Contact Keeel - Book a Free AI Discovery Call',
     description:
-      'Book a free 30 minute call with Keel to discuss AI solutions for your business.',
+      'Book a free 30 minute call with Keeel to discuss AI solutions for your business.',
   },
 };
 
@@ -49,13 +49,13 @@ const faqSchema = {
 const contactSchema = {
   '@context': 'https://schema.org',
   '@type': 'ContactPage',
-  name: 'Contact Keel',
+  name: 'Contact Keeel',
   url: 'https://saykeel.com/contact',
   description:
     'Book a free 30 minute discovery call or send a message to discuss your AI solution needs.',
   mainEntity: {
     '@type': 'Organization',
-    name: 'Keel',
+    name: 'Keeel',
     url: 'https://saykeel.com',
     email: 'hello@saykeel.com',
     contactPoint: {
