@@ -135,7 +135,7 @@ export default function HowItWorks() {
                   {step.number}
                 </span>
                 <div>
-                  <h3 className="type-h3 text-fg">{step.title}</h3>
+                  <h3 className="type-h4 text-fg">{step.title}</h3>
                   <p className="type-body measure mt-3 text-fg-muted text-pretty">
                     {step.description}
                   </p>

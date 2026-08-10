@@ -1,30 +1,30 @@
 "use client";
 
 import { useEffect } from "react";
-import Hero from "@/components/Hero";
-import ProofStrip from "@/components/ProofStrip";
+import HeroSignal from "@/components/hero/HeroSignal";
 import ServicesSection from "@/components/ui/services";
 import { services } from "@/config/content";
 import FeaturedWork from "@/components/FeaturedWork";
+import ProcessLog from "@/components/ProcessLog";
 import DeliveryTrust from "@/components/DeliveryTrust";
-import CTA from "@/components/CTA";
+import BriefForm from "@/components/BriefForm";
 
 const NAV_OFFSET = 72; // navbar height
 
 /**
- * Five sections, alternating light and navy:
- *   Hero (light) → Services (light) → Proof (DARK) → Work (light)
- *   → CTA (DARK)
+ * Homepage order, and the tone rhythm it produces:
  *
- * The light/dark boundaries are HARD CUTS. A SceneShift band used to sit at
- * each one, wiping navy up over the canvas as you scrolled. In practice it
- * rendered as an empty full-width navy strip — 128px and 160px of stretched
- * dead colour, twice — which read as filler rather than as a transition. The
- * abrupt inversion is the effect; it does not need a runway.
+ *   1 Hero            light   headline + the system console
+ *   2 Services        light   the five surfaces, one stage
+ *   3 Selected work   light   three cinematic chapters
+ *   4 How Keel thinks raised  the process, with an artefact per step
+ *   5 Trust           light   handoff commitments + deployment surfaces
+ *   6 Brief           NAVY    the compact intake form
  *
- * Testimonials and FAQ were removed from this page — the testimonials are
- * placeholders, and the FAQ (with its FAQPage JSON-LD) moved to /contact
- * where it answers real pre-sales questions.
+ * The light/dark boundaries are HARD CUTS. A SceneShift band used to wipe
+ * navy up over the canvas at each one and rendered as an empty full-width
+ * strip of dead colour; the abrupt inversion is the effect and it does not
+ * need a runway.
  */
 
 function scrollToServices() {
@@ -59,12 +59,12 @@ export default function Home() {
 
   return (
     <>
-      <Hero />
+      <HeroSignal />
       <ServicesSection services={services} />
-      <ProofStrip />
-      <DeliveryTrust />
       <FeaturedWork />
-      <CTA />
+      <ProcessLog />
+      <DeliveryTrust />
+      <BriefForm />
     </>
   );
 }

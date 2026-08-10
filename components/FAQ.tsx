@@ -48,7 +48,7 @@ export default function FAQ() {
                       onClick={() => setOpenIndex(isOpen ? null : index)}
                       className="flex w-full items-start justify-between gap-5 py-5 text-left sm:gap-6 sm:py-6"
                     >
-                      <span className="type-h3 text-fg">{faq.question}</span>
+                      <span className="type-h4 text-fg">{faq.question}</span>
                       <motion.span
                         aria-hidden
                         animate={

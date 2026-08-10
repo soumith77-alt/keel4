@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
@@ -21,16 +21,38 @@ const NAV_LINKS = [
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [overDark, setOverDark] = useState(false);
   const pathname = usePathname();
   const reduceMotion = useReducedMotion();
+  const toggleRef = useRef<HTMLButtonElement>(null);
 
-  // Transparent over the hero, glass once you start scrolling.
+  // Transparent over the hero, opaque once you start scrolling.
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
     onScroll();
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
+
+  /**
+   * Does this route open on an obsidian environment?
+   *
+   * The homepage hero is now near-black, and a navy wordmark on it is
+   * invisible — which is exactly what shipped for a moment. Rather than
+   * hardcode `pathname === '/'` (which breaks the first time another route
+   * gets a dark hero), the hero declares itself with `data-hero-tone` and the
+   * bar reads it. Re-checked on navigation because App Router keeps this
+   * component mounted across routes.
+   */
+  useEffect(() => {
+    setOverDark(
+      Boolean(document.querySelector('[data-hero-tone="obsidian"]')),
+    );
+  }, [pathname]);
+
+  // Inverted only while sitting ON the dark hero. Once scrolled, the bar
+  // becomes the warm-white bar and reverts to navy ink.
+  const inverted = overDark && !scrolled && !isOpen;
 
   // Close the mobile menu on navigation.
   useEffect(() => {
@@ -45,6 +67,42 @@ export default function Navbar() {
     };
   }, [isOpen]);
 
+  /**
+   * Open-drawer behaviour. Three things the drawer was missing, and each of
+   * them is a real problem rather than a polish item:
+   *
+   *   · SCROLL LOCK. The page scrolled behind the open menu, so a scroll
+   *     gesture aimed at the menu moved the content underneath it instead.
+   *   · ESCAPE. The only way out was to hit the toggle again — the standard
+   *     dismissal for any overlay was simply absent.
+   *   · FOCUS RETURN. On close, focus was left wherever it happened to be,
+   *     which for a keyboard user means being dropped at the top of the
+   *     document with no idea where they are.
+   */
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const { body } = document;
+    // Captured now rather than read in the cleanup: by the time cleanup runs
+    // the ref may point at a different node, and the whole purpose of this is
+    // to return focus to the element the visitor actually opened the menu with.
+    const toggle = toggleRef.current;
+    const previousOverflow = body.style.overflow;
+    body.style.overflow = 'hidden';
+
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setIsOpen(false);
+    };
+    document.addEventListener('keydown', onKeyDown);
+
+    return () => {
+      body.style.overflow = previousOverflow;
+      document.removeEventListener('keydown', onKeyDown);
+      // Return focus to the control that opened it.
+      toggle?.focus();
+    };
+  }, [isOpen]);
+
   return (
     <header
       className={cn(
@@ -55,7 +113,10 @@ export default function Navbar() {
         // That is worst on mobile, where the bar is pinned the whole scroll.
         scrolled || isOpen
           ? 'border-b border-line/10 bg-surface'
-          : 'border-b border-transparent bg-transparent'
+          : 'border-b border-transparent bg-transparent',
+        // Over the obsidian hero the bar paints itself in the dark theme, so
+        // every child (wordmark, links, button) resolves against it.
+        inverted && 'theme-obsidian'
       )}
     >
       <nav
@@ -63,7 +124,11 @@ export default function Navbar() {
         className="mx-auto w-full max-w-content px-5 sm:px-8"
       >
         <div className="flex h-[72px] items-center justify-between">
-          <Link href="/" className="text-fg" aria-label="Keel, home">
+          <Link
+            href="/"
+            className={cn('flex min-h-[44px] items-center', inverted ? 'text-white' : 'text-fg')}
+            aria-label="Keel, home"
+          >
             <Wordmark />
           </Link>
 
@@ -72,12 +137,25 @@ export default function Navbar() {
               <Link
                 key={link.href}
                 href={link.href}
-                className="text-sm font-medium text-fg-muted transition-colors duration-base hover:text-fg"
+                // `min-h-[44px]` on the desktop links too, not just the mobile
+                // drawer. The desktop nav starts at `md` — 768px — which is a
+                // TOUCH width on every tablet, and at 20px tall these were
+                // less than half the minimum target there.
+                className={cn(
+                  'flex min-h-[44px] items-center text-sm font-medium transition-colors duration-fast ease-micro',
+                  inverted
+                    ? 'text-white/70 hover:text-white'
+                    : 'text-fg-muted hover:text-fg',
+                )}
               >
                 {link.label}
               </Link>
             ))}
-            <Button asChild size="sm">
+            {/* `primary` is the navy fill — on the obsidian hero that is
+                #0e1836 on #070b18, effectively an invisible button. Inverted,
+                the CTA is the brightest thing in the bar, which is also the
+                right hierarchy while it sits over the environment. */}
+            <Button asChild size="sm" variant={inverted ? 'inverse' : 'primary'}>
               <a href={calendlyLink} target="_blank" rel="noopener noreferrer">
                 Book a call
               </a>
@@ -85,9 +163,15 @@ export default function Navbar() {
           </div>
 
           <button
+            ref={toggleRef}
             type="button"
             onClick={() => setIsOpen((open) => !open)}
-            className="inline-flex h-11 w-11 items-center justify-center rounded-control text-fg-muted transition-colors duration-base hover:bg-fg/[0.05] hover:text-fg md:hidden"
+            className={cn(
+              'inline-flex h-11 w-11 items-center justify-center rounded-control transition-colors duration-base md:hidden',
+              inverted
+                ? 'text-white/80 hover:bg-white/10 hover:text-white'
+                : 'text-fg-muted hover:bg-fg/[0.05] hover:text-fg',
+            )}
             aria-label={isOpen ? 'Close menu' : 'Open menu'}
             aria-expanded={isOpen}
             aria-controls="mobile-menu"

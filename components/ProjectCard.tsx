@@ -34,7 +34,7 @@ export default function ProjectCard({
             </span>
           )}
           <h3 className="type-h3 text-fg text-balance">{project.title}</h3>
-          <p className="mt-3 text-sm leading-relaxed text-fg-muted text-pretty">
+          <p className="type-small mt-3 text-fg-muted text-pretty">
             {project.claim}
           </p>
 
@@ -49,24 +49,30 @@ export default function ProjectCard({
                   &rsaquo;
                 </span>
               </summary>
-              <p className="mt-3 text-sm leading-relaxed text-fg-muted text-pretty">
+              <p className="type-small mt-3 text-fg-muted text-pretty">
                 {project.summary}
               </p>
             </details>
           )}
         </div>
 
+        {/* A <dl> may only contain properly ordered dt/dd pairs, optionally
+            wrapped in a <div>. This had a loose <span> carrying the visible
+            label next to an sr-only <dt> holding the same text, which broke
+            the definition list and, with it, the accessibility tree for the
+            whole page. One <dt> now does both jobs — visible AND announced.
+            `flex-col-reverse` keeps the metric above its label visually while
+            the DOM keeps dt before dd, which is the order the spec requires. */}
         {project.results && project.results.length > 0 && (
           <dl className="grid grid-cols-2 gap-4 border-t border-line/10 pt-6">
             {project.results.slice(0, 2).map((r) => (
-              <div key={r.label}>
-                <dt className="sr-only">{r.label}</dt>
+              <div key={r.label} className="flex flex-col-reverse">
+                <dt className="mt-1 block text-xs leading-snug text-fg-subtle">
+                  {r.label}
+                </dt>
                 <dd className="font-mono text-xl font-medium tabular-nums text-accent-700">
                   {r.metric}
                 </dd>
-                <span className="mt-1 block text-xs leading-snug text-fg-subtle">
-                  {r.label}
-                </span>
               </div>
             ))}
           </dl>

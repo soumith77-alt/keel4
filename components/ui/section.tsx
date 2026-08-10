@@ -33,10 +33,17 @@ const TONES = {
   overlay: "theme-light bg-surface-raised text-fg",
 } as const;
 
+/**
+ * Vertical rhythm. The phone values came down roughly a quarter (12 → 9,
+ * i.e. 48px → 36px of padding a side): every section was setting the same
+ * py-12 regardless of tier, so a phone got desktop-sized breathing room
+ * between blocks that were already short, and the page read as mostly gaps.
+ * The desktop tiers are unchanged — that is where the rhythm was working.
+ */
 const SPACING = {
   none: "",
-  sm: "py-12 sm:py-20",
-  md: "py-12 sm:py-28",
+  sm: "py-9 sm:py-20",
+  md: "py-10 sm:py-28",
   lg: "py-12 sm:py-32",
 } as const;
 

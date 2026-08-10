@@ -33,10 +33,33 @@
   /* Foreground — navy as ink, never pure black */
   --fg: 14 24 54; /* #0e1836 — 15.8:1 on canvas */
   --fg-muted: 74 82 104; /* 7.4:1 */
-  --fg-subtle: 107 114 133; /* 4.8:1 */
+  /**
+   * #626879 — 4.96:1 on the canvas. It was #6b7285, which measures 4.29:1 and
+   * therefore FAILED 4.5:1 everywhere `.type-mono-sm` used it: the proof rail's
+   * mobile column labels, the work chapters' field labels, the service spine.
+   * The old comment claimed 4.8:1; it was wrong, and eleven separate elements
+   * were shipping under-contrast because of it. Verified with a contrast
+   * calculation against #f2f2f0, not by eye.
+   */
+  --fg-subtle: 98 104 121; /* 4.96:1 */
 
   /* Hairline base; alpha applied at use site */
   --line: 14 24 54;
+
+  /**
+   * GREEN AS TEXT — theme-scoped, so it can never be got wrong again.
+   *
+   * The rule was already documented ("green text on light must be accent-700")
+   * and it was still violated the moment one component was shared between a
+   * light chapter and an obsidian one: #00c776 measures 1.98:1 on the canvas.
+   * A single component cannot hardcode the right answer, because the right
+   * answer depends on which surface it lands on.
+   *
+   * `--signal-text` resolves per theme, so `text-signal` is correct in both
+   * scopes by construction. Use it for any green TEXT. `accent-500` remains
+   * the fill.
+   */
+  --signal-text: 0 121 74; /* accent-700 — 5.4:1 on the canvas */
 
   /* shadcn aliases (consumed by components/ui/button.tsx) */
   --background: 60 7% 95%;
@@ -48,6 +71,43 @@
   --border: 226 59% 13%;
   --input: 226 59% 13%;
   --ring: 158 100% 24%;
+}
+
+/**
+ * THE OBSIDIAN ENVIRONMENT.
+ *
+ * Deeper than the inversion band, and that difference is the point: the hero
+ * and the final brief are ENVIRONMENTS the visitor is inside, while
+ * `.theme-dark` bands are inversions of the page they are cut into. Running
+ * both at #0e1836 is part of why the old page read as one repeated pattern —
+ * every dark thing was the same dark thing.
+ *
+ * Nothing is ever "raised" in here. Obsidian surfaces are defined by hairlines
+ * and by what is lit, not by stacked panels catching light.
+ */
+.theme-obsidian {
+  color-scheme: dark;
+
+  --canvas: 7 11 24; /* #070b18 */
+  --canvas-raised: 12 18 38;
+  --canvas-overlay: 18 27 56;
+
+  --fg: 245 247 250;
+  --fg-muted: 158 167 187;
+  --fg-subtle: 128 138 160;
+
+  --line: 255 255 255;
+  --signal-text: 0 199 118; /* accent-500 — clears 8:1 on obsidian */
+
+  --background: 226 55% 6%;
+  --foreground: 214 25% 97%;
+  --secondary: 226 45% 12%;
+  --secondary-foreground: 214 25% 97%;
+  --muted: 226 45% 12%;
+  --muted-foreground: 222 14% 67%;
+  --border: 0 0% 100%;
+  --input: 0 0% 100%;
+  --ring: 158 100% 39%;
 }
 
 .theme-dark {
@@ -62,6 +122,7 @@
   --fg-subtle: 139 147 166;
 
   --line: 255 255 255;
+  --signal-text: 0 199 118; /* accent-500 — ~7:1 on the band navy */
 
   --background: 226 59% 13%;
   --foreground: 214 25% 97%;
@@ -105,18 +166,105 @@
   --accent-600: #00a862;
   --accent-700: #00794a; /* green text on light — 5.4:1 */
 
+  /**
+   * THE TECHNICAL ACCENT — rationed cobalt, ~2% of the page.
+   *
+   * Inside a system trace the two accents carry OPPOSITE meanings and that is
+   * the whole reason this colour exists:
+   *   · cobalt  = what the system RECEIVED (the caller, the visitor, the brief)
+   *   · green   = what the system DID about it (decision, action, outcome)
+   *
+   * It marks inputs, technical annotations and selected system states. It never
+   * fills a large area and it never competes with green as the brand accent.
+   * -600 is the text-safe step on the off-white canvas (5.1:1); -400 is the
+   * text-safe step on navy (6.2:1).
+   */
+  --technical-400: #7aa0ff;
+  --technical-500: #3d6bff;
+  --technical-600: #2a4fd7;
+
   /* Primary button uses the structural ink, not brand-600 */
   --primary: 226 59% 13%;
   --primary-foreground: 0 0% 100%;
   --destructive: 0 72% 51%;
   --destructive-foreground: 0 0% 100%;
 
-  /* Motion */
+  /**
+   * Motion — three tiers, and a piece of motion belongs to exactly one.
+   *
+   *   scene     600–800ms  section entrance, band inversion, chapter change
+   *   component 320–450ms  service switch, trace step, tab morph
+   *   micro     140–220ms  hover, arrow, focus, underline
+   *
+   * `--ease-micro` is deliberately a different curve from `--ease-out`: micro
+   * interactions want to leave immediately and settle, scene transitions want
+   * to ease out of the gate. Using one curve for both is what makes hovers
+   * feel sluggish.
+   */
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
   --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --ease-micro: cubic-bezier(0.32, 0.72, 0, 1);
   --dur-fast: 150ms;
   --dur-base: 240ms;
   --dur-slow: 400ms;
+  --dur-scene: 700ms;
+
+  /* ------------------------------------------------------------------------
+     THE FLUID TYPE SCALE.
+
+     One scale, every route. Defined here so no component has to know a pixel
+     value; see the `.type-*` utilities below for which role goes where.
+
+     Every step is a clamp, so there are no breakpoint jumps between sizes —
+     the previous scale changed abruptly at `sm` and `lg` on some roles and
+     not others, which is a large part of why the typography read as
+     inconsistent rather than as a system.
+     ------------------------------------------------------------------------ */
+  /**
+   * THE TOP END CAME DOWN AND THE BOTTOM END WENT UP.
+   *
+   * The first cut of this scale ran to 7rem at the display end and 0.6875rem
+   * at the label end — a 10:1 spread. In practice that read as two unrelated
+   * decisions rather than one system: headlines shouted, and the mono state
+   * labels that carry the actual technical detail were 11px and genuinely
+   * hard to read. A service-page <h1> at 4.75rem also wrapped to five lines
+   * in a five-column measure.
+   *
+   * The spread is now roughly 7:1. Every role keeps its position and its
+   * relationship to its neighbours; the range is just less extreme.
+   */
+  --text-display-xl: clamp(3rem, 6.1vw, 5.5rem);
+  --text-display: clamp(2.6rem, 5vw, 4.5rem);
+  --text-h1: clamp(2.4rem, 4.2vw, 4rem);
+  --text-h2: clamp(1.9rem, 3.2vw, 3rem);
+  --text-h3: clamp(1.45rem, 2vw, 2rem);
+  --text-h4: clamp(1.15rem, 1.4vw, 1.375rem);
+  --text-body-lg: clamp(1.0625rem, 1.25vw, 1.25rem);
+  --text-body: clamp(1rem, 1.05vw, 1.125rem);
+  --text-small: clamp(0.9375rem, 0.95vw, 1rem);
+  --text-label: clamp(0.75rem, 0.78vw, 0.8125rem);
+}
+
+/**
+ * SMALL-SCREEN FLOORS.
+ *
+ * The clamp floors above are tuned for a comfortable phone (390px and up). At
+ * 320–380px they are not a taste question but a measurement: "We build AI
+ * systems" at the 3.75rem display-xl floor is ~430px of glyphs inside a 280px
+ * text column, which overflows horizontally — the one defect this design is
+ * not allowed to ship.
+ *
+ * Only the three largest roles are floored down, and only below 480px. Every
+ * role keeps its identity and its relative order; the scale is still one
+ * scale.
+ */
+@media (max-width: 479px) {
+  :root {
+    --text-display-xl: clamp(2.35rem, 10.5vw, 3rem);
+    --text-display: clamp(2.1rem, 9vw, 2.6rem);
+    --text-h1: clamp(1.95rem, 8vw, 2.4rem);
+    --text-h2: clamp(1.65rem, 6.5vw, 1.9rem);
+  }
 }
 
 @layer base {
@@ -127,6 +275,19 @@
        container is <html>. Positioning it is layout-neutral and silences a
        warning that would otherwise ship. */
     position: relative;
+  }
+
+  /**
+   * ONE SCROLL OFFSET, EVERYWHERE.
+   *
+   * The bar is fixed and 72px tall, so any in-page jump lands its target
+   * underneath it. This was being patched per component with `scroll-mt-24`
+   * and it was missing wherever nobody remembered — which is why the services
+   * heading on a phone opened beneath the header. Declaring it once on every
+   * element that can be an anchor target means it cannot be forgotten again.
+   */
+  [id] {
+    scroll-margin-top: 6rem;
   }
 
   /* :root already carries the light-theme variables, so the default document
@@ -162,90 +323,195 @@
     display: none;
   }
 
-  /* Type scale — see tailwind.config.ts for the token definitions */
-  .type-display {
-    font-family: var(--font-display), var(--font-sans), sans-serif;
-    font-size: clamp(2.5rem, 6vw, 5.25rem);
+  /* ------------------------------------------------------------------------
+     THE TYPE SCALE.
+
+     Nine roles, defined once as tokens in :root (see the --text-* block near
+     the top of this file) and consumed here. Components are not permitted to
+     invent a size: every `text-[2.9rem]`-style literal that used to exist has
+     been replaced by one of these classes, so a change to the scale is a
+     one-line change rather than a search across forty files.
+
+     Which role goes where:
+       display-xl  homepage hero — the single largest thing on the site
+       display     every other page hero (/about, /work, /services, /contact)
+       h1          service-page main headings
+       h2          major section headings
+       h3          project titles, service titles, major card titles
+       h4          smaller content headings inside a list or row
+       body-lg     leads and propositions
+       body        paragraphs
+       small       supporting copy
+       label       (below, mono) eyebrows and metadata
+
+     Line height and tracking are BOUND TO THE ROLE, not applied ad hoc.
+     Display sizes are set tight and negatively tracked because at 60–112px
+     default spacing reads as loose; body is set at 1.6–1.65 with almost no
+     tracking because that is where it is comfortable. Uppercase mono is the
+     only thing on the site with positive tracking.
+     ------------------------------------------------------------------------ */
+  .type-display-xl {
+    font-family: var(--font-sans), sans-serif;
+    font-size: var(--text-display-xl);
     font-weight: 600;
-    letter-spacing: -0.02em;
+    letter-spacing: -0.045em;
+    line-height: 0.94;
+  }
+
+  .type-display {
+    font-family: var(--font-sans), sans-serif;
+    font-size: var(--text-display);
+    font-weight: 600;
+    letter-spacing: -0.04em;
     line-height: 0.98;
   }
 
-  /**
-   * Hero headline only. Capped below .type-display so "We build AI systems"
-   * fits a 7-column measure on ONE line down to 1280px — at the display size
-   * it wrapped again and the headline stacked four deep, which is what made
-   * the left column read as a dense block.
-   *
-   * The 1.75rem floor is a MOBILE fix, not a taste call: at the old 2.5rem
-   * floor "We build AI systems" was ~20px wider than a 360px column, so it
-   * wrapped and the explicit <br/> pushed the headline to three lines on every
-   * phone. The steep 8vw middle term still reaches full size by ~900px.
-   */
-  .type-hero {
-    font-family: var(--font-display), var(--font-sans), sans-serif;
-    font-size: clamp(1.75rem, 8vw, 4.5rem);
-    font-weight: 600;
-    letter-spacing: -0.025em;
-    line-height: 1;
-  }
-
-  /**
-   * The one band where viewport width and HEADLINE width move in opposite
-   * directions: at `lg` the hero switches to a 7-of-12 grid, so crossing
-   * 1024px drops the measure from ~836px to ~543px while the clamp is already
-   * pinned at its 4.5rem maximum. Sizing off the column instead of the
-   * viewport here is what keeps it at two lines; without it 1024–1180px is
-   * the only range on the site that wraps to three.
-   */
-  @media (min-width: 1024px) and (max-width: 1279px) {
-    .type-hero {
-      font-size: clamp(3.4rem, 5.3vw, 4.5rem);
-    }
-  }
-
   .type-h1 {
-    font-family: var(--font-display), var(--font-sans), sans-serif;
-    font-size: clamp(2.25rem, 5vw, 4rem);
+    font-family: var(--font-sans), sans-serif;
+    font-size: var(--text-h1);
     font-weight: 600;
-    letter-spacing: -0.015em;
-    line-height: 1.05;
+    letter-spacing: -0.035em;
+    line-height: 1.02;
   }
 
   .type-h2 {
-    font-family: var(--font-display), var(--font-sans), sans-serif;
-    font-size: clamp(1.875rem, 3.5vw, 3rem);
+    font-family: var(--font-sans), sans-serif;
+    font-size: var(--text-h2);
     font-weight: 600;
-    letter-spacing: -0.02em;
-    line-height: 1.1;
+    letter-spacing: -0.03em;
+    line-height: 1.04;
   }
 
   .type-h3 {
-    font-family: var(--font-display), var(--font-sans), sans-serif;
-    font-size: 1.25rem;
+    font-family: var(--font-sans), sans-serif;
+    font-size: var(--text-h3);
     font-weight: 600;
-    letter-spacing: -0.01em;
+    letter-spacing: -0.02em;
+    line-height: 1.12;
+  }
+
+  .type-h4 {
+    font-family: var(--font-sans), sans-serif;
+    font-size: var(--text-h4);
+    font-weight: 600;
+    letter-spacing: -0.015em;
     line-height: 1.3;
   }
 
+  /**
+   * THE EDITORIAL SERIF IS GONE, and its absence is the decision.
+   *
+   * Instrument Serif was carrying exactly three words on the entire site:
+   * "compound" in the homepage hero, "a number" on /about, "something" in the
+   * process section. Three italic words is not a typographic system, it is
+   * three exceptions — and because the wordmark is already a serif, the page
+   * ended up with a serif logo, a serif accent word and a sans headline that
+   * shared no relationship with either.
+   *
+   * Two families now do everything: Instrument Sans for all reading, IBM Plex
+   * Mono for machine voice. Emphasis is carried by size, weight and colour,
+   * which the scale above already defines. If an expressive serif returns it
+   * has to earn a repeating role, not a single word per page.
+   */
+
   .type-body-lg {
-    font-size: 1.125rem;
+    font-size: var(--text-body-lg);
     font-weight: 400;
     line-height: 1.6;
+    letter-spacing: -0.005em;
   }
 
   .type-body {
-    font-size: 1rem;
+    font-size: var(--text-body);
     font-weight: 400;
     line-height: 1.65;
+    letter-spacing: -0.005em;
+  }
+
+  .type-small {
+    font-size: var(--text-small);
+    font-weight: 400;
+    line-height: 1.55;
   }
 
   .type-label {
     font-family: var(--font-mono), ui-monospace, monospace;
-    font-size: 0.75rem;
+    font-size: var(--text-label);
     font-weight: 500;
+    line-height: 1.3;
     text-transform: uppercase;
-    letter-spacing: 0.12em;
+    letter-spacing: 0.14em;
+  }
+
+  /**
+   * THE SYSTEM VOICE.
+   *
+   * Mono is how the machine speaks: step names, payload lines, state,
+   * metadata, timestamps. It is never used for a human sentence — the moment
+   * a paragraph is set in mono the whole page reads as a developer portfolio
+   * rather than a studio that ships commercial software.
+   *
+   * `.type-mono` is the payload line (the content of a step); `.type-mono-sm`
+   * is the annotation beside it. `.type-label` (above) remains the uppercase
+   * eyebrow.
+   */
+  .type-mono {
+    font-family: var(--font-mono), ui-monospace, monospace;
+    font-size: var(--text-small);
+    font-weight: 400;
+    line-height: 1.4;
+    letter-spacing: -0.005em;
+  }
+
+  .type-mono-sm {
+    font-family: var(--font-mono), ui-monospace, monospace;
+    font-size: var(--text-label);
+    font-weight: 500;
+    line-height: 1.3;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+  }
+
+  /**
+   * THE TRAVELLING SIGNAL.
+   *
+   * A short green segment sliding along each connector in the hero's system
+   * row, on a 3s circuit — the second connector starts halfway through, so
+   * one signal appears to run input → system → outcome and repeat.
+   *
+   * This is ambient only. It reinforces the relationship between the three
+   * objects and reveals nothing: every word in the row is legible before it
+   * has moved a pixel.
+   */
+  /**
+   * TRANSFORM ONLY. The first version animated `left` from -3rem to 100%,
+   * which forces a layout on every frame of a 3s infinite loop on two
+   * elements — measurable as blocking time on the main thread for as long as
+   * the hero is on screen. The element is now full-width with the bright band
+   * painted into a gradient, and only `translateX` moves, so the whole thing
+   * runs on the compositor.
+   */
+  .signal-run {
+    animation: signal-run 3s linear infinite;
+    will-change: transform;
+  }
+
+  @keyframes signal-run {
+    from {
+      transform: translateX(-100%);
+    }
+    to {
+      transform: translateX(100%);
+    }
+  }
+
+  /* Reduced motion: the segment parks mid-connector rather than running.
+     Nothing disappears. */
+  @media (prefers-reduced-motion: reduce) {
+    .signal-run {
+      animation: none;
+      transform: none;
+    }
   }
 
   /* Readable measure for long-form copy */
@@ -284,11 +550,43 @@ html.js .reveal.is-visible {
   transform: none;
 }
 
+/**
+ * Clip-path reveal, for project imagery. The frame wipes open from the bottom
+ * rather than fading up, so the work section does not enter the same way as
+ * every other section.
+ *
+ * It follows the SAME contract as `.reveal` above, and that is not optional:
+ * the first implementation used Framer's `whileInView`, which writes
+ * `opacity: 0` into the render and left two of the three project images
+ * permanently invisible whenever the observer did not fire. Hidden state lives
+ * behind `html.js`; without JavaScript the image is simply there.
+ */
+html.js .clip-reveal {
+  opacity: 0;
+  clip-path: inset(0 0 22% 0);
+  transition:
+    opacity 700ms var(--ease-out),
+    clip-path 800ms var(--ease-out);
+  will-change: opacity, clip-path;
+}
+
+html.js .clip-reveal.is-visible {
+  opacity: 1;
+  clip-path: inset(0 0 0 0);
+}
+
 @media (prefers-reduced-motion: reduce) {
   html.js .reveal,
   html.js .reveal.is-visible {
     opacity: 1 !important;
     transform: none !important;
+    transition: none !important;
+  }
+
+  html.js .clip-reveal,
+  html.js .clip-reveal.is-visible {
+    opacity: 1 !important;
+    clip-path: none !important;
     transition: none !important;
   }
 }

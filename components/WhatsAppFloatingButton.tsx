@@ -13,17 +13,19 @@ import { cn } from '@/lib/utils';
  * scrolled past the fold, and hides again whenever the mobile menu is open
  * (Navbar broadcasts that via a data attribute on <body>).
  *
- * 48px on mobile, 56px from sm up — both clear the 44px touch-target minimum.
+ * 44px on mobile, 48px from sm up. It was 48/56 and sat 20px from the edge,
+ * which put it on top of CTAs and body copy on a phone; 44px is the touch
+ * target minimum, not a size to exceed for a secondary action.
  */
 /**
- * The button's own footprint plus its viewport offset, per breakpoint:
- * 48px + 20px inset on mobile, 56px + 28px from sm up. Anything overlapping
- * this corner box is something the button would sit on top of.
+ * The button's own footprint plus its viewport offset, per breakpoint.
+ * Anything overlapping this corner box is something the button would sit on
+ * top of, and it steps aside rather than covering it.
  */
 function buttonZone() {
   const wide = window.innerWidth >= 640;
-  const size = wide ? 56 : 48;
-  const inset = wide ? 28 : 20;
+  const size = wide ? 48 : 44;
+  const inset = wide ? 32 : 16;
   const pad = 12; // breathing room, so "nearly touching" also counts
 
   return {
@@ -92,15 +94,28 @@ export default function WhatsAppFloatingButton() {
       aria-hidden={!visible}
       tabIndex={visible ? 0 : -1}
       className={cn(
-        'fixed bottom-5 right-5 z-float flex h-12 w-12 items-center justify-center rounded-full bg-[#25D366] text-white shadow-lg transition-all duration-base ease-out sm:bottom-7 sm:right-7 sm:h-14 sm:w-14',
-        'hover:scale-105 hover:shadow-xl',
+        /**
+         * NOT WhatsApp green.
+         *
+         * #25D366 on a 56px circle was the single most saturated thing on the
+         * site by a wide margin — a consumer-brand accent sitting on a
+         * restrained navy/off-white palette, and the first thing the eye
+         * landed on regardless of what the page was actually saying.
+         *
+         * The affordance is unchanged: same position, same size, same icon,
+         * still obviously a chat button. It is now painted in the site's own
+         * ink with a Keel-green hairline, so it reads as part of the interface
+         * rather than as a widget bolted onto it.
+         */
+        'fixed bottom-6 right-4 z-float flex h-11 w-11 items-center justify-center rounded-full border border-accent-500/45 bg-ink text-white shadow-lg transition-all duration-base ease-out sm:bottom-8 sm:right-8 sm:h-12 sm:w-12',
+        'hover:border-accent-500 hover:shadow-xl',
         visible
           ? 'pointer-events-auto translate-y-0 opacity-100'
           : 'pointer-events-none translate-y-3 opacity-0'
       )}
     >
       <svg
-        className="h-6 w-6 sm:h-7 sm:w-7"
+        className="h-5 w-5 sm:h-6 sm:w-6"
         fill="currentColor"
         viewBox="0 0 24 24"
         aria-hidden

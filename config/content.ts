@@ -123,12 +123,210 @@ export const services = [
       'Internal operations products',
       'AI native software'
     ],
-    image: '/football-intelligence-os.png',
-    overlayImage: '/football-intelligence-os.png',
+    image: '/football-intelligence-os.webp',
+    overlayImage: '/football-intelligence-os.webp',
     outcomeStatement: 'From product logic to launch ready software.',
   }
 ];
 
+
+/**
+ * THE KEEL SIGNAL SYSTEM — system traces.
+ *
+ * Every service Keel sells is the same five states applied to a different
+ * business event, and these five words are the spine of the whole site:
+ *
+ *   SIGNAL → CONTEXT → DECISION → ACTION → OUTCOME
+ *
+ * The hero renders one of these as a run travelling through a field. They are
+ * labelled as EXAMPLE RUNs in the interface, and that label is load-bearing:
+ * the scenarios are illustrative of how a system behaves, so they are allowed
+ * to name a time slot or a channel. They are NOT allowed to carry a result
+ * number — no percentages, no hours saved, no revenue. If a number would read
+ * as a claim, it does not belong here; put it in the proof rail with a source.
+ *
+ * THREE OBJECTS, NOT FIVE FLOATING CARDS.
+ *
+ * The five states are still the model, but the hero composes them as three
+ * things, because five equally-weighted outlined boxes scattered around a
+ * headline is five competitors for the same attention:
+ *
+ *   steps[0]    THE INPUT      one compact object — what arrived
+ *   steps[1..3] THE CORE       one transformation area — what the system did
+ *   steps[4]    THE OUTCOME    one clear object — what came of it
+ *
+ * `anchors` places those three in the field, per service, so switching service
+ * recomposes the composition rather than only swapping text. `form` still
+ * varies per step (a waveform is not a branch is not a reel strip), which is
+ * what keeps the five services from reading as one diagram with the words
+ * changed.
+ *
+ * NOTHING HERE IS REVEALED OVER TIME. Every step renders complete and at full
+ * contrast from the first frame — the visitor must be able to read the entire
+ * workflow without waiting for an animation, and must never have to watch a
+ * sequence to reach the outcome. The only motion is a signal travelling the
+ * already-visible path.
+ *
+ * `tone` picks the accent semantics inside a trace:
+ *   'input'  → cobalt, what the system RECEIVED
+ *   'system' → the default ink/white, what it worked out
+ *   'result' → green, what it DID and what came of it
+ */
+export type TraceForm =
+  | 'pulse'
+  | 'wave'
+  | 'transcript'
+  | 'branch'
+  | 'slots'
+  | 'reels'
+  | 'browser'
+  | 'chart'
+  | 'chip'
+  | 'confirm';
+
+export type TraceStep = {
+  state: 'Signal' | 'Context' | 'Decision' | 'Action' | 'Outcome';
+  payload: string;
+  tone: 'input' | 'system' | 'result';
+  form: TraceForm;
+};
+
+/** Centre point of an object in the hero field, in 0–1 stage coordinates. */
+export type Anchor = { x: number; y: number };
+
+export type SystemRun = {
+  id: string;
+  /** Selector label. Short — this sits in a 5-up index. */
+  label: string;
+  /** Full service name, announced to screen readers on switch. */
+  service: string;
+  /** Links the run to the service page. */
+  slug: string;
+  /**
+   * Where the three objects sit. All three stay in the upper band of the
+   * stage (y < 0.5) so the headline below is never crowded — the system
+   * supports the headline, it does not compete with it.
+   */
+  anchors: { input: Anchor; core: Anchor; outcome: Anchor };
+  /**
+   * The one-line mobile summary: input → what the system does → outcome.
+   * A phone gets this, not a shrunk copy of the desktop diagram.
+   */
+  compact: { input: string; action: string; outcome: string };
+  steps: TraceStep[];
+};
+
+export const systemRuns: SystemRun[] = [
+  {
+    id: 'voice',
+    label: 'Voice',
+    service: 'Voice AI',
+    slug: 'voice-ai',
+    anchors: { input: { x: 0.09, y: 0.21 }, core: { x: 0.43, y: 0.31 }, outcome: { x: 0.80, y: 0.19 } },
+    compact: {
+      input: 'After-hours call',
+      action: 'Intent understood and the appointment booked',
+      outcome: 'Calendar and CRM updated',
+    },
+    steps: [
+      { state: 'Signal', payload: 'Inbound call · 18:42, after hours', tone: 'input', form: 'pulse' },
+      { state: 'Context', payload: 'Contact recognised — known patient', tone: 'system', form: 'wave' },
+      { state: 'Decision', payload: 'Intent: reschedule — availability loaded', tone: 'system', form: 'slots' },
+      { state: 'Action', payload: '10:30 Tue confirmed on the call', tone: 'result', form: 'transcript' },
+      { state: 'Outcome', payload: 'Calendar and CRM updated', tone: 'result', form: 'confirm' },
+    ],
+  },
+  {
+    id: 'automation',
+    label: 'Automation',
+    service: 'Agentic AI Automations',
+    slug: 'agentic-automations',
+    anchors: { input: { x: 0.10, y: 0.30 }, core: { x: 0.41, y: 0.19 }, outcome: { x: 0.79, y: 0.32 } },
+    compact: {
+      input: 'New lead received',
+      action: 'Enriched, scored and routed with a human in the loop',
+      outcome: 'CRM and owner updated',
+    },
+    steps: [
+      { state: 'Signal', payload: 'New lead received', tone: 'input', form: 'chip' },
+      { state: 'Context', payload: 'Company enriched and de-duplicated', tone: 'system', form: 'chart' },
+      { state: 'Decision', payload: 'Fit evaluated — action selected', tone: 'system', form: 'branch' },
+      { state: 'Action', payload: 'Human approval requested before it sends', tone: 'result', form: 'transcript' },
+      { state: 'Outcome', payload: 'CRM and owner updated', tone: 'result', form: 'confirm' },
+    ],
+  },
+  {
+    id: 'video',
+    label: 'Video',
+    service: 'UGC Ads & AI Video',
+    slug: 'ugc-video',
+    anchors: { input: { x: 0.12, y: 0.18 }, core: { x: 0.45, y: 0.33 }, outcome: { x: 0.81, y: 0.22 } },
+    compact: {
+      input: 'Campaign brief',
+      action: 'Angles found, variants produced and compared',
+      outcome: 'Winning direction selected',
+    },
+    steps: [
+      { state: 'Signal', payload: 'Campaign brief arrives', tone: 'input', form: 'chip' },
+      { state: 'Context', payload: 'Creative angles identified', tone: 'system', form: 'branch' },
+      { state: 'Decision', payload: 'Variants produced and assets prepared', tone: 'system', form: 'reels' },
+      { state: 'Action', payload: 'Performance compared across variants', tone: 'result', form: 'chart' },
+      { state: 'Outcome', payload: 'Winning direction selected and scaled', tone: 'result', form: 'confirm' },
+    ],
+  },
+  {
+    id: 'web',
+    label: 'Web',
+    service: 'Conversion Websites',
+    slug: 'websites',
+    anchors: { input: { x: 0.08, y: 0.28 }, core: { x: 0.39, y: 0.17 }, outcome: { x: 0.77, y: 0.30 } },
+    compact: {
+      input: 'Visitor arrives',
+      action: 'Intent inferred and the matching proof surfaced',
+      outcome: 'Attributed sales conversation',
+    },
+    steps: [
+      { state: 'Signal', payload: 'Visitor arrives from paid search', tone: 'input', form: 'pulse' },
+      { state: 'Context', payload: 'Intent inferred: pricing comparison', tone: 'system', form: 'transcript' },
+      { state: 'Decision', payload: 'Matching proof surfaced', tone: 'system', form: 'browser' },
+      { state: 'Action', payload: 'Conversion action completed', tone: 'result', form: 'chip' },
+      { state: 'Outcome', payload: 'Lead attributed to its source', tone: 'result', form: 'confirm' },
+    ],
+  },
+  {
+    id: 'saas',
+    label: 'SaaS',
+    service: 'SaaS Products',
+    slug: 'saas-products',
+    anchors: { input: { x: 0.11, y: 0.22 }, core: { x: 0.46, y: 0.33 }, outcome: { x: 0.82, y: 0.18 } },
+    compact: {
+      input: 'User action',
+      action: 'Product context loaded and AI assistance triggered',
+      outcome: 'Product insight generated',
+    },
+    steps: [
+      { state: 'Signal', payload: 'User action inside the product', tone: 'input', form: 'browser' },
+      { state: 'Context', payload: 'Product context loaded and attributed', tone: 'system', form: 'chart' },
+      { state: 'Decision', payload: 'AI assistance triggered', tone: 'system', form: 'branch' },
+      { state: 'Action', payload: 'Workflow completed in the same session', tone: 'result', form: 'chip' },
+      { state: 'Outcome', payload: 'Event recorded, product insight generated', tone: 'result', form: 'confirm' },
+    ],
+  },
+];
+
+/**
+ * The light/dark rhythm of the work chapters, by POSITION.
+ *
+ * Lives here rather than in components/FeaturedWork.tsx because /work is a
+ * server component: a non-component export imported across a "use client"
+ * boundary arrives as a client reference and is not callable on the server.
+ * Keyed to position, not to project, so it survives a reorder.
+ */
+export const projectChapterEnvs = ['paper', 'raised'] as const;
+
+export function projectChapterEnv(index: number) {
+  return projectChapterEnvs[index % projectChapterEnvs.length];
+}
 
 export const testimonials = [
   {
@@ -266,12 +464,50 @@ export type Project = {
   claim: string;
   summary: string;
   /**
+   * Homepage chapter copy. ONE sentence each — the content limits in the brief
+   * cap a homepage project at one challenge line, one system line and one
+   * attributable status. Anything longer belongs in `summary` on /work.
+   */
+  challenge?: string;
+  systemBuilt?: string;
+  /**
+   * Honest project state, NOT a result claim. Allowed vocabulary: Built,
+   * Deployed, In pilot, Shipped, In development — optionally followed by an
+   * attributable observation ("39 institutions audited"). Never a percentage,
+   * a revenue figure or a time-saved number unless it is measured and
+   * sourced. If you cannot attribute it, use the bare status.
+   */
+  status?: string;
+  /**
    * Project visual. A real interface crop, render, diagram or branded still —
    * this is what should carry the composition. Until one exists the card
    * falls back to the Keel system object keyed to `service`, which is an
    * honest diagram rather than a fabricated screenshot.
    */
   image?: string;
+  /**
+   * An 800px-wide variant of `image`, used as the small end of a `srcset`.
+   * Next's <Image> is unavailable here — `output: 'export'` ships without the
+   * optimiser — so responsive sources are hand-authored. Generate with:
+   *   cwebp -q 80 -resize 800 0 <source> -o <name>-800.webp
+   */
+  imageSmall?: string;
+  /**
+   * Intrinsic pixel dimensions of `image`. Required wherever `image` is set —
+   * without them the browser cannot reserve the box and every chapter
+   * contributes to cumulative layout shift.
+   */
+  imageWidth?: number;
+  imageHeight?: number;
+  /**
+   * How the image meets its frame.
+   *   'contain' — dense product UI. Nothing is cropped through interface text.
+   *   'cover'   — only when the crop is a deliberate composition.
+   * There is no single right answer for a mixed set of screenshots, which is
+   * why the old blanket `object-cover object-top` rendered a 1536px dashboard
+   * as unreadable pixel soup.
+   */
+  fit?: 'contain' | 'cover';
   /** Optional looping clip; takes precedence over `image`. */
   video?: string;
   results?: { metric: string; label: string }[];
@@ -290,7 +526,16 @@ export const projects: Project[] = [
     year: '2026',
     summary:
       'A platform for football clubs and academies that runs the whole operation in one place: squads, calendar, training, matchday, attendance, availability, finances and messaging. Clubs without a performance department have no reliable picture of a player, so every event logged here builds one, turning attendance, wellness and match data into a living player profile with a confidence score attached. Access is enforced at the data layer rather than in the interface, so sensitive medical information stays visible only to the people entitled to see it.',
-    image: '/football-intelligence-os.png',
+    challenge:
+      'Clubs without a performance department have no reliable picture of a player.',
+    systemBuilt:
+      'One operations layer where attendance, wellness and match data build a living player profile.',
+    status: 'Built',
+    image: '/football-intelligence-os.webp',
+    imageSmall: '/football-intelligence-os-800.webp',
+    imageWidth: 1536,
+    imageHeight: 1024,
+    fit: 'contain',
     featured: true,
   },
   {
@@ -302,7 +547,16 @@ export const projects: Project[] = [
     year: '2026',
     summary:
       'A voice agent calls a university switchboard, presses every option until the whole menu tree is mapped, scores how much pain a real caller goes through, and turns that into a single page report with a booking link at the end. A phone tree cannot be scraped: there is no API and no sitemap, only dial, listen, press and hang up, so every branch is a separate live call and the shape of the tree is unknown until you are already inside it. A weighted friction model scores only the paths that were genuinely walked, and options that were announced but never dialled are excluded from every number.',
+    challenge:
+      'A phone tree has no API or sitemap. It can only be mapped by dialling, listening and pressing each option.',
+    systemBuilt:
+      'A voice agent that walks every branch live, then scores caller friction across the paths it genuinely reached.',
+    status: 'Built · 39 institutions audited',
     image: '/ivr-audit-engine.webp',
+    imageSmall: '/ivr-audit-engine-800.webp',
+    imageWidth: 1448,
+    imageHeight: 1086,
+    fit: 'contain',
     results: [
       { metric: '39', label: 'Institutions audited' },
       { metric: '405', label: 'Live call minutes crawled' },
@@ -319,7 +573,16 @@ export const projects: Project[] = [
     year: '2026',
     summary:
       'A marketplace connecting building professionals with clients across the PACA region, working in both directions. Clients post projects for free and receive offers, while artisans also publish their own available services for clients to browse and contact directly. Most trade marketplaces run one way and take a cut of every job, which pushes artisans off the platform the moment a relationship forms, so this one earns from monthly subscriptions across three tiers and takes no commission at all. Matching, messaging, reviews and payment all sit inside the platform, across nineteen trades.',
+    challenge:
+      'Commission-based trade marketplaces push artisans off the platform the moment a relationship forms.',
+    systemBuilt:
+      'A two-way marketplace earning from subscriptions instead of commission, with matching, messaging, reviews and payment inside it.',
+    status: 'Built · 19 trades',
     image: '/artizyn-marketplace.webp',
+    imageSmall: '/artizyn-marketplace-800.webp',
+    imageWidth: 1448,
+    imageHeight: 1086,
+    fit: 'contain',
     featured: true,
   },
   {

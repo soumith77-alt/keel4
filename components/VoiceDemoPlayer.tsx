@@ -20,8 +20,8 @@ export default function VoiceDemoPlayer({
 }: VoiceDemoPlayerProps) {
   return (
     <div className="rounded-panel border border-line/15 bg-fg/[0.03] p-6 backdrop-blur-sm sm:p-7">
-      <p className="type-h3 text-fg">{title}</p>
-      <p className="mt-1.5 text-sm text-fg-muted">
+      <p className="type-h4 text-fg">{title}</p>
+      <p className="type-small mt-1.5 text-fg-muted">
         A real call, start to finish.
       </p>
       <audio

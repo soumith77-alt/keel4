@@ -1,14 +1,7 @@
-import Link from 'next/link';
-import { ArrowRight } from 'lucide-react';
-
-import { calendlyLink } from '@/config/content';
 import { Section } from '@/components/ui/section';
 import PageHero from '@/components/ui/page-hero';
-import { SectionHeading } from '@/components/ui/section-heading';
-import { Reveal } from '@/components/ui/reveal';
-import { Button } from '@/components/ui/button';
-import { GlowCard } from '@/components/ui/glow-card';
-import { Icon } from '@/components/ui/icon';
+import { Reveal, RevealGroup, RevealItem } from '@/components/ui/reveal';
+import FinalCTA from '@/components/FinalCTA';
 
 export const metadata = {
   title: 'About Keel - Agentic AI Solutions Studio',
@@ -47,26 +40,49 @@ const aboutSchema = {
   },
 };
 
-const PRINCIPLES = [
+/**
+ * ABOUT — the same system as every other route.
+ *
+ * This page used to run its own design language: the old heavy display face,
+ * a four-up grid of glow cards, its own spacing rhythm, and a bespoke navy
+ * CTA band with a radial highlight that appeared nowhere else. Read next to
+ * the homepage it looked like the previous version of the website, which is
+ * precisely what a visitor moving between the two would conclude.
+ *
+ * Nothing here is About-specific any more. It uses the shared type roles, the
+ * shared section rhythm, the shared border and label system, and the shared
+ * final CTA — and its one expressive moment ("a number") is the same editorial
+ * serif the homepage gives to "compound", used once, on purpose.
+ */
+
+/**
+ * FOUR COMMITMENTS. Not three principles AND four commitments.
+ *
+ * The page previously ran both lists, and they said the same things twice:
+ * "Move in weeks" beside "Fast deployment", "Build the whole system" beside
+ * "One system, not four projects". Two sections, eight items, four ideas.
+ * This is the merge — every idea kept, said once.
+ */
+const COMMITMENTS = [
   {
-    icon: 'chart',
-    title: 'Outcomes, not deliverables',
-    body: 'We start from the metric that matters and work backwards. If a build won’t move it, we say so before you pay for it.',
+    n: '01',
+    title: 'Find the number first',
+    body: 'Goals and bottlenecks before tools. If a build won’t move the metric, we say so before you pay for it.',
   },
   {
-    icon: 'bolt',
-    title: 'Fast deployment',
+    n: '02',
+    title: 'One system, not four projects',
+    body: 'Voice, automation, video and web are designed to feed each other rather than sit in separate silos.',
+  },
+  {
+    n: '03',
+    title: 'Move in weeks',
     body: 'Most solutions launch within 2 to 4 weeks. Voice agents can be live in as little as one week.',
   },
   {
-    icon: 'layers',
-    title: 'One system, not four projects',
-    body: 'Voice, automations, video, and web are built to feed each other rather than sit in separate silos.',
-  },
-  {
-    icon: 'refresh',
-    title: 'Ongoing optimisation',
-    body: 'We stay on after launch. Most of the gain arrives from tuning against real traffic, not from the first release.',
+    n: '04',
+    title: 'Stay after launch',
+    body: 'Most of the gain arrives from tuning against real traffic, not from the first release.',
   },
 ];
 
@@ -78,111 +94,50 @@ export default function AboutPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(aboutSchema) }}
       />
 
-      {/* Hero */}
       <PageHero
         eyebrow="About"
         title="We build AI that moves a number."
-        lead="We solve real problems with AI. No buzzwords, no half-finished experiments."
-        className="pb-20"
+        lead="We solve real business problems with AI without buzzwords or half-finished experiments."
+        className="pb-12"
       />
 
-      {/* Approach */}
-      <Section tone="raised" spacing="lg">
-        <div className="grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-16">
+      {/* One section, not three. The statement and four commitments say each
+          idea once, without repeating the homepage workflow illustration. */}
+      <Section tone="raised" spacing="md">
+        <div className="grid gap-10 lg:grid-cols-12 lg:gap-16">
           <div className="lg:col-span-5">
-            <SectionHeading
-              eyebrow="Our approach"
-              title="Start with the metric"
-              lead="Not with the tech, and not with a deliverables list."
-            />
-          </div>
-          <div className="lg:col-span-7">
-            {/* Was three paragraphs of 29, 36 and 20 words. The same three
-                ideas, as statements you can read at a glance. */}
             <Reveal>
-              <dl className="divide-y divide-line/10 border-y border-line/10">
-                {[
-                  ['We find the number first', 'Goals and bottlenecks before tools.'],
-                  ['We build the whole system', 'Voice, automation, video and web.'],
-                  ['We move in weeks', 'Not months.'],
-                ].map(([term, detail]) => (
-                  <div key={term} className="py-6">
-                    <dt className="type-h3 text-fg">{term}</dt>
-                    <dd className="mt-1.5 type-body text-fg-muted">{detail}</dd>
-                  </div>
-                ))}
-              </dl>
+              <span className="type-label flex items-center gap-3 text-signal">
+                <span aria-hidden className="h-px w-8 bg-accent-600" />
+                How we work
+              </span>
+              <h2 className="type-h2 mt-4 text-fg text-balance">
+                Start with the metric, not with the tech.
+              </h2>
+              <p className="type-body measure mt-5 text-fg-muted text-pretty">
+                Four commitments shape every engagement, and they are the things
+                we expect to be held to.
+              </p>
             </Reveal>
+
           </div>
-        </div>
-      </Section>
 
-      {/* Principles */}
-      <Section spacing="lg">
-        <SectionHeading
-          eyebrow="Why Keel"
-          title="How we work"
-          lead="Four commitments that shape every engagement."
-        />
-
-        <div className="mt-14 grid grid-cols-1 gap-4 sm:grid-cols-2">
-          {PRINCIPLES.map((p, i) => (
-            <Reveal key={p.title} delay={i * 0.05}>
-              <GlowCard className="h-full">
-                <div className="flex h-full flex-col gap-4 p-7">
-                  <span className="inline-flex h-10 w-10 items-center justify-center rounded-control border border-line/15 bg-ink/10 text-accent-700">
-                    <Icon name={p.icon} size={20} />
-                  </span>
-                  <h3 className="type-h3 text-fg">{p.title}</h3>
-                  <p className="text-sm leading-relaxed text-fg-muted text-pretty">
-                    {p.body}
-                  </p>
-                </div>
-              </GlowCard>
-            </Reveal>
-          ))}
-        </div>
-      </Section>
-
-      {/* CTA */}
-      <Section tone="brand" spacing="lg" className="overflow-hidden">
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-0 bg-[radial-gradient(60%_120%_at_50%_0%,rgba(255,255,255,0.16),transparent_70%)]"
-        />
-        <div aria-hidden className="grain-overlay pointer-events-none absolute inset-0" />
-
-        <div className="relative z-raised flex flex-col items-start gap-10 lg:flex-row lg:items-end lg:justify-between">
-          <Reveal className="max-w-2xl">
-            <span className="type-label text-white/70">Next step</span>
-            <h2 className="type-h1 mt-5 text-white text-balance">
-              Let&apos;s work together.
-            </h2>
-            <p className="type-body-lg measure mt-5 text-white/80 text-pretty">
-              Book a call to discuss how we can help transform your business.
-            </p>
-          </Reveal>
-
-          <Reveal delay={0.08} className="shrink-0">
-            <div className="flex flex-col gap-3 sm:flex-row">
-              <Button asChild size="lg" variant="inverse">
-                <a href={calendlyLink} target="_blank" rel="noopener noreferrer">
-                  Book a call
-                  <ArrowRight className="h-4 w-4" aria-hidden />
-                </a>
-              </Button>
-              <Button
-                asChild
-                size="lg"
-                variant="secondary"
-                className="border-white/25 bg-white/10 text-white hover:border-white/40 hover:bg-white/20"
+          <RevealGroup className="grid self-start border-t border-line/15 lg:col-span-7">
+            {COMMITMENTS.map((item) => (
+              <RevealItem
+                key={item.title}
+                className="grid gap-2 border-b border-line/15 py-6 sm:grid-cols-[auto_1fr_1.5fr] sm:items-baseline sm:gap-x-8"
               >
-                <Link href="/contact">Get in touch</Link>
-              </Button>
-            </div>
-          </Reveal>
+                <span className="type-mono-sm text-fg-subtle">{item.n}</span>
+                <h3 className="type-h4 text-fg">{item.title}</h3>
+                <p className="type-body text-fg-muted text-pretty">{item.body}</p>
+              </RevealItem>
+            ))}
+          </RevealGroup>
         </div>
       </Section>
+
+      <FinalCTA />
     </>
   );
 }

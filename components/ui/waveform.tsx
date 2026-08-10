@@ -85,11 +85,44 @@ export function Waveform({
     };
 
     resize();
-    if (reduceMotion) {
-      draw();
+    draw();
+
+    /**
+     * Gate the loop on being both onscreen and on a foreground tab. Without
+     * this the canvas repainted 60 times a second for the entire life of the
+     * page — including while scrolled past and while the tab sat in the
+     * background — which is exactly the kind of cost that shows up as a
+     * Lighthouse regression and as battery drain on a phone.
+     */
+    let onscreen = false;
+    const stop = () => {
+      if (raf !== null) {
+        cancelAnimationFrame(raf);
+        raf = null;
+      }
+    };
+    const sync = () => {
+      const shouldRun =
+        !reduceMotion && onscreen && document.visibilityState === "visible";
+      if (shouldRun && raf === null) raf = requestAnimationFrame(loop);
+      if (!shouldRun) stop();
+    };
+
+    let io: IntersectionObserver | null = null;
+    if (typeof IntersectionObserver === "undefined") {
+      onscreen = true;
+      sync();
     } else {
-      raf = requestAnimationFrame(loop);
+      io = new IntersectionObserver(
+        ([entry]) => {
+          onscreen = entry.isIntersecting;
+          sync();
+        },
+        { threshold: 0 },
+      );
+      io.observe(canvas);
     }
+    document.addEventListener("visibilitychange", sync);
 
     const onResize = () => {
       resize();
@@ -98,7 +131,9 @@ export function Waveform({
     window.addEventListener("resize", onResize);
 
     return () => {
-      if (raf !== null) cancelAnimationFrame(raf);
+      stop();
+      io?.disconnect();
+      document.removeEventListener("visibilitychange", sync);
       window.removeEventListener("resize", onResize);
     };
   }, [bars, color, idleColor, reduceMotion]);

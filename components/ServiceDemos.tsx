@@ -46,6 +46,10 @@ export function VoiceDemo({ className }: { className?: string }) {
       <div className="h-12 w-full sm:h-16">
         <Waveform
           active={reduceMotion ? true : inView && line < TRANSCRIPT.length}
+          // The default idle colour is the structural navy, which is invisible
+          // inside the dark service panel — between transcript lines the meter
+          // simply vanished. This is the muted foreground of the dark theme.
+          idleColor="#8b93a6"
         />
       </div>
 
@@ -54,16 +58,34 @@ export function VoiceDemo({ className }: { className?: string }) {
           <motion.div
             key={entry.text}
             initial={false}
-            animate={{
-              opacity: i <= line ? 1 : 0.18,
-              y: i <= line ? 0 : 4,
-            }}
+            /**
+             * DIMMING TEXT WITH OPACITY IS THE WRONG MECHANISM, and this is the
+             * second time it was wrong here. It started at 0.18 (≈1.4:1 —
+             * invisible). Raising it to 0.55 still measured 2.67:1 against the
+             * navy bubble, because opacity multiplies the TEXT down as well as
+             * the background.
+             *
+             * So the pending state is now carried by colour and position, not
+             * transparency: `fg-muted` (5.7:1 on the bubble) for a line not yet
+             * said, `fg` (12.2:1) once it has been. Both pass at 12px, the
+             * progression still reads, and it survives the animation being off.
+             */
+            animate={{ y: i <= line ? 0 : 4 }}
             transition={{ duration: 0.4, ease: EASE_OUT }}
+            // Theme-neutral. These bubbles were tuned when this demo lived on
+            // a navy panel; the section is paper now, and `bg-ink/25` rendered
+            // as a flat grey slab. A bordered raised surface for the agent and
+            // a tinted foreground wash for the caller both resolve correctly
+            // on either polarity, because both are expressed in theme tokens
+            // rather than in a fixed colour.
             className={cn(
-              "max-w-[90%] rounded-control px-3 py-1.5 text-xs leading-relaxed sm:py-2",
-              entry.who === "agent"
-                ? "ml-auto bg-ink/12 text-fg text-right"
-                : "bg-fg/[0.05] text-fg-muted",
+              "max-w-[90%] rounded-control px-3 py-2 text-xs leading-relaxed transition-colors duration-base ease-out",
+              entry.who === "agent" ? "ml-auto text-right" : "",
+              i <= line
+                ? entry.who === "agent"
+                  ? "border border-line/12 bg-surface-raised text-fg"
+                  : "bg-fg/[0.07] text-fg"
+                : "bg-fg/[0.03] text-fg-muted",
             )}
           >
             {entry.text}
@@ -98,23 +120,34 @@ export function AutomationDemo({ className }: { className?: string }) {
   const byId = Object.fromEntries(NODES.map((n) => [n.id, n]));
 
   return (
+    // The inner wrapper is load-bearing. `className` carries the panel padding,
+    // so the <svg> filled the CONTENT box while the node labels were positioned
+    // against the BORDER box — the edges rendered offset from the nodes they
+    // were supposed to connect by exactly the padding. Both layers now share
+    // one coordinate space.
     <div className={cn("relative w-full", className)}>
-      <svg
-        viewBox="0 0 100 100"
-        preserveAspectRatio="none"
-        className="h-full w-full"
-        aria-hidden
-      >
+      <div className="relative h-full w-full">
+        <svg
+          viewBox="0 0 100 100"
+          preserveAspectRatio="none"
+          className="absolute inset-0 h-full w-full"
+          aria-hidden
+        >
         {EDGES.map(([from, to], i) => {
           const a = byId[from];
           const b = byId[to];
           const d = `M ${a.x} ${a.y} C ${(a.x + b.x) / 2} ${a.y}, ${(a.x + b.x) / 2} ${b.y}, ${b.x} ${b.y}`;
           return (
             <g key={`${from}-${to}`}>
+              {/* currentColor, not a hardcoded navy: this demo renders inside
+                  the dark service panel, where rgba(14,24,54,…) is navy on
+                  navy — the resting workflow graph was invisible and only the
+                  travelling green pulse showed. */}
               <path
                 d={d}
                 fill="none"
-                stroke="rgba(14,24,54,0.15)"
+                stroke="currentColor"
+                strokeOpacity={0.2}
                 strokeWidth={0.6}
                 vectorEffect="non-scaling-stroke"
               />
@@ -140,9 +173,9 @@ export function AutomationDemo({ className }: { className?: string }) {
             </g>
           );
         })}
-      </svg>
+        </svg>
 
-      {NODES.map((n, i) => (
+        {NODES.map((n, i) => (
         <motion.span
           key={n.id}
           className="absolute -translate-x-1/2 -translate-y-1/2 whitespace-nowrap border border-line/15 bg-surface px-2 py-1 font-mono text-[11px] font-medium uppercase tracking-wider text-fg"
@@ -168,7 +201,8 @@ export function AutomationDemo({ className }: { className?: string }) {
         >
           {n.label}
         </motion.span>
-      ))}
+        ))}
+      </div>
     </div>
   );
 }

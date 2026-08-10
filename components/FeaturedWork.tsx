@@ -3,237 +3,335 @@
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 
-import { projects, type Project } from '@/config/content';
-import { Section } from '@/components/ui/section';
+import { cn } from '@/lib/utils';
+import { projectChapterEnv, projects, type Project } from '@/config/content';
 import { Reveal } from '@/components/ui/reveal';
-import KeelSystem, { type SystemForm } from '@/components/KeelSystem';
 
 /**
- * Selected work, media-led.
+ * SELECTED WORK — one chapter layout, used everywhere.
  *
- * The previous version was three text-only cards, which asked project titles
- * and descriptions to carry all the visual weight. Here the visual occupies
- * roughly two thirds of each composition: one large cinematic panel, two
- * smaller ones beneath.
+ * This has been narrowed twice. It began as three bespoke compositions, which
+ * opened most of an empty viewport at the IVR → Artizyn seam and put the same
+ * three facts in three different places. That was replaced by two patterns, a
+ * full-width "featured" treatment for the first project and a 40/60 split for
+ * the rest — and the featured project then read as substantially more
+ * premium than the other two, which is a ranking nobody asked for.
  *
- * ASSETS: `project.image` / `project.video` are the real thing and should be
- * filled in — an interface crop, render or branded still per project. Until
- * then the panel renders the Keel system object keyed to the project's
- * service. That is a deliberate choice over a grey placeholder: it reuses the
- * hero's visual language so it recurs across the page (which is what makes a
- * visual system read as identity), and it is an honest diagram rather than a
- * fabricated screenshot.
+ * There is now ONE layout: 40% information, 60% media, sides alternating,
+ * every stage 16:10. Every project gets the same room, the same fact
+ * structure, the same CTA and the same mobile order (title → visual → facts).
+ * The only thing that varies between chapters is the surface a chapter sits
+ * on, which carries the page's light/dark rhythm.
+ *
+ * NO ENTRANCE ANIMATION ON THE MEDIA. The stage used to wipe open with a
+ * clip-path reveal, which meant a screenshot could be caught mid-transition
+ * and read as washed out — a fade that makes the product look worse is worse
+ * than no fade. Images are simply present.
+ *
+ * IMAGE RULES ARE NON-NEGOTIABLE. Dense product UI is contained, never cropped
+ * through its own interface text; every image declares its intrinsic size and
+ * a responsive source set.
  */
 
-/** Map a project's service onto the matching system form. */
-function formFor(service: string): SystemForm {
-  const s = service.toLowerCase();
-  if (s.includes('voice')) return 'voice';
-  if (s.includes('automation')) return 'workflow';
-  if (s.includes('video') || s.includes('ugc')) return 'video';
-  return 'convert';
-}
+/**
+ * Chapter environments. Restrained on purpose: the difference between the
+ * three is the SURFACE and how the product frame is lit, not a new palette.
+ * Giving each project its own colours would have broken the one thing that
+ * makes these read as one studio's work.
+ */
+export type Env = 'obsidian' | 'paper' | 'raised';
 
-function IVRAuditVisual() {
+const ENV: Record<Env, { section: string; frame: string }> = {
+  // Near-black. The hero project, and the only chapter that inverts.
+  obsidian: {
+    section: 'theme-obsidian bg-surface text-fg',
+    frame: 'border-line/14 bg-[rgb(var(--canvas-raised))]',
+  },
+  // The canvas, with the interface held in a navy frame — a cool, technical
+  // surround for a dense workflow diagram.
+  paper: {
+    section: 'theme-light bg-surface text-fg',
+    frame: 'border-line/12 bg-surface-raised',
+  },
+  // White paper, same navy frame. Warmer by contrast with the canvas above it
+  // rather than by introducing a warmer colour.
+  raised: {
+    section: 'theme-light bg-surface-raised text-fg',
+    frame: 'border-line/12 bg-surface',
+  },
+};
+
+/**
+ * THE PRODUCT STAGE.
+ *
+ * One definition for every project image on the page. It declares a ratio, a
+ * fit, a frame, an internal pad and a loading strategy, because the previous
+ * version left those to each chapter and produced a 3:2 here, a 16:10 there,
+ * and dashboards enlarged past the point where their own labels stayed
+ * readable.
+ *
+ * `contain` is the default and it is deliberate: every asset on this page is
+ * dense product UI, and `cover` crops through interface text. Only an image
+ * whose crop has been approved sets `fit: 'cover'` in the data layer.
+ */
+function Stage({
+  project,
+  env,
+  priority,
+  className,
+}: {
+  project: Project;
+  env: Env;
+  priority?: boolean;
+  className?: string;
+}) {
+  const contain = project.fit !== 'cover';
+
   return (
-    <div className="grid h-full grid-cols-[0.72fr_1.28fr] gap-4 p-6 sm:p-8">
-      <div className="flex flex-col justify-between border border-line/10 bg-fg/[0.025] p-5">
-        <span className="type-label text-fg-subtle">Friction score</span>
-        <div>
-          <span className="font-mono text-5xl text-accent-500">82</span>
-          <span className="ml-1 font-mono text-sm text-fg-subtle">/100</span>
+    <div
+      className={cn(
+        // ONE ratio, every project, every breakpoint. The exceptions that
+        // used to live here (16:9 for the featured chapter, 4:3 on phones)
+        // are exactly what made the section read as unfinished.
+        'relative overflow-hidden rounded-panel border aspect-project-standard',
+        ENV[env].frame,
+        className,
+      )}
+    >
+      {project.video ? (
+        <video
+          src={project.video}
+          muted
+          loop
+          autoPlay
+          playsInline
+          className="h-full w-full object-cover"
+        />
+      ) : project.image ? (
+        // 20–56px of internal pad, fluid. Dense UI needs air inside its frame
+        // or it reads as a screenshot pasted onto the page.
+        <div className={cn('h-full w-full', contain && 'p-[clamp(0.75rem,1.4vw,1.5rem)]')}>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={project.image}
+            srcSet={
+              project.imageSmall && project.imageWidth
+                ? `${project.imageSmall} 800w, ${project.image} ${project.imageWidth}w`
+                : undefined
+            }
+            alt={`${project.title} — product interface`}
+            width={project.imageWidth}
+            height={project.imageHeight}
+            loading={priority ? 'eager' : 'lazy'}
+            decoding="async"
+            // Matches the seven-of-twelve media column, so the browser does
+            // not pick the 800px source for a 1200px stage and upscale it.
+            sizes="(min-width: 1024px) 58vw, 92vw"
+            className={cn(
+              'h-full w-full',
+              contain ? 'object-contain' : 'object-cover object-top',
+            )}
+          />
         </div>
-        <div className="space-y-2">
-          {[76, 52, 88].map((width, i) => (
-            <span key={i} className="block h-1.5 bg-fg/10">
-              <span
-                className="block h-full bg-accent-500"
-                style={{ width: `${width}%` }}
-              />
-            </span>
-          ))}
-        </div>
-      </div>
-      <div className="relative overflow-hidden border border-line/10 bg-fg/[0.025]">
-        <span className="type-label absolute left-4 top-4 text-fg-subtle">
-          IVR map
-        </span>
-        <div className="absolute inset-x-5 bottom-6 top-12">
-          <span className="absolute left-1/2 top-0 h-9 w-20 -translate-x-1/2 border border-accent-500/60 bg-accent-500/10" />
-          <span className="absolute left-1/2 top-9 h-8 w-px bg-fg/20" />
-          <span className="absolute left-[20%] right-[20%] top-[4.25rem] h-px bg-fg/20" />
-          {[20, 50, 80].map((left) => (
-            <span key={left}>
-              <span
-                className="absolute top-[4.25rem] h-9 w-px bg-fg/20"
-                style={{ left: `${left}%` }}
-              />
-              <span
-                className="absolute top-[6.5rem] h-8 w-16 -translate-x-1/2 border border-line/15 bg-surface"
-                style={{ left: `${left}%` }}
-              />
-              <span
-                className="absolute top-[9.75rem] h-1.5 w-12 -translate-x-1/2 bg-fg/12"
-                style={{ left: `${left}%` }}
-              />
-            </span>
-          ))}
-        </div>
-      </div>
+      ) : null}
     </div>
   );
 }
 
-function MarketplaceVisual() {
+/** Number · service · year. Identical in both patterns. */
+function MetaLine({ project, index }: { project: Project; index: number }) {
   return (
-    <div className="h-full p-6 sm:p-8">
-      <div className="flex h-full flex-col overflow-hidden border border-line/10 bg-fg/[0.025]">
-        <div className="flex items-center justify-between border-b border-line/10 px-4 py-3">
-          <div className="flex items-center gap-2">
-            <span className="h-6 w-6 rounded-full bg-accent-500" />
-            <span className="h-2 w-20 rounded-full bg-fg/45" />
-          </div>
-          <span className="h-7 w-20 bg-accent-500" />
-        </div>
-        <div className="grid min-h-0 flex-1 grid-cols-[0.42fr_1fr]">
-          <div className="space-y-3 border-r border-line/10 p-4">
-            <span className="type-label text-fg-subtle">Filters</span>
-            {[90, 70, 82, 58].map((width) => (
-              <span
-                key={width}
-                className="block h-2 rounded-full bg-fg/10"
-                style={{ width: `${width}%` }}
-              />
-            ))}
-          </div>
-          <div className="grid grid-cols-2 gap-3 p-4">
-            {[0, 1, 2, 3].map((n) => (
-              <div key={n} className="flex flex-col border border-line/10 bg-surface p-3">
-                <span className="mb-3 block aspect-[16/8] bg-gradient-to-br from-accent-500/35 to-fg/[0.03]" />
-                <span className="h-2 w-4/5 rounded-full bg-fg/45" />
-                <span className="mt-2 h-1.5 w-1/2 rounded-full bg-fg/12" />
-                <span className="mt-auto pt-3 font-mono text-[10px] text-accent-500">
-                  AVAILABLE
-                </span>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
+    <div className="flex items-center gap-3">
+      <span className="type-mono-sm text-signal">
+        {String(index + 1).padStart(2, '0')}
+      </span>
+      <span aria-hidden className="h-px w-6 bg-line/25" />
+      <span className="type-mono-sm text-fg-subtle">
+        {project.service} · {project.year}
+      </span>
     </div>
   );
 }
 
-function Visual({ project }: { project: Project }) {
-  if (project.video) {
-    return (
-      <video
-        src={project.video}
-        muted
-        loop
-        autoPlay
-        playsInline
-        className="h-full w-full object-cover"
-      />
-    );
-  }
-  if (project.image) {
-    return (
-      // eslint-disable-next-line @next/next/no-img-element
-      <img
-        src={project.image}
-        alt={`${project.title} product interface`}
-        className="h-full w-full object-cover object-top"
-        loading="lazy"
-      />
-    );
-  }
-  if (project.slug === 'ivr-audit-engine') return <IVRAuditVisual />;
-  if (project.slug === 'artizyn') return <MarketplaceVisual />;
+/**
+ * Challenge / System / Status — always these three, always in this order,
+ * always labelled the same way. `layout` only changes whether they run across
+ * or down; the content structure never varies between projects.
+ */
+function Facts({ project }: { project: Project }) {
+  const rows = (
+    [
+      ['Challenge', project.challenge],
+      ['System', project.systemBuilt],
+      ['Status', project.status],
+    ] as const
+  ).filter(([, value]) => Boolean(value));
+
+  if (!rows.length) return null;
 
   return (
-    <div className="relative flex h-full w-full items-center justify-center">
-      <div
+    <dl className="grid gap-4">
+      {rows.map(([label, value]) => (
+        <div key={label} className="border-t border-line/15 pt-3.5">
+          <dt className="type-mono-sm text-fg-subtle">{label}</dt>
+          <dd
+            className={cn(
+              'type-small mt-1.5 text-pretty',
+              label === 'Status' ? 'text-signal' : 'text-fg-muted',
+            )}
+          >
+            {value}
+          </dd>
+        </div>
+      ))}
+    </dl>
+  );
+}
+
+function CaseStudyLink({ project }: { project: Project }) {
+  if (!project.summary.trim()) return null;
+
+  return (
+    <Link
+      href={`/work#${project.slug}`}
+      className="group inline-flex min-h-[44px] items-center gap-2 border-b border-fg pb-1 text-fg transition-colors duration-fast ease-micro hover:border-accent-500 hover:text-signal"
+    >
+      <span className="type-small font-medium">Read project details</span>
+      <ArrowRight
         aria-hidden
-        className="pointer-events-none absolute h-2/3 w-2/3 rounded-full bg-accent-500/20 blur-[90px]"
+        className="h-4 w-4 transition-transform duration-fast ease-micro group-hover:translate-x-1"
       />
-      <KeelSystem
-        form={formFor(project.service)}
-        className="relative h-[82%] w-[82%] text-fg"
-      />
-    </div>
+    </Link>
   );
 }
 
-function Panel({ project }: { project: Project }) {
+type ChapterProps = {
+  project: Project;
+  index: number;
+  env: Env;
+  /** Which side the media sits on from `lg`. Alternate down the page. */
+  media?: 'left' | 'right';
+  priority?: boolean;
+  showDetails?: boolean;
+};
+
+/**
+ * ONE CHAPTER. 40% information, 60% media, sides alternating.
+ *
+ * Three blocks in a twelve-column grid rather than two columns, so the mobile
+ * order is title → visual → facts on every project while the desktop layout
+ * is still a clean 40/60. Two columns could not do both.
+ */
+export function ProjectChapter({
+  project,
+  index,
+  env,
+  media = 'right',
+  priority,
+  showDetails = false,
+}: ChapterProps) {
+  // The one vertical rhythm every chapter uses — 56px on a phone, 96px at the
+  // top end, down from 80/144. Nothing else on the page sets its own.
+  const hasMedia = Boolean(project.video || project.image);
+  const infoCols = hasMedia
+    ? media === 'right'
+      ? 'lg:col-span-5 lg:col-start-1'
+      : 'lg:col-span-5 lg:col-start-8'
+    : 'lg:col-span-8 lg:col-start-1';
+  const mediaCols = media === 'right' ? 'lg:col-start-6' : 'lg:col-start-1';
+
   return (
-    <article className="theme-dark group grid h-full grid-rows-[auto_1fr] overflow-hidden rounded-panel bg-surface">
-      <div className="relative aspect-[4/3] overflow-hidden border-b border-line/10">
-        <Visual project={project} />
-      </div>
+    <section
+      id={project.slug}
+      className={cn(
+        'relative overflow-hidden py-[clamp(3.5rem,6vw,6rem)]',
+        ENV[env].section,
+      )}
+    >
+      <div className="mx-auto w-full max-w-wide px-5 sm:px-8">
+        <div className="grid gap-5 lg:grid-cols-12 lg:gap-x-12 lg:gap-y-5">
+          <Reveal className={cn('lg:row-start-1', infoCols)}>
+            <MetaLine project={project} index={index} />
+            <h3 className="type-h3 mt-3 text-fg text-balance">{project.title}</h3>
+          </Reveal>
 
-      <div className="flex min-h-[18rem] flex-col gap-4 p-7">
-        <div className="flex items-center gap-3">
-          <span className="type-label text-accent-500">{project.service}</span>
-          <span aria-hidden className="h-1 w-1 rounded-full bg-fg/30" />
-          <span className="type-label text-fg-subtle">{project.year}</span>
-        </div>
+          {hasMedia && (
+            <div
+              className={cn(
+                'lg:col-span-7 lg:row-span-2 lg:row-start-1 lg:self-center',
+                mediaCols,
+              )}
+            >
+              <Stage project={project} env={env} priority={priority} />
+            </div>
+          )}
 
-        <h3 className="type-h3 min-h-[3.25rem] text-fg">
-          {project.title}
-        </h3>
-        <p className="type-body text-fg-muted text-pretty">{project.claim}</p>
-
-        {project.results && project.results.length > 0 && (
-          <dl className="mt-auto flex flex-wrap gap-x-10 gap-y-4 pt-4">
-            {project.results.slice(0, 2).map((r) => (
-              <div key={r.label}>
-                <dt className="sr-only">{r.label}</dt>
-                <dd className="font-mono text-2xl font-medium tabular-nums text-accent-500">
-                  {r.metric}
-                </dd>
-                <span className="mt-1 block text-xs leading-snug text-fg-subtle">
-                  {r.label}
-                </span>
+          <div className={cn('lg:row-start-2', infoCols)}>
+            <Facts project={project} />
+            {showDetails && project.summary.trim() ? (
+              <div className="mt-6 border-t border-line/15 pt-4">
+                <span className="type-mono-sm text-fg-subtle">Project overview</span>
+                <p className="type-body mt-2 text-fg-muted text-pretty">
+                  {project.summary}
+                </p>
               </div>
-            ))}
-          </dl>
-        )}
+            ) : (
+              <div className="mt-6">
+                <CaseStudyLink project={project} />
+              </div>
+            )}
+          </div>
+        </div>
       </div>
-    </article>
+    </section>
   );
 }
 
 export default function FeaturedWork() {
   const featured = projects.filter((p) => p.featured);
   const pool = featured.length > 0 ? featured : projects;
-  const [lead, ...rest] = pool.slice(0, 3);
+  const chapters = pool.slice(0, 3);
 
-  if (!lead) return null;
+  if (!chapters.length) return null;
 
   return (
-    <Section tone="light" spacing="lg" id="work">
-      <Reveal className="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
-        <h2 className="type-h1 text-fg text-balance">Selected work</h2>
-        <Link
-          href="/work"
-          className="group inline-flex min-h-[44px] items-center gap-2 self-start border-b border-fg pb-1 text-fg transition-colors duration-base ease-out hover:border-accent-700 hover:text-accent-700 sm:min-h-0"
-        >
-          <span className="type-body">View all</span>
-          <ArrowRight
-            className="h-4 w-4 transition-transform duration-base ease-out group-hover:translate-x-1"
-            aria-hidden
-          />
-        </Link>
-      </Reveal>
-
-      <div className="mt-14 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-        {[lead, ...rest].map((p, i) => (
-          <Reveal key={p.slug} delay={i * 0.05} className="h-full">
-            <Panel project={p} />
+    <div id="work" className="scroll-mt-24">
+      <section className="theme-light bg-surface pt-14 sm:pt-20">
+        <div className="mx-auto w-full max-w-wide px-5 sm:px-8">
+          <Reveal className="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
+            <div>
+              <span className="flex items-baseline gap-3">
+                <span aria-hidden className="h-px w-8 translate-y-[-0.35rem] bg-accent-600" />
+                <span className="type-mono-sm text-fg-subtle">Selected work</span>
+              </span>
+              <h2 className="type-h2 mt-4 text-fg text-balance">
+                Selected systems.
+              </h2>
+            </div>
+            <Link
+              href="/work"
+              className="group inline-flex min-h-[44px] items-center gap-2 self-start border-b border-fg pb-1 text-fg transition-colors duration-fast ease-micro hover:border-accent-700 hover:text-signal sm:self-end"
+            >
+              <span className="type-small font-medium">View all work</span>
+              <ArrowRight
+                aria-hidden
+                className="h-4 w-4 transition-transform duration-fast ease-micro group-hover:translate-x-1"
+              />
+            </Link>
           </Reveal>
-        ))}
-      </div>
-    </Section>
+        </div>
+      </section>
+
+      {chapters.map((project, i) => (
+        <ProjectChapter
+          key={project.slug}
+          project={project}
+          index={i}
+          env={projectChapterEnv(i)}
+          media={i % 2 === 0 ? 'right' : 'left'}
+          priority={i === 0}
+        />
+      ))}
+    </div>
   );
 }

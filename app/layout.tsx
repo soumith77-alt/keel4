@@ -1,31 +1,44 @@
 import type { Metadata } from "next";
-import { Inter, JetBrains_Mono } from "next/font/google";
-import localFont from "next/font/local";
+import { IBM_Plex_Mono, Instrument_Sans } from "next/font/google";
 import "./globals.css";
-
-/**
- * Clash Display (Fontshare, ITF Free Font License) — headlines only.
- * Self hosted variable file: one 29KB request covers weights 200–700, and it
- * ships with the static export rather than depending on an external CDN.
- */
-const clashDisplay = localFont({
-  src: "./fonts/ClashDisplay-Variable.woff2",
-  variable: "--font-display",
-  weight: "200 700",
-  display: "swap",
-});
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import WhatsAppFloatingButton from "@/components/WhatsAppFloatingButton";
 
-const inter = Inter({
+/**
+ * THREE FAMILIES, THREE JOBS. Nothing else is loaded.
+ *
+ * The site previously ran FOUR: Clash Display for headings, Inter for body,
+ * JetBrains Mono for labels — and, unintentionally, the browser's default
+ * serif, because `font-serif` was used for the word "compound" in the hero
+ * while tailwind.config.ts declared no `serif` key. That is why the one
+ * expressive moment on the homepage looked like a stray Times italic dropped
+ * into a technical composition.
+ *
+ * Clash Display is gone. Its geometric weight is what made /about read as the
+ * old website while the homepage read as the new one, and pairing a display
+ * face with Inter meant headings and body shared no relationship at all.
+ * Instrument Sans covers both roles, so the whole site is now ONE voice with
+ * two deliberate accents:
+ *
+ *   Instrument Sans   navigation, headings, body, buttons, controls
+ *   IBM Plex Mono     metadata, state labels, step numbers, annotations
+ *
+ * Instrument Serif was loaded for one italic word per page and has been
+ * dropped: three exceptions is not a system, and next to a serif wordmark it
+ * read as a third unrelated voice. Emphasis is size, weight and colour.
+ *
+ * Instrument Sans is variable (400–700 in a single file), so the four weights
+ * the design uses cost one request rather than four.
+ */
+const instrumentSans = Instrument_Sans({
   subsets: ["latin"],
   variable: "--font-sans",
   display: "swap",
 });
 
-// Mono is used for eyebrow labels and metrics — the "technical studio" accent.
-const jetbrainsMono = JetBrains_Mono({
+// The system voice: step names, payloads, metadata. Never a paragraph.
+const plexMono = IBM_Plex_Mono({
   subsets: ["latin"],
   weight: ["400", "500"],
   variable: "--font-mono",
@@ -180,7 +193,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${inter.variable} ${jetbrainsMono.variable} ${clashDisplay.variable}`}
+      className={`${instrumentSans.variable} ${plexMono.variable}`}
       // The script below adds `js` to this element before React hydrates, so
       // the server HTML and the hydrating DOM differ on className by design.
       // Rendering `js` on the server instead would defeat the no-JS fallback:

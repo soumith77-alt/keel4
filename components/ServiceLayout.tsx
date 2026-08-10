@@ -5,6 +5,7 @@ import dynamic from "next/dynamic";
 import { ArrowRight } from "lucide-react";
 
 import { calendlyLink, serviceFeatureCards } from "@/config/content";
+import FinalCTA from '@/components/FinalCTA';
 import { Section } from "@/components/ui/section";
 import { SectionHeading } from "@/components/ui/section-heading";
 import { Button } from "@/components/ui/button";
@@ -12,6 +13,7 @@ import { Icon } from "@/components/ui/icon";
 import { GlowCard } from "@/components/ui/glow-card";
 import { Reveal, RevealGroup, RevealItem } from "@/components/ui/reveal";
 import GlowBackdrop from "@/components/ui/glow-backdrop";
+import { DeferredWebGL } from "@/components/ui/deferred-webgl";
 import { CountUp } from "@/components/ui/count-up";
 import VoiceDemoPlayer from "@/components/VoiceDemoPlayer";
 import {
@@ -80,11 +82,28 @@ function ServiceHeroMedia({ service }: ServiceLayoutProps) {
           <div className="theme-dark relative overflow-hidden rounded-panel bg-surface p-6">
             <div className="relative mx-auto aspect-square w-full max-w-[20rem]">
               <div className="absolute inset-[14%] rounded-full bg-accent-500/25 blur-[60px]" />
-              <VoicePoweredOrb
-                className="relative h-full w-full"
-                variant="brand"
-                maxRotationSpeed={0.5}
-              />
+              {/* The shader waits for the slot to be in view, for the main
+                  thread to be idle, and for motion to be allowed. The fallback
+                  below is a static ring in the same geometry — it is what a
+                  reduced-motion visitor sees permanently, so it is designed to
+                  look finished rather than to look like a placeholder. */}
+              <DeferredWebGL
+                fallback={
+                  <div
+                    aria-hidden
+                    className="relative h-full w-full rounded-full border border-accent-500/35 bg-[radial-gradient(circle_at_50%_45%,rgba(0,199,118,0.30),transparent_62%)]"
+                  >
+                    <span className="absolute inset-[18%] rounded-full border border-accent-500/25" />
+                    <span className="absolute inset-[34%] rounded-full border border-accent-500/15" />
+                  </div>
+                }
+              >
+                <VoicePoweredOrb
+                  className="relative h-full w-full"
+                  variant="brand"
+                  maxRotationSpeed={0.5}
+                />
+              </DeferredWebGL>
             </div>
           </div>
           {service.demoAudioUrl && (
@@ -246,7 +265,7 @@ export default function ServiceLayout({ service }: ServiceLayoutProps) {
                     <span className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-control border border-line/15 bg-ink/10 text-accent-700">
                       <Icon name={card.icon} size={20} />
                     </span>
-                    <h3 className="text-base font-semibold text-fg text-balance">
+                    <h3 className="type-h4 text-fg text-balance">
                       {card.title}
                     </h3>
                   </div>
@@ -286,39 +305,11 @@ export default function ServiceLayout({ service }: ServiceLayoutProps) {
         </Section>
       )}
 
-      {/* ── CTA ──────────────────────────────────────────────────────── */}
-      <Section tone="brand" spacing="lg" className="overflow-hidden">
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-0 bg-[radial-gradient(60%_120%_at_50%_0%,rgba(255,255,255,0.16),transparent_70%)]"
-        />
-        <div
-          aria-hidden
-          className="grain-overlay pointer-events-none absolute inset-0"
-        />
-
-        <div className="relative z-raised flex flex-col items-start gap-10 lg:flex-row lg:items-end lg:justify-between">
-          <Reveal className="max-w-2xl">
-            <span className="type-label text-white/70">Next step</span>
-            <h2 className="type-h1 mt-5 text-white text-balance">
-              Ready to put {service.title.toLowerCase()} to work?
-            </h2>
-            <p className="type-body-lg measure mt-5 text-white/80 text-pretty">
-              Book a call and we&apos;ll walk through your setup, show live
-              examples, and scope what it would take.
-            </p>
-          </Reveal>
-
-          <Reveal delay={0.08} className="shrink-0">
-            <Button asChild size="lg" variant="inverse">
-              <a href={calendlyLink} target="_blank" rel="noopener noreferrer">
-                Book a call
-                <ArrowRight className="h-4 w-4" aria-hidden />
-              </a>
-            </Button>
-          </Reveal>
-        </div>
-      </Section>
+      <FinalCTA
+        // Not `.toLowerCase()` — that rendered "voice ai", and the acronym
+        // matters more than the sentence case does.
+        heading={`Ready to put ${service.title} to work?`}
+      />
     </>
   );
 }

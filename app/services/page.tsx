@@ -1,5 +1,6 @@
 import { services } from '@/config/content';
 import ServicesPageGrid from '@/components/ServicesPageGrid';
+import FinalCTA from '@/components/FinalCTA';
 import { Section } from '@/components/ui/section';
 import PageHero from '@/components/ui/page-hero';
 
@@ -48,11 +49,19 @@ export default function ServicesPage() {
         eyebrow="Services"
         title="One system. Five surfaces."
         lead="Voice answers. Automations move the data. Video creates demand. Websites convert it. SaaS turns the system into a product."
+        className="pb-6"
       />
 
-      <Section spacing="lg">
+      <Section spacing="md">
+        {/* Same missing level as /work: PageHero's <h1> went straight to the
+            cards' <h3>. This is the <h2> that was skipped. */}
+        <h2 className="type-h2 mb-8 text-fg text-balance">
+          Five disciplines, one system
+        </h2>
         <ServicesPageGrid services={services} />
       </Section>
+
+      <FinalCTA />
     </>
   );
 }

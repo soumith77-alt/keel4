@@ -23,7 +23,11 @@ export default function Footer() {
       <div className="mx-auto w-full max-w-content px-5 py-16 sm:px-8 sm:py-20">
         <div className="grid grid-cols-2 gap-10 md:grid-cols-4 md:gap-8">
           <div className="col-span-2">
-            <Link href="/" className="inline-block text-fg" aria-label="Keel, home">
+            <Link
+              href="/"
+              className="inline-flex min-h-[44px] items-center text-fg"
+              aria-label="Keel, home"
+            >
               <Wordmark />
             </Link>
             <p className="type-body measure-tight mt-4 text-fg-muted text-pretty">
@@ -47,7 +51,7 @@ export default function Footer() {
                 <li key={service.slug}>
                   <Link
                     href={`/services/${service.slug}`}
-                    className="flex min-h-[44px] items-center text-sm text-fg-muted transition-colors duration-base hover:text-fg md:min-h-0"
+                    className="flex min-h-[44px] items-center text-sm text-fg-muted transition-colors duration-fast ease-micro hover:text-fg"
                   >
                     {service.title}
                   </Link>
@@ -65,7 +69,7 @@ export default function Footer() {
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className="flex min-h-[44px] items-center text-sm text-fg-muted transition-colors duration-base hover:text-fg md:min-h-0"
+                    className="flex min-h-[44px] items-center text-sm text-fg-muted transition-colors duration-fast ease-micro hover:text-fg"
                   >
                     {link.label}
                   </Link>
@@ -76,12 +80,12 @@ export default function Footer() {
         </div>
 
         <div className="mt-14 flex flex-col gap-3 border-t border-line/10 pt-8 sm:flex-row sm:items-center sm:justify-between">
-          <p className="text-sm text-fg-subtle">
+          <p className="type-small text-fg-subtle">
             © {new Date().getFullYear()} keel. All rights reserved.
           </p>
           <a
             href="mailto:hello@saykeel.com"
-            className="inline-flex min-h-[44px] items-center self-start text-sm text-fg-muted transition-colors duration-base hover:text-fg sm:min-h-0"
+            className="inline-flex min-h-[44px] items-center self-start text-sm text-fg-muted transition-colors duration-fast ease-micro hover:text-fg"
           >
             hello@saykeel.com
           </a>

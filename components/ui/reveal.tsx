@@ -82,6 +82,26 @@ export function Reveal({ children, className, delay = 0 }: RevealProps) {
   );
 }
 
+/**
+ * Clip-path reveal — the same three safety nets as <Reveal>, a different
+ * gesture. Used for project imagery so the work chapters do not enter the page
+ * with the identical fade-up as everything else.
+ */
+export function ClipReveal({
+  children,
+  className,
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) {
+  const ref = useRevealOnView<HTMLDivElement>();
+  return (
+    <div ref={ref} className={cn("clip-reveal", className)}>
+      {children}
+    </div>
+  );
+}
+
 type RevealGroupProps = {
   children: React.ReactNode;
   className?: string;

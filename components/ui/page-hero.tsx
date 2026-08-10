@@ -34,7 +34,7 @@ export function PageHero({ eyebrow, title, lead, className }: PageHeroProps) {
       className={cn(
         // pt-28 below `sm`: pt-36 was tuned against the desktop bar and left a
         // near-empty first screen on a phone before the headline appeared.
-        "relative isolate overflow-hidden bg-surface px-5 pb-10 pt-28 sm:px-8 sm:pb-16 sm:pt-44",
+        "relative isolate overflow-hidden bg-surface px-5 pb-8 pt-24 sm:px-8 sm:pb-12 sm:pt-36",
         className
       )}
     >

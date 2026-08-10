@@ -1,12 +1,7 @@
-import Link from 'next/link';
-import { ArrowRight } from 'lucide-react';
-
-import { projects, calendlyLink } from '@/config/content';
-import { Section } from '@/components/ui/section';
+import { projectChapterEnv, projects } from '@/config/content';
 import PageHero from '@/components/ui/page-hero';
-import { Reveal } from '@/components/ui/reveal';
-import { Button } from '@/components/ui/button';
-import ProjectCard from '@/components/ProjectCard';
+import { ProjectChapter } from '@/components/FeaturedWork';
+import FinalCTA from '@/components/FinalCTA';
 
 export const metadata = {
   title: 'Work - AI Systems We’ve Built | Keel',
@@ -48,31 +43,37 @@ export default function WorkPage() {
         eyebrow="Work"
         title="Systems we’ve shipped."
         lead="Each engagement scoped to a metric, built end to end, and measured against what it was supposed to move."
+        className="pb-4"
       />
 
-      <Section spacing="lg">
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-          {projects.map((project, i) => (
-            <Reveal key={project.slug} delay={i * 0.05}>
-              <ProjectCard project={project} />
-            </Reveal>
-          ))}
-        </div>
+      {/**
+        * The card grid is gone.
+        *
+        * /work was the last page still running the old website's design: a
+        * two-column grid of white cards with a cropped thumbnail in each. It
+        * showed the same projects as the homepage in a completely different
+        * visual language, which made the homepage chapters look like a
+        * one-off rather than like how Keel presents work.
+        *
+        * It now uses the SAME `<ProjectChapter>` the homepage does — same
+        * 16:10 stage, same fact structure, same alternation, same rhythm. The
+        * only difference between the two pages is how many chapters run.
+        */}
+      <h2 className="sr-only">Selected engagements</h2>
 
-        <Reveal>
-          <div className="mt-14 flex flex-col gap-3 sm:flex-row">
-            <Button asChild size="lg">
-              <a href={calendlyLink} target="_blank" rel="noopener noreferrer">
-                Design my AI system
-                <ArrowRight className="h-4 w-4" aria-hidden />
-              </a>
-            </Button>
-            <Button asChild size="lg" variant="secondary">
-              <Link href="/services">See what we build</Link>
-            </Button>
-          </div>
-        </Reveal>
-      </Section>
+      {projects.map((project, i) => (
+        <ProjectChapter
+          key={project.slug}
+          project={project}
+          index={i}
+          env={projectChapterEnv(i)}
+          media={i % 2 === 0 ? 'right' : 'left'}
+          priority={i === 0}
+          showDetails
+        />
+      ))}
+
+      <FinalCTA />
     </>
   );
 }

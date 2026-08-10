@@ -86,14 +86,14 @@ export default function ContactPage() {
         className="pb-20"
       />
 
-      <Section spacing="lg">
+      <Section spacing="md">
         <div className="grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-14">
           {/* Form */}
           <div className="lg:col-span-7">
             <GlowCard>
               <div className="p-7 sm:p-9">
-                <h2 className="type-h3 text-fg">Send us a message</h2>
-                <p className="mt-2 text-sm text-fg-muted">
+                <h2 className="type-h4 text-fg">Send us a message</h2>
+                <p className="type-small mt-2 text-fg-muted">
                   Tell us what you&apos;re trying to fix and we&apos;ll come back
                   with a view on whether we can help.
                 </p>
@@ -109,8 +109,8 @@ export default function ContactPage() {
             <div className="space-y-4 lg:sticky lg:top-28">
               <GlowCard>
                 <div className="p-7">
-                  <h2 className="type-h3 text-fg">Prefer to pick a time?</h2>
-                  <p className="mt-3 text-sm leading-relaxed text-fg-muted">
+                  <h2 className="type-h4 text-fg">Prefer to pick a time?</h2>
+                  <p className="type-small mt-3 text-fg-muted">
                     A 30 minute walkthrough. We&apos;ll show live examples and
                     discuss how this maps onto your business.
                   </p>
@@ -139,7 +139,7 @@ export default function ContactPage() {
                       <span className="type-label block text-fg-subtle">Email</span>
                       <a
                         href="mailto:hello@saykeel.com"
-                        className="mt-1 inline-flex min-h-[44px] items-center text-sm text-fg transition-colors duration-base hover:text-accent-600 sm:min-h-0"
+                        className="type-small mt-1 inline-flex min-h-[44px] items-center text-fg transition-colors duration-base hover:text-accent-600"
                       >
                         hello@saykeel.com
                       </a>
@@ -159,7 +159,7 @@ export default function ContactPage() {
                         href={whatsappLink}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="mt-1 inline-flex min-h-[44px] items-center text-sm text-fg transition-colors duration-base hover:text-accent-600 sm:min-h-0"
+                        className="type-small mt-1 inline-flex min-h-[44px] items-center text-fg transition-colors duration-base hover:text-accent-600"
                       >
                         Message us directly
                       </a>
@@ -175,7 +175,7 @@ export default function ContactPage() {
                       <span className="type-label block text-fg-subtle">
                         Response time
                       </span>
-                      <p className="mt-1 text-sm text-fg-muted">
+                      <p className="type-small mt-1 text-fg-muted">
                         Within one business day.
                       </p>
                     </div>
