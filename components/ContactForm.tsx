@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 const serviceOptions = [
   'Voice AI',
@@ -37,8 +37,25 @@ export default function ContactForm() {
     email: '',
     company: '',
     service: '',
-    details: ''
+    details: '',
   });
+
+  /**
+   * HONEYPOT. Never shown, never focusable, never announced — a human cannot
+   * fill this in, so anything arriving with it populated is a bot. A public
+   * POST endpoint attracts automated traffic within weeks; this is the
+   * cheapest defence and costs a real visitor nothing — no captcha, no extra
+   * request, no third-party script.
+   *
+   * IT IS DELIBERATELY UNCONTROLLED, read from the DOM at submit time rather
+   * than mirrored into React state. The first version was a controlled input
+   * and it did not work: React tracks the value setter on its inputs, so
+   * anything that writes `input.value` directly — which is exactly what a
+   * headless bot does — never fires `onChange`, leaves the state empty, and
+   * sails through the check. Reading the node at submit catches the value
+   * however it got there.
+   */
+  const honeypotRef = useRef<HTMLInputElement>(null);
 
   /**
    * Read the handoff params from `window.location` rather than
@@ -88,6 +105,14 @@ export default function ContactForm() {
     e.preventDefault();
     setIsSubmitting(true);
     setSubmitStatus('idle');
+
+    // A filled honeypot is a bot. Report success and send nothing — telling
+    // it that it failed just teaches it to try again differently.
+    if (honeypotRef.current?.value) {
+      setSubmitStatus('success');
+      setIsSubmitting(false);
+      return;
+    }
 
     const endpoint = process.env.NEXT_PUBLIC_FORM_ENDPOINT;
 
@@ -143,6 +168,23 @@ export default function ContactForm() {
 
   return (
     <form onSubmit={handleSubmit} className="max-w-2xl mx-auto">
+      {/* Positioned off-screen rather than `display: none` — some bots skip
+          hidden inputs but fill anything they can find in the DOM.
+          `tabIndex={-1}` and `aria-hidden` keep it away from keyboard users
+          and screen readers, and autocomplete is off so a browser never
+          helpfully fills it in for a real person. */}
+      <div className="absolute left-[-9999px]" aria-hidden>
+        <label htmlFor="_gotcha">Leave this field empty</label>
+        <input
+          type="text"
+          id="_gotcha"
+          name="_gotcha"
+          ref={honeypotRef}
+          tabIndex={-1}
+          autoComplete="off"
+          defaultValue=""
+        />
+      </div>
       <div className="space-y-6">
         {prefilled && (
           <p
@@ -255,7 +297,7 @@ export default function ContactForm() {
         {submitStatus === 'success' && (
           <div
             role="status"
-            className="bg-green-50 border-2 border-green-200 rounded-control p-4 text-green-800"
+            className="rounded-control border-2 border-accent-600/30 bg-accent-500/10 p-4 text-fg"
           >
             {process.env.NEXT_PUBLIC_FORM_ENDPOINT
               ? "Thank you! We'll get back to you within one business day."
@@ -264,8 +306,16 @@ export default function ContactForm() {
         )}
 
         {/* Error Message */}
+        {/* `role="alert"` — the success block had `role="status"` and this had
+            nothing, so a screen-reader user submitting a form that failed got
+            no indication at all: no announcement, and the visual red block is
+            the only signal. A failed submission is exactly the case that must
+            be announced. */}
         {submitStatus === 'error' && (
-          <div className="bg-red-50 border-2 border-red-200 rounded-control p-4 text-red-800">
+          <div
+            role="alert"
+            className="rounded-control border-2 border-destructive/30 bg-destructive/10 p-4 text-fg"
+          >
             Something went wrong. Please try again or email us directly at hello@saykeel.com
           </div>
         )}
