@@ -248,7 +248,7 @@ export function ProjectChapter({
         ENV[env].section,
       )}
     >
-      <div className="mx-auto w-full max-w-wide px-5 sm:px-8">
+      <div className="site-container">
         <div className="grid gap-5 lg:grid-cols-12 lg:gap-x-12 lg:gap-y-5">
           <Reveal className={cn('lg:row-start-1', infoCols)}>
             <MetaLine project={project} index={index} />
@@ -297,7 +297,7 @@ export default function FeaturedWork() {
   return (
     <div id="work" className="scroll-mt-24">
       <section className="theme-light bg-surface pt-14 sm:pt-20">
-        <div className="mx-auto w-full max-w-wide px-5 sm:px-8">
+        <div className="site-container">
           <Reveal className="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
             <div>
               <span className="flex items-baseline gap-3">

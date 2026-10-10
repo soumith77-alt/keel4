@@ -1,6 +1,6 @@
-# Keeel - Agentic AI Solutions Studio
+# Keeel - Product & Software Studio
 
-A premium, conversion-focused marketing website built with Next.js, TypeScript, and TailwindCSS.
+The marketing site for Keeel (https://saykeeel.com), a studio that designs and builds SaaS products, CRMs and business systems, websites, and automation. Next.js 14 static export, TypeScript, TailwindCSS, deployed as Cloudflare assets (`wrangler.jsonc`).
 
 ## 🚀 Quick Start
 
@@ -93,38 +93,33 @@ Create a `.env.local` file:
 NEXT_PUBLIC_CALENDLY_LINK=https://calendly.com/your-link
 ```
 
-### Calendly Integration
+### Booking links
 
-Update the `calendlyLink` in `/config/content.ts` or set `NEXT_PUBLIC_CALENDLY_LINK` environment variable.
+- `NEXT_PUBLIC_CALENDLY_LINK` is the voice agent demo event, used only on `/services/voice-ai`.
+- `NEXT_PUBLIC_PROJECT_BOOKING_LINK` is a general project call. It is unset, so "Book a call" is hidden site wide. Set it to bring that CTA back.
 
-### Form Submission
+### Form submission
 
-The contact form currently logs to console. To connect to a backend:
-
-1. Update `ContactForm.tsx` handleSubmit function
-2. Add your API endpoint
-3. Handle success/error states
+`ContactForm.tsx` POSTs JSON to `NEXT_PUBLIC_FORM_ENDPOINT` (Formspree, set in `.env.production`), falling back to a pre-composed `mailto:` when unset. It has a honeypot field. The homepage brief and service pages hand off to `/contact` with `?type=` and `?note=`.
 
 ## 🎯 Pages
 
 - **Home** (`/`): Full homepage with all sections
 - **Services** (`/services/[slug]`): Dynamic service pages
-  - `/services/voice-ai`
-  - `/services/agentic-automations`
-  - `/services/ugc`
-  - `/services/animation`
-  - `/services/websites`
+  - Primary: `/services/saas-products`, `/services/crm-business-systems`, `/services/websites`, `/services/agentic-automations` (Automation & Integrations)
+  - Additional: `/services/voice-ai`, `/services/ugc-video`
 - **Case Studies** (`/case-studies`): All case studies
 - **About** (`/about`): About page
 - **Contact** (`/contact`): Contact page with form and Calendly
 
 ## 🎨 Design System
 
-- **Primary Color**: Indigo (`#6366f1`)
-- **Typography**: Inter font family
-- **Spacing**: TailwindCSS default scale
-- **Shadows**: Soft, subtle shadows for depth
-- **Animations**: Subtle hover effects and transitions
+Tokens live in `app/globals.css` and `tailwind.config.ts`, with measured contrast ratios documented there.
+
+- **Colours**: page `#F6F5F0`, surface `#FFFFFF`, text `#111814`, secondary `#526158`, emerald `#146C50` (`#6FD3A5` for green text on dark), mint `#E5F1EA`, border `#DDE3DB`, dark `#101A15`
+- **Typography**: Instrument Sans (all text), IBM Plex Mono (labels and metadata only), with a fluid `.type-*` scale
+- **Layout**: `.site-container` (1240px column, 20–56px gutters), `.section-y` (~56px mobile, ~120px desktop)
+- **Motion**: 180ms controls, 300ms panels, 480ms reveals with a 12px rise; honours `prefers-reduced-motion`
 
 ## ⚡ Performance
 

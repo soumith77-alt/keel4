@@ -1,8 +1,8 @@
 import { MetadataRoute } from 'next';
-import { services } from '@/config/content';
+import { SITE_URL, services } from '@/config/content';
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = 'https://saykeel.com';
+  const baseUrl = SITE_URL;
 
   const staticPages: MetadataRoute.Sitemap = [
     { url: baseUrl, lastModified: new Date(), changeFrequency: 'weekly', priority: 1.0 },

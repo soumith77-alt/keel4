@@ -1,9 +1,161 @@
 // Content configuration - easy to edit and maintain
 
-export const services = [
+/**
+ * The live domain. It has three e's; `saykeel.com` (two) has no web host, so
+ * canonical URLs, the sitemap and structured data must use this value.
+ * The mailbox is different on purpose: hello@saykeel.com is the Google
+ * Workspace address that actually receives mail.
+ */
+export const SITE_URL = 'https://saykeeel.com';
+export const CONTACT_EMAIL = 'hello@saykeel.com';
+
+/**
+ * Services. `tier` decides where a service is surfaced:
+ *   'primary'    — the four offerings in the navigation, homepage and footer.
+ *   'additional' — capabilities that keep their own detail page but are not
+ *                  featured as a headline offering (voice, video).
+ * Order matters: primary services render in this order everywhere.
+ */
+export type Service = {
+  id: string;
+  title: string;
+  /** Short name for menus. */
+  navLabel: string;
+  tier: 'primary' | 'additional';
+  slug: string;
+  description: string;
+  shortDescription: string;
+  icon: string;
+  features: string[];
+  outcomes: { metric: string; label: string }[];
+  useCases: string[];
+  outcomeStatement?: string;
+  /** Category value pre-selected on the contact form for this service. */
+  contactType: string;
+  /** Detail pages for closely related capabilities. */
+  related?: { label: string; slug: string }[];
+  demoAudioUrl?: string;
+  demoVideoUrl?: string;
+  image?: string;
+};
+
+export const services: Service[] = [
+  {
+    id: 'saas-products',
+    title: 'SaaS & Digital Products',
+    navLabel: 'SaaS & digital products',
+    tier: 'primary',
+    slug: 'saas-products',
+    description:
+      'Product strategy, interface design and full stack engineering for MVPs, customer platforms and subscription products, designed, built and shipped as one product.',
+    shortDescription: 'Turn a product idea into software people can use.',
+    icon: 'code',
+    features: [
+      'Product strategy & technical architecture',
+      'UX, interface design & prototyping',
+      'Full stack product engineering',
+      'AI features & third party integrations',
+      'Authentication, billing & analytics',
+      'Launch support & iteration'
+    ],
+    outcomes: [],
+    useCases: [
+      'MVPs for new products',
+      'Customer platforms and marketplaces',
+      'Subscription products'
+    ],
+    image: '/football-intelligence-os.webp',
+    outcomeStatement: 'MVPs, customer platforms, subscription products.',
+    contactType: 'SaaS product',
+  },
+  {
+    id: 'crm-business-systems',
+    title: 'CRMs & Business Systems',
+    navLabel: 'CRMs & business systems',
+    tier: 'primary',
+    slug: 'crm-business-systems',
+    description:
+      'Custom CRMs, client portals, dashboards and internal tools, designed around how your team already works and connected to the tools you rely on.',
+    shortDescription: 'Build around the way your team actually works.',
+    icon: 'database',
+    features: [
+      'Pipelines & records shaped to your process',
+      'Client portals',
+      'Dashboards & reporting',
+      'Roles & permissions',
+      'Integrations & data migration',
+      'Workflow automation'
+    ],
+    outcomes: [],
+    useCases: [
+      'Teams outgrowing spreadsheets and shared inboxes',
+      'Sales or delivery spread across several tools',
+      'Businesses that need a client facing portal'
+    ],
+    outcomeStatement: 'Custom CRMs, client portals, dashboards, internal tools.',
+    contactType: 'CRM or internal tool',
+  },
+  {
+    id: 'websites',
+    title: 'Websites & Digital Experiences',
+    navLabel: 'Websites & digital experiences',
+    tier: 'primary',
+    slug: 'websites',
+    description:
+      'Marketing websites, ecommerce and booking experiences, designed and built on modern frameworks, fast on every device and connected to the tools behind them.',
+    shortDescription: 'A website that earns attention and makes the next step clear.',
+    icon: 'globe2',
+    features: [
+      'Next.js & modern frameworks',
+      'Mobile first responsive design',
+      'Fast load times & performance'
+    ],
+    outcomes: [],
+    useCases: [
+      'Marketing websites',
+      'Ecommerce stores',
+      'Booking experiences'
+    ],
+    outcomeStatement: 'Marketing websites, ecommerce, booking experiences.',
+    contactType: 'Website',
+  },
+  {
+    id: 'agentic-automations',
+    title: 'Automation & Integrations',
+    navLabel: 'Automation & integrations',
+    tier: 'primary',
+    // Slug kept from the previous "Agentic AI Automations" page so existing
+    // links and search results keep resolving.
+    slug: 'agentic-automations',
+    description:
+      'Workflow automation and data sync between the tools you already use, with AI assistants and voice agents where they genuinely help.',
+    shortDescription: 'Connect your tools and keep work moving.',
+    icon: 'bot',
+    features: [
+      'End to end workflow automation',
+      'Multi step decision making',
+      'API integrations & data sync',
+      'Error handling & retries',
+      'Custom logic & rules',
+      'Performance monitoring'
+    ],
+    outcomes: [],
+    useCases: [
+      'Website enquiries into your CRM',
+      'Data sync between tools',
+      'Customer onboarding flows',
+      'Report generation'
+    ],
+    image: '/ai-automation.webp',
+    outcomeStatement: 'Workflow automation, data sync, AI assistants, voice capabilities.',
+    contactType: 'Automation',
+    related: [{ label: 'Voice agents', slug: 'voice-ai' }],
+  },
   {
     id: 'voice-ai',
     title: 'Voice AI',
+    navLabel: 'Voice agents',
+    tier: 'additional',
     slug: 'voice-ai',
     description: 'Intelligent voice assistants that answer calls, book appointments, and handle customer inquiries 24/7.',
     shortDescription: '24/7 AI call answering that converts leads into booked clients.',
@@ -26,37 +178,15 @@ export const services = [
     // Path to voice demo (file in public/audio/)
     demoAudioUrl: '/audio/voice_ai_audio.mp4',
     image: '/voice_ai_poster.webp',
-    overlayImage: '/voice_ai_poster.webp',
     outcomeStatement: 'Inbound voice agents, Outbound voice agents, Lead reactivation agents.',
-  },
-  {
-    id: 'agentic-automations',
-    title: 'Agentic AI Automations',
-    slug: 'agentic-automations',
-    description: 'Autonomous AI agents that handle complex workflows, data processing, and business operations end to end.',
-    shortDescription: 'AI agents that work autonomously to automate your business processes.',
-    icon: 'bot',
-    features: [
-      'End to end workflow automation',
-      'Multi step decision making',
-      'API integrations & data sync',
-      'Error handling & retries',
-      'Custom logic & rules',
-      'Performance monitoring'
-    ],
-    outcomes: [],
-    useCases: [
-      'Data processing pipelines',
-      'Customer onboarding flows',
-      'Report generation'
-    ],
-    image: '/ai-automation.webp',
-    overlayImage: '/ai-automation.webp',
-    outcomeStatement: 'Automate repetitive workflows end to end.',
+    contactType: 'Voice agent',
+    related: [{ label: 'Automation & integrations', slug: 'agentic-automations' }],
   },
   {
     id: 'ugc-video',
     title: 'UGC Ads & AI Video',
+    navLabel: 'Video & UGC',
+    tier: 'additional',
     slug: 'ugc-video',
     description: 'Authentic UGC ads and AI powered video that drive engagement and conversion. From creator content to motion graphics and product demos.',
     shortDescription: 'UGC ad campaigns and AI video that feel authentic and drive results.',
@@ -77,242 +207,13 @@ export const services = [
     ],
     demoVideoUrl: '/video/demo-video.mp4',
     image: '/ai-video-creative.webp',
-    overlayImage: '/ai-video-creative.webp',
     outcomeStatement: 'Performance driven content at scale.',
-  },
-  {
-    id: 'websites',
-    title: 'Conversion Websites',
-    slug: 'websites',
-    description: 'Premium, conversion focused websites built with modern tech and AI enhanced performance.',
-    shortDescription: 'High performance websites that convert visitors into customers.',
-    icon: 'globe2',
-    features: [
-      'Next.js & modern frameworks',
-      'Mobile first responsive design',
-      'Fast load times & performance'
-    ],
-    outcomes: [],
-    useCases: [
-      'SaaS landing pages',
-      'Ecommerce stores',
-      'Portfolio sites'
-    ],
-    image: '/websites.webp',
-    overlayImage: '/websites.webp',
-    outcomeStatement: 'High converting websites engineered for growth.',
-  },
-  {
-    id: 'saas-products',
-    title: 'SaaS Products',
-    slug: 'saas-products',
-    description: 'End to end SaaS product development, from product strategy and UX through engineering, integrations, launch, and iteration.',
-    shortDescription: 'Launch ready SaaS products designed, built, and shipped as one system.',
-    icon: 'code',
-    features: [
-      'Product strategy & technical architecture',
-      'UX, interface design & prototyping',
-      'Full stack product engineering',
-      'AI features & third party integrations',
-      'Authentication, billing & analytics',
-      'Launch support & continuous iteration'
-    ],
-    outcomes: [],
-    useCases: [
-      'New SaaS ventures',
-      'Internal operations products',
-      'AI native software'
-    ],
-    image: '/football-intelligence-os.webp',
-    overlayImage: '/football-intelligence-os.webp',
-    outcomeStatement: 'From product logic to launch ready software.',
-  }
-];
-
-
-/**
- * THE KEEEL SIGNAL SYSTEM — system traces.
- *
- * Every service Keeel sells is the same five states applied to a different
- * business event, and these five words are the spine of the whole site:
- *
- *   SIGNAL → CONTEXT → DECISION → ACTION → OUTCOME
- *
- * The hero renders one of these as a run travelling through a field. They are
- * labelled as EXAMPLE RUNs in the interface, and that label is load-bearing:
- * the scenarios are illustrative of how a system behaves, so they are allowed
- * to name a time slot or a channel. They are NOT allowed to carry a result
- * number — no percentages, no hours saved, no revenue. If a number would read
- * as a claim, it does not belong here; put it in the proof rail with a source.
- *
- * THREE OBJECTS, NOT FIVE FLOATING CARDS.
- *
- * The five states are still the model, but the hero composes them as three
- * things, because five equally-weighted outlined boxes scattered around a
- * headline is five competitors for the same attention:
- *
- *   steps[0]    THE INPUT      one compact object — what arrived
- *   steps[1..3] THE CORE       one transformation area — what the system did
- *   steps[4]    THE OUTCOME    one clear object — what came of it
- *
- * `anchors` places those three in the field, per service, so switching service
- * recomposes the composition rather than only swapping text. `form` still
- * varies per step (a waveform is not a branch is not a reel strip), which is
- * what keeps the five services from reading as one diagram with the words
- * changed.
- *
- * NOTHING HERE IS REVEALED OVER TIME. Every step renders complete and at full
- * contrast from the first frame — the visitor must be able to read the entire
- * workflow without waiting for an animation, and must never have to watch a
- * sequence to reach the outcome. The only motion is a signal travelling the
- * already-visible path.
- *
- * `tone` picks the accent semantics inside a trace:
- *   'input'  → cobalt, what the system RECEIVED
- *   'system' → the default ink/white, what it worked out
- *   'result' → green, what it DID and what came of it
- */
-export type TraceForm =
-  | 'pulse'
-  | 'wave'
-  | 'transcript'
-  | 'branch'
-  | 'slots'
-  | 'reels'
-  | 'browser'
-  | 'chart'
-  | 'chip'
-  | 'confirm';
-
-export type TraceStep = {
-  state: 'Signal' | 'Context' | 'Decision' | 'Action' | 'Outcome';
-  payload: string;
-  tone: 'input' | 'system' | 'result';
-  form: TraceForm;
-};
-
-/** Centre point of an object in the hero field, in 0–1 stage coordinates. */
-export type Anchor = { x: number; y: number };
-
-export type SystemRun = {
-  id: string;
-  /** Selector label. Short — this sits in a 5-up index. */
-  label: string;
-  /** Full service name, announced to screen readers on switch. */
-  service: string;
-  /** Links the run to the service page. */
-  slug: string;
-  /**
-   * Where the three objects sit. All three stay in the upper band of the
-   * stage (y < 0.5) so the headline below is never crowded — the system
-   * supports the headline, it does not compete with it.
-   */
-  anchors: { input: Anchor; core: Anchor; outcome: Anchor };
-  /**
-   * The one-line mobile summary: input → what the system does → outcome.
-   * A phone gets this, not a shrunk copy of the desktop diagram.
-   */
-  compact: { input: string; action: string; outcome: string };
-  steps: TraceStep[];
-};
-
-export const systemRuns: SystemRun[] = [
-  {
-    id: 'voice',
-    label: 'Voice',
-    service: 'Voice AI',
-    slug: 'voice-ai',
-    anchors: { input: { x: 0.09, y: 0.21 }, core: { x: 0.43, y: 0.31 }, outcome: { x: 0.80, y: 0.19 } },
-    compact: {
-      input: 'After-hours call',
-      action: 'Intent understood and the appointment booked',
-      outcome: 'Calendar and CRM updated',
-    },
-    steps: [
-      { state: 'Signal', payload: 'Inbound call · 18:42, after hours', tone: 'input', form: 'pulse' },
-      { state: 'Context', payload: 'Contact recognised — known patient', tone: 'system', form: 'wave' },
-      { state: 'Decision', payload: 'Intent: reschedule — availability loaded', tone: 'system', form: 'slots' },
-      { state: 'Action', payload: '10:30 Tue confirmed on the call', tone: 'result', form: 'transcript' },
-      { state: 'Outcome', payload: 'Calendar and CRM updated', tone: 'result', form: 'confirm' },
-    ],
-  },
-  {
-    id: 'automation',
-    label: 'Automation',
-    service: 'Agentic AI Automations',
-    slug: 'agentic-automations',
-    anchors: { input: { x: 0.10, y: 0.30 }, core: { x: 0.41, y: 0.19 }, outcome: { x: 0.79, y: 0.32 } },
-    compact: {
-      input: 'New lead received',
-      action: 'Enriched, scored and routed with a human in the loop',
-      outcome: 'CRM and owner updated',
-    },
-    steps: [
-      { state: 'Signal', payload: 'New lead received', tone: 'input', form: 'chip' },
-      { state: 'Context', payload: 'Company enriched and de-duplicated', tone: 'system', form: 'chart' },
-      { state: 'Decision', payload: 'Fit evaluated — action selected', tone: 'system', form: 'branch' },
-      { state: 'Action', payload: 'Human approval requested before it sends', tone: 'result', form: 'transcript' },
-      { state: 'Outcome', payload: 'CRM and owner updated', tone: 'result', form: 'confirm' },
-    ],
-  },
-  {
-    id: 'video',
-    label: 'Video',
-    service: 'UGC Ads & AI Video',
-    slug: 'ugc-video',
-    anchors: { input: { x: 0.12, y: 0.18 }, core: { x: 0.45, y: 0.33 }, outcome: { x: 0.81, y: 0.22 } },
-    compact: {
-      input: 'Campaign brief',
-      action: 'Angles found, variants produced and compared',
-      outcome: 'Winning direction selected',
-    },
-    steps: [
-      { state: 'Signal', payload: 'Campaign brief arrives', tone: 'input', form: 'chip' },
-      { state: 'Context', payload: 'Creative angles identified', tone: 'system', form: 'branch' },
-      { state: 'Decision', payload: 'Variants produced and assets prepared', tone: 'system', form: 'reels' },
-      { state: 'Action', payload: 'Performance compared across variants', tone: 'result', form: 'chart' },
-      { state: 'Outcome', payload: 'Winning direction selected and scaled', tone: 'result', form: 'confirm' },
-    ],
-  },
-  {
-    id: 'web',
-    label: 'Web',
-    service: 'Conversion Websites',
-    slug: 'websites',
-    anchors: { input: { x: 0.08, y: 0.28 }, core: { x: 0.39, y: 0.17 }, outcome: { x: 0.77, y: 0.30 } },
-    compact: {
-      input: 'Visitor arrives',
-      action: 'Intent inferred and the matching proof surfaced',
-      outcome: 'Attributed sales conversation',
-    },
-    steps: [
-      { state: 'Signal', payload: 'Visitor arrives from paid search', tone: 'input', form: 'pulse' },
-      { state: 'Context', payload: 'Intent inferred: pricing comparison', tone: 'system', form: 'transcript' },
-      { state: 'Decision', payload: 'Matching proof surfaced', tone: 'system', form: 'browser' },
-      { state: 'Action', payload: 'Conversion action completed', tone: 'result', form: 'chip' },
-      { state: 'Outcome', payload: 'Lead attributed to its source', tone: 'result', form: 'confirm' },
-    ],
-  },
-  {
-    id: 'saas',
-    label: 'SaaS',
-    service: 'SaaS Products',
-    slug: 'saas-products',
-    anchors: { input: { x: 0.11, y: 0.22 }, core: { x: 0.46, y: 0.33 }, outcome: { x: 0.82, y: 0.18 } },
-    compact: {
-      input: 'User action',
-      action: 'Product context loaded and AI assistance triggered',
-      outcome: 'Product insight generated',
-    },
-    steps: [
-      { state: 'Signal', payload: 'User action inside the product', tone: 'input', form: 'browser' },
-      { state: 'Context', payload: 'Product context loaded and attributed', tone: 'system', form: 'chart' },
-      { state: 'Decision', payload: 'AI assistance triggered', tone: 'system', form: 'branch' },
-      { state: 'Action', payload: 'Workflow completed in the same session', tone: 'result', form: 'chip' },
-      { state: 'Outcome', payload: 'Event recorded, product insight generated', tone: 'result', form: 'confirm' },
-    ],
+    contactType: 'Video or UGC',
   },
 ];
+
+export const primaryServices = services.filter((s) => s.tier === 'primary');
+export const additionalServices = services.filter((s) => s.tier === 'additional');
 
 /**
  * The light/dark rhythm of the work chapters, by POSITION.
@@ -328,57 +229,78 @@ export function projectChapterEnv(index: number) {
   return projectChapterEnvs[index % projectChapterEnvs.length];
 }
 
-export const testimonials = [
-  {
-    name: 'Sarah Chen',
-    role: 'CEO',
-    company: 'Premier Dental Care',
-    content: 'Keeel transformed our patient booking process. We never miss a call, and our conversion rate speaks for itself.',
-    avatar: '/placeholder-avatar-1.jpg'
-  },
-  {
-    name: 'Michael Rodriguez',
-    role: 'Founder',
-    company: 'TechFlow Inc.',
-    content: 'The AI automations we built together save us 20+ hours per week. Game changing technology.',
-    avatar: '/placeholder-avatar-2.jpg'
-  },
-  {
-    name: 'Emily Watson',
-    role: 'Marketing Director',
-    company: 'StyleCo',
-    content: 'Our UGC campaign exceeded all expectations. Authentic content that actually converts.',
-    avatar: '/placeholder-avatar-3.jpg'
-  }
-];
-
+/**
+ * FAQ answers say only what the site can stand behind. The previous set
+ * promised "30 to 50% improvements" and a blanket 2 to 4 week launch, neither
+ * of which had a source, and neither of which holds for a SaaS build or CRM.
+ */
 export const faqs = [
   {
-    question: 'How quickly can we get started?',
-    answer: 'Most projects launch within 2 to 4 weeks. Voice AI implementations can go live in as little as 1 week with our streamlined setup process.'
+    question: 'How does a project start?',
+    answer: 'With a conversation about the problem, the people who will use what we build, and the scope. We agree what the first version includes before any build work begins.'
   },
-  // {
-  //   question: 'Do you work with businesses outside of healthcare?',
-  //   answer: 'Absolutely. While we have deep expertise in healthcare, we work with SaaS companies, ecommerce brands, service businesses, and more across industries.'
-  // },
+  {
+    question: 'How long does a project take?',
+    answer: 'It depends on scope. A marketing website and a multi tenant platform are very different builds, so we give you a timeline once the first version is defined rather than before.'
+  },
   {
     question: 'Can you integrate with our existing tools?',
-    answer: 'Yes. We integrate with popular CRMs, calendars, payment processors, and marketing tools. Custom integrations are available for enterprise clients.'
+    answer: 'Yes. We integrate with popular CRMs, calendars, payment processors, and marketing tools, and build custom integrations where a project needs them.'
   },
   {
-    question: 'What kind of results can we expect?',
-    answer: 'Results vary by service and industry, but clients typically see 30 to 50% improvements in key metrics like conversion rates, time saved, or cost reduction within the first quarter.'
+    question: 'Who owns the code and accounts?',
+    answer: 'You do. Repositories, accounts, documentation and credentials stay with you from handoff.'
   },
   {
     question: 'Do you provide ongoing support?',
-    answer: 'Yes. We offer maintenance plans, performance monitoring, and optimization services to ensure your solutions continue delivering value.'
+    answer: 'Yes, as a separate arrangement. We offer maintenance plans, performance monitoring, and optimization after launch, scoped to what you need.'
   }
 ];
 
-export const calendlyLink = process.env.NEXT_PUBLIC_CALENDLY_LINK || 'https://cal.com/manyam-soumith-reddy-eba1qt/ai-voice-agent-demo';
+/**
+ * BOOKING LINKS — two, because they book different things.
+ *
+ * `voiceDemoBookingLink` is the existing Cal.com event at /ai-voice-agent-demo
+ * (titled "KEEEL AI", 30 minutes). It is the right link on the Voice AI page and
+ * nowhere else: the slug promises a voice agent demo, which is not what someone
+ * asking about a SaaS build or a website wants to book.
+ *
+ * `projectBookingLink` is a general project call. No such event exists yet, so
+ * it is null and every "Book a call" for a general project is hidden; the
+ * contact form is the primary path. Create a project-call event type and set
+ * NEXT_PUBLIC_PROJECT_BOOKING_LINK to bring the secondary CTA back site wide.
+ */
+export const voiceDemoBookingLink =
+  process.env.NEXT_PUBLIC_CALENDLY_LINK || 'https://cal.com/manyam-soumith-reddy-eba1qt/ai-voice-agent-demo';
+
+export const projectBookingLink: string | null =
+  process.env.NEXT_PUBLIC_PROJECT_BOOKING_LINK || null;
 
 // WhatsApp: include country code, no + or spaces (e.g. 15551234567)
 export const whatsappLink = process.env.NEXT_PUBLIC_WHATSAPP_LINK || 'https://wa.me/918977287631';
+
+/**
+ * Project categories for enquiries. The homepage brief and the contact form
+ * share this list so a choice made on one arrives selected on the other.
+ */
+export const projectTypes = [
+  'SaaS product',
+  'CRM or internal tool',
+  'Website',
+  'Automation',
+  'Something else',
+] as const;
+
+/** The contact form also accepts the additional capabilities. */
+export const contactTypes = [
+  'SaaS product',
+  'CRM or internal tool',
+  'Website',
+  'Automation',
+  'Voice agent',
+  'Video or UGC',
+  'Something else',
+] as const;
 
 /**
  * Feature cards per service, keyed by slug.
@@ -428,9 +350,17 @@ export const serviceFeatureCards: Record<
     { title: 'Next.js & modern frameworks', desc: 'Built with Next.js and modern tooling for fast, scalable, and maintainable sites.', icon: 'code' },
     { title: 'Mobile first responsive design', desc: 'Sites that look and perform great on every device, from phone to desktop.', icon: 'device' },
     { title: 'Fast load times & performance', desc: 'Optimized assets, minimal JS, and performance best practices for speed that converts.', icon: 'bolt' },
-    { title: 'SaaS landing pages', desc: 'High converting landing pages that capture signups and communicate value clearly.', icon: 'window' },
+    { title: 'Marketing websites', desc: 'Clear positioning, a page structure that leads somewhere, and a design that holds attention.', icon: 'window' },
     { title: 'Ecommerce stores', desc: 'Online stores that are fast, secure, and built to grow with your catalog.', icon: 'cart' },
-    { title: 'Portfolio sites', desc: 'Clean, professional portfolios that showcase your work and win clients.', icon: 'briefcase' },
+    { title: 'Booking & enquiry flows', desc: 'The step after the page: a booking, a quote request or an enquiry that lands where your team works.', icon: 'calendar' },
+  ],
+  'crm-business-systems': [
+    { title: 'Pipelines shaped to your process', desc: 'Stages, records and fields that match how your team actually sells or delivers.', icon: 'workflow' },
+    { title: 'Client portals', desc: 'A place for clients to see progress, share files and approve work without email chains.', icon: 'users' },
+    { title: 'Dashboards & reporting', desc: 'The numbers your team checks every week, in one place and up to date.', icon: 'chart' },
+    { title: 'Roles & permissions', desc: 'Each person sees and edits what their role needs, enforced in the data layer.', icon: 'shield' },
+    { title: 'Integrations & data migration', desc: 'Bring records over from spreadsheets and existing tools, and keep them in sync.', icon: 'plug' },
+    { title: 'Workflow automation', desc: 'Follow ups, assignments and notifications that run when a record changes.', icon: 'cog' },
   ],
   'saas-products': [
     { title: 'Product strategy & architecture', desc: 'Define the users, jobs, data model, and technical shape before engineering begins.', icon: 'branch' },
@@ -471,6 +401,16 @@ export type Project = {
   challenge?: string;
   systemBuilt?: string;
   /**
+   * Homepage "Selected work" fields. `category` is the kind of product;
+   * `purpose` is one sentence on the problem it solves; `built` lists what
+   * Keeel actually delivered, each line traceable to `summary`; `scope` is an
+   * optional size-of-work fact — scope, never a commercial result.
+   */
+  category?: string;
+  purpose?: string;
+  built?: string[];
+  scope?: string;
+  /**
    * Honest project state, NOT a result claim. Allowed vocabulary: Built,
    * Deployed, In pilot, Shipped, In development — optionally followed by an
    * attributable observation ("39 institutions audited"). Never a percentage,
@@ -479,10 +419,8 @@ export type Project = {
    */
   status?: string;
   /**
-   * Project visual. A real interface crop, render, diagram or branded still —
-   * this is what should carry the composition. Until one exists the card
-   * falls back to the Keeel system object keyed to `service`, which is an
-   * honest diagram rather than a fabricated screenshot.
+   * Project visual. A real interface crop, render or branded still. Projects
+   * without one render as text only; never substitute a stock image.
    */
   image?: string;
   /**
@@ -522,7 +460,15 @@ export const projects: Project[] = [
     title: 'Football Intelligence OS',
     claim:
       'Squads, training, matchday and finances in one operations layer.',
-    service: 'SaaS Products',
+    service: 'SaaS & digital products',
+    category: 'SaaS platform · Club operations',
+    purpose:
+      'Gives clubs without a performance department one reliable picture of every player.',
+    built: [
+      'Squads, calendar, training, matchday, attendance, finances and messaging in one platform',
+      'Player profiles built from attendance, wellness and match data, with a confidence score',
+      'Access control enforced at the data layer, so medical information stays restricted',
+    ],
     year: '2026',
     summary:
       'A platform for football clubs and academies that runs the whole operation in one place: squads, calendar, training, matchday, attendance, availability, finances and messaging. Clubs without a performance department have no reliable picture of a player, so every event logged here builds one, turning attendance, wellness and match data into a living player profile with a confidence score attached. Access is enforced at the data layer rather than in the interface, so sensitive medical information stays visible only to the people entitled to see it.',
@@ -543,7 +489,16 @@ export const projects: Project[] = [
     title: 'University IVR audit engine',
     claim:
       'A voice agent maps a whole phone tree, then scores caller friction.',
-    service: 'Voice AI',
+    service: 'Automation & integrations',
+    category: 'Automation · Voice audit',
+    purpose:
+      'Maps a university phone menu by calling it, then scores how hard it is for a caller to get help.',
+    built: [
+      'A voice agent that dials in and walks every menu branch live',
+      'A weighted friction model over the paths it genuinely reached',
+      'A single page report for each institution',
+    ],
+    scope: '39 institutions audited',
     year: '2026',
     summary:
       'A voice agent calls a university switchboard, presses every option until the whole menu tree is mapped, scores how much pain a real caller goes through, and turns that into a single page report with a booking link at the end. A phone tree cannot be scraped: there is no API and no sitemap, only dial, listen, press and hang up, so every branch is a separate live call and the shape of the tree is unknown until you are already inside it. A weighted friction model scores only the paths that were genuinely walked, and options that were announced but never dialled are excluded from every number.',
@@ -569,7 +524,15 @@ export const projects: Project[] = [
     title: 'Artizyn',
     claim:
       'A two-way trades marketplace across PACA, on subscriptions not commission.',
-    service: 'SaaS Products',
+    service: 'SaaS & digital products',
+    category: 'Marketplace platform · Trades',
+    purpose:
+      'Connects building professionals and clients across the PACA region in both directions, without taking commission.',
+    built: [
+      'A two-way marketplace across nineteen trades',
+      'Subscription billing across three tiers instead of commission',
+      'Matching, messaging, reviews and payment inside the platform',
+    ],
     year: '2026',
     summary:
       'A marketplace connecting building professionals with clients across the PACA region, working in both directions. Clients post projects for free and receive offers, while artisans also publish their own available services for clients to browse and contact directly. Most trade marketplaces run one way and take a cut of every job, which pushes artisans off the platform the moment a relationship forms, so this one earns from monthly subscriptions across three tiers and takes no commission at all. Matching, messaging, reviews and payment all sit inside the platform, across nineteen trades.',
@@ -590,7 +553,7 @@ export const projects: Project[] = [
     title: 'Oxacan',
     claim:
       'Quote to cash for Swiss contractors, without leaving the tool.',
-    service: 'Conversion Websites',
+    service: 'SaaS & digital products',
     year: '2026',
     summary:
       'A platform for building and electrical contractors that carries a job from quote to cash without ever leaving the tool, across five pillars: estimating, site management, finance, client relationships and staff. Contractors normally run all of that across disconnected pieces, which costs real money in retyped data, margin errors that arrive unannounced and invoicing that waits on financial tracking nobody has. Here, winning a bid automatically generates the site tasks, material orders and schedule from the quoted lines, hours logged on site feed live margin against estimate, and an intelligence layer runs across every module: drafting quotes, reading meeting minutes for actions and deadlines, and raising a flag when margin starts trending the wrong way. Built for the Swiss and francophone market.',
@@ -601,7 +564,7 @@ export const projects: Project[] = [
     title: 'Amitsells',
     claim:
       'A phone-first marketing site built to turn visitors into enquiries.',
-    service: 'Conversion Websites',
+    service: 'Websites',
     year: '2026',
     summary:
       'A fast marketing site built to turn visitors into enquiries, with clear positioning, a layout designed for phones first, and the technical groundwork for search in place from launch.',
@@ -611,7 +574,7 @@ export const projects: Project[] = [
     title: 'Virtual try on',
     claim:
       'Shoppers see garments and eyewear on themselves from one photo.',
-    service: 'Agentic AI Automations',
+    service: 'Automation & integrations',
     year: '2026',
     summary:
       'A try before you buy experience that lets shoppers see garments and sunglasses on themselves from a single photo, built to cut the hesitation and the returns that hold back selling clothing online.',
@@ -621,7 +584,7 @@ export const projects: Project[] = [
     title: 'RFQ automation',
     claim:
       'Inbound request in, priced structured quote out, no retyping.',
-    service: 'Agentic AI Automations',
+    service: 'Automation & integrations',
     year: '2026',
     summary:
       'An agent that reads incoming requests for quote, pulls out the line items and specifications, prices them against internal data and returns a structured quote, removing the manual retyping that makes quoting slow and inconsistent.',
@@ -631,7 +594,7 @@ export const projects: Project[] = [
     title: 'Salon voice agent',
     claim:
       'Answers every call around the clock and books while they wait.',
-    service: 'Voice AI',
+    service: 'Voice agents',
     year: '2026',
     summary:
       'A phone agent that answers every call around the clock, checks real availability and books the appointment while the caller is still on the line, so a busy chair never costs the salon a booking.',
@@ -641,7 +604,7 @@ export const projects: Project[] = [
     title: 'Real estate lead follow up',
     claim:
       'Every property enquiry qualified, nurtured and routed automatically.',
-    service: 'Agentic AI Automations',
+    service: 'Automation & integrations',
     year: '2026',
     summary:
       'Automated follow up for property enquiries, on a steady cadence. Every lead gets qualified, nurtured and routed to the right agent instead of going cold in an inbox.',

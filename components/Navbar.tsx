@@ -1,227 +1,401 @@
 'use client';
 
 import Link from 'next/link';
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useId, useRef, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
-import { Menu, X } from 'lucide-react';
+import { ArrowRight, ChevronDown, Menu, X } from 'lucide-react';
 
-import { calendlyLink } from '@/config/content';
+import { additionalServices, primaryServices } from '@/config/content';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { Wordmark } from '@/components/ui/wordmark';
 
-const NAV_LINKS = [
-  { href: '/#services', label: 'Services' },
+const PAGE_LINKS = [
   { href: '/work', label: 'Work' },
   { href: '/about', label: 'About' },
-  { href: '/contact', label: 'Contact' },
 ];
 
+/** One line per offering in the Solutions menu. */
+const SOLUTION_BLURBS: Record<string, string> = {
+  'saas-products': 'MVPs, customer platforms, subscription products',
+  'crm-business-systems': 'Custom CRMs, client portals, internal tools',
+  websites: 'Marketing sites, ecommerce, booking experiences',
+  'agentic-automations': 'Workflow automation, data sync, AI assistants',
+};
+
+const EASE = [0.22, 1, 0.36, 1] as const;
+
+/**
+ * Desktop hover highlight — the Motion Primitives "AnimatedBackground"
+ * pattern: one pill shared between items through `layoutId`, so it slides
+ * from item to item instead of fading in place. Pure decoration; every item
+ * has its own hover colour, so nothing depends on it.
+ */
+function NavHighlight({ id }: { id: string }) {
+  return (
+    <motion.span
+      layoutId={id}
+      aria-hidden
+      className="absolute inset-x-0 inset-y-1.5 -z-10 rounded-pill bg-fg/[0.06]"
+      transition={{ type: 'spring', bounce: 0.15, duration: 0.3 }}
+    />
+  );
+}
+
 export default function Navbar() {
-  const [isOpen, setIsOpen] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const [solutionsOpen, setSolutionsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const [overDark, setOverDark] = useState(false);
+  const [hovered, setHovered] = useState<string | null>(null);
   const pathname = usePathname();
   const reduceMotion = useReducedMotion();
-  const toggleRef = useRef<HTMLButtonElement>(null);
+  const highlightId = useId();
 
-  // Transparent over the hero, opaque once you start scrolling.
+  const toggleRef = useRef<HTMLButtonElement>(null);
+  const mobilePanelRef = useRef<HTMLDivElement>(null);
+  const solutionsButtonRef = useRef<HTMLButtonElement>(null);
+  const solutionsPanelRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 24);
+    const onScroll = () => setScrolled(window.scrollY > 8);
     onScroll();
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  /**
-   * Does this route open on an obsidian environment?
-   *
-   * The homepage hero is now near-black, and a navy wordmark on it is
-   * invisible — which is exactly what shipped for a moment. Rather than
-   * hardcode `pathname === '/'` (which breaks the first time another route
-   * gets a dark hero), the hero declares itself with `data-hero-tone` and the
-   * bar reads it. Re-checked on navigation because App Router keeps this
-   * component mounted across routes.
-   */
+  // Close everything on navigation.
   useEffect(() => {
-    setOverDark(
-      Boolean(document.querySelector('[data-hero-tone="obsidian"]')),
-    );
-  }, [pathname]);
-
-  // Inverted only while sitting ON the dark hero. Once scrolled, the bar
-  // becomes the warm-white bar and reverts to navy ink.
-  const inverted = overDark && !scrolled && !isOpen;
-
-  // Close the mobile menu on navigation.
-  useEffect(() => {
-    setIsOpen(false);
+    setMobileOpen(false);
+    setSolutionsOpen(false);
   }, [pathname]);
 
   // Broadcast menu state so the floating WhatsApp button can hide behind it.
   useEffect(() => {
-    document.body.dataset.menuOpen = isOpen ? 'true' : 'false';
+    document.body.dataset.menuOpen = mobileOpen ? 'true' : 'false';
     return () => {
       delete document.body.dataset.menuOpen;
     };
-  }, [isOpen]);
+  }, [mobileOpen]);
 
   /**
-   * Open-drawer behaviour. Three things the drawer was missing, and each of
-   * them is a real problem rather than a polish item:
-   *
-   *   · SCROLL LOCK. The page scrolled behind the open menu, so a scroll
-   *     gesture aimed at the menu moved the content underneath it instead.
-   *   · ESCAPE. The only way out was to hit the toggle again — the standard
-   *     dismissal for any overlay was simply absent.
-   *   · FOCUS RETURN. On close, focus was left wherever it happened to be,
-   *     which for a keyboard user means being dropped at the top of the
-   *     document with no idea where they are.
+   * Solutions disclosure: closes on Escape (returning focus to its button),
+   * on a click outside, and when focus leaves both button and panel.
+   */
+  const closeSolutions = useCallback((returnFocus: boolean) => {
+    setSolutionsOpen(false);
+    if (returnFocus) solutionsButtonRef.current?.focus();
+  }, []);
+
+  useEffect(() => {
+    if (!solutionsOpen) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') closeSolutions(true);
+    };
+    const onPointer = (e: PointerEvent) => {
+      const t = e.target as Node;
+      if (
+        !solutionsPanelRef.current?.contains(t) &&
+        !solutionsButtonRef.current?.contains(t)
+      ) {
+        closeSolutions(false);
+      }
+    };
+    const onFocus = (e: FocusEvent) => {
+      const t = e.target as Node;
+      if (
+        !solutionsPanelRef.current?.contains(t) &&
+        !solutionsButtonRef.current?.contains(t)
+      ) {
+        setSolutionsOpen(false);
+      }
+    };
+    document.addEventListener('keydown', onKey);
+    document.addEventListener('pointerdown', onPointer);
+    document.addEventListener('focusin', onFocus);
+    return () => {
+      document.removeEventListener('keydown', onKey);
+      document.removeEventListener('pointerdown', onPointer);
+      document.removeEventListener('focusin', onFocus);
+    };
+  }, [solutionsOpen, closeSolutions]);
+
+  /**
+   * Mobile menu: scroll lock, Escape to close, focus moved into the panel on
+   * open, Tab kept inside the header while open, and focus returned to the
+   * toggle on close.
    */
   useEffect(() => {
-    if (!isOpen) return;
+    if (!mobileOpen) return;
 
     const { body } = document;
-    // Captured now rather than read in the cleanup: by the time cleanup runs
-    // the ref may point at a different node, and the whole purpose of this is
-    // to return focus to the element the visitor actually opened the menu with.
     const toggle = toggleRef.current;
     const previousOverflow = body.style.overflow;
     body.style.overflow = 'hidden';
 
+    const focusables = () =>
+      [
+        toggle,
+        ...Array.from(
+          mobilePanelRef.current?.querySelectorAll<HTMLElement>('a[href], button') ?? [],
+        ),
+      ].filter(Boolean) as HTMLElement[];
+
+    // Wait a frame for the panel to mount before moving focus into it.
+    const raf = requestAnimationFrame(() => {
+      mobilePanelRef.current?.querySelector<HTMLElement>('a[href]')?.focus();
+    });
+
     const onKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') setIsOpen(false);
+      if (e.key === 'Escape') {
+        setMobileOpen(false);
+        return;
+      }
+      if (e.key !== 'Tab') return;
+      const items = focusables();
+      if (!items.length) return;
+      const first = items[0];
+      const last = items[items.length - 1];
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
     };
     document.addEventListener('keydown', onKeyDown);
 
     return () => {
+      cancelAnimationFrame(raf);
       body.style.overflow = previousOverflow;
       document.removeEventListener('keydown', onKeyDown);
-      // Return focus to the control that opened it.
       toggle?.focus();
     };
-  }, [isOpen]);
+  }, [mobileOpen]);
+
+  const solutionsActive = pathname.startsWith('/services');
 
   return (
     <header
       className={cn(
-        'fixed inset-x-0 top-0 z-nav transition-colors duration-base ease-out',
-        // Opaque, not bg-surface/80. The bar is navy-on-off-white, and the
-        // page crosses several full-bleed dark bands — at 80% the navy band
-        // showed through and the navy wordmark went invisible against it.
-        // That is worst on mobile, where the bar is pinned the whole scroll.
-        scrolled || isOpen
-          ? 'border-b border-line/10 bg-surface'
-          : 'border-b border-transparent bg-transparent',
-        // Over the obsidian hero the bar paints itself in the dark theme, so
-        // every child (wordmark, links, button) resolves against it.
-        inverted && 'theme-obsidian'
+        'fixed inset-x-0 top-0 z-nav transition-[background-color,border-color,box-shadow] duration-base ease-out',
+        scrolled || mobileOpen
+          ? 'border-b border-hairline bg-surface/90 backdrop-blur-md supports-[backdrop-filter]:bg-surface/80'
+          : 'border-b border-transparent bg-surface/0',
       )}
     >
-      <nav
-        aria-label="Main"
-        className="mx-auto w-full max-w-content px-5 sm:px-8"
-      >
-        <div className="flex h-[72px] items-center justify-between">
+      <nav aria-label="Main" className="site-container">
+        <div className="flex h-[68px] items-center justify-between gap-6">
           <Link
             href="/"
-            className={cn('flex min-h-[44px] items-center', inverted ? 'text-white' : 'text-fg')}
+            className="-ml-1 flex min-h-[44px] items-center rounded-control px-1 text-fg"
             aria-label="Keeel, home"
           >
-            <Wordmark />
+            <Wordmark className="h-8" />
           </Link>
 
-          <div className="hidden items-center gap-8 md:flex">
-            {NAV_LINKS.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                // `min-h-[44px]` on the desktop links too, not just the mobile
-                // drawer. The desktop nav starts at `md` — 768px — which is a
-                // TOUCH width on every tablet, and at 20px tall these were
-                // less than half the minimum target there.
-                className={cn(
-                  'flex min-h-[44px] items-center text-sm font-medium transition-colors duration-fast ease-micro',
-                  inverted
-                    ? 'text-white/70 hover:text-white'
-                    : 'text-fg-muted hover:text-fg',
-                )}
-              >
-                {link.label}
-              </Link>
-            ))}
-            {/* `primary` is the navy fill — on the obsidian hero that is
-                #0e1836 on #070b18, effectively an invisible button. Inverted,
-                the CTA is the brightest thing in the bar, which is also the
-                right hierarchy while it sits over the environment. */}
-            <Button asChild size="sm" variant={inverted ? 'inverse' : 'primary'}>
-              <a href={calendlyLink} target="_blank" rel="noopener noreferrer">
-                Book a call
-              </a>
+          {/* Desktop */}
+          <div className="hidden flex-1 items-center justify-between md:flex">
+            <ul
+              className="relative ml-6 flex items-center lg:ml-10"
+              onMouseLeave={() => setHovered(null)}
+            >
+              <li className="relative">
+                <button
+                  ref={solutionsButtonRef}
+                  type="button"
+                  aria-expanded={solutionsOpen}
+                  aria-controls="solutions-menu"
+                  onClick={() => setSolutionsOpen((o) => !o)}
+                  onMouseEnter={() => setHovered('solutions')}
+                  className={cn(
+                    'relative isolate flex min-h-[44px] items-center gap-1.5 px-4 text-[0.9375rem] font-medium transition-colors duration-fast ease-micro hover:text-fg',
+                    solutionsOpen || solutionsActive ? 'text-fg' : 'text-fg-muted',
+                  )}
+                >
+                  {hovered === 'solutions' && !reduceMotion && <NavHighlight id={highlightId} />}
+                  Solutions
+                  <ChevronDown
+                    aria-hidden
+                    className={cn(
+                      'h-4 w-4 transition-transform duration-fast ease-micro',
+                      solutionsOpen && 'rotate-180',
+                    )}
+                  />
+                </button>
+
+                <AnimatePresence>
+                  {solutionsOpen && (
+                    <motion.div
+                      ref={solutionsPanelRef}
+                      id="solutions-menu"
+                      initial={reduceMotion ? { opacity: 0 } : { opacity: 0, y: -6 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={reduceMotion ? { opacity: 0 } : { opacity: 0, y: -6 }}
+                      transition={{ duration: 0.2, ease: EASE }}
+                      className="absolute left-0 top-[calc(100%+10px)] w-[min(40rem,calc(100vw-4rem))] rounded-panel border border-hairline bg-surface-raised p-2 shadow-glow-lg"
+                    >
+                      <ul className="grid grid-cols-2 gap-1">
+                        {primaryServices.map((s) => (
+                          <li key={s.slug}>
+                            <Link
+                              href={`/services/${s.slug}`}
+                              onClick={() => setSolutionsOpen(false)}
+                              className="group flex h-full flex-col rounded-card p-4 transition-colors duration-fast ease-micro hover:bg-mint focus-visible:bg-mint"
+                            >
+                              <span className="flex items-center justify-between gap-3 text-[0.9375rem] font-semibold text-fg">
+                                {s.navLabel}
+                                <ArrowRight
+                                  aria-hidden
+                                  className="h-4 w-4 -translate-x-1 text-signal opacity-0 transition duration-fast ease-micro group-hover:translate-x-0 group-hover:opacity-100"
+                                />
+                              </span>
+                              <span className="mt-1 text-sm text-fg-muted">
+                                {SOLUTION_BLURBS[s.slug]}
+                              </span>
+                            </Link>
+                          </li>
+                        ))}
+                      </ul>
+                      <div className="mt-1 flex flex-wrap items-center gap-x-4 gap-y-1 rounded-card bg-surface px-4 py-3">
+                        <span className="type-mono-sm text-fg-subtle">Also</span>
+                        {additionalServices.map((s) => (
+                          <Link
+                            key={s.slug}
+                            href={`/services/${s.slug}`}
+                            onClick={() => setSolutionsOpen(false)}
+                            className="inline-flex min-h-[32px] items-center text-sm text-fg-muted underline-offset-4 transition-colors duration-fast hover:text-fg hover:underline"
+                          >
+                            {s.navLabel}
+                          </Link>
+                        ))}
+                        <Link
+                          href="/services"
+                          onClick={() => setSolutionsOpen(false)}
+                          className="ml-auto inline-flex min-h-[32px] items-center gap-1 text-sm font-medium text-signal underline-offset-4 hover:underline"
+                        >
+                          All services
+                          <ArrowRight aria-hidden className="h-3.5 w-3.5" />
+                        </Link>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </li>
+
+              {PAGE_LINKS.map((link) => {
+                const active = pathname.startsWith(link.href);
+                return (
+                  <li key={link.href}>
+                    <Link
+                      href={link.href}
+                      aria-current={active ? 'page' : undefined}
+                      onMouseEnter={() => setHovered(link.href)}
+                      className={cn(
+                        'relative isolate flex min-h-[44px] items-center px-4 text-[0.9375rem] font-medium transition-colors duration-fast ease-micro hover:text-fg',
+                        active ? 'text-fg' : 'text-fg-muted',
+                      )}
+                    >
+                      {hovered === link.href && !reduceMotion && <NavHighlight id={highlightId} />}
+                      {link.label}
+                    </Link>
+                  </li>
+                );
+              })}
+            </ul>
+
+            <Button asChild size="sm">
+              <Link href="/contact">Discuss your project</Link>
             </Button>
           </div>
 
+          {/* Mobile toggle */}
           <button
             ref={toggleRef}
             type="button"
-            onClick={() => setIsOpen((open) => !open)}
-            className={cn(
-              'inline-flex h-11 w-11 items-center justify-center rounded-control transition-colors duration-base md:hidden',
-              inverted
-                ? 'text-white/80 hover:bg-white/10 hover:text-white'
-                : 'text-fg-muted hover:bg-fg/[0.05] hover:text-fg',
-            )}
-            aria-label={isOpen ? 'Close menu' : 'Open menu'}
-            aria-expanded={isOpen}
+            onClick={() => setMobileOpen((open) => !open)}
+            className="-mr-2 inline-flex h-11 w-11 items-center justify-center rounded-pill text-fg transition-colors duration-fast hover:bg-fg/[0.06] md:hidden"
+            aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
+            aria-expanded={mobileOpen}
             aria-controls="mobile-menu"
           >
-            {isOpen ? (
-              <X className="h-5 w-5" strokeWidth={1.5} />
+            {mobileOpen ? (
+              <X className="h-5 w-5" strokeWidth={1.75} />
             ) : (
-              <Menu className="h-5 w-5" strokeWidth={1.5} />
+              <Menu className="h-5 w-5" strokeWidth={1.75} />
             )}
           </button>
         </div>
-
-        <AnimatePresence initial={false}>
-          {isOpen && (
-            <motion.div
-              id="mobile-menu"
-              initial={reduceMotion ? { opacity: 1 } : { opacity: 0, height: 0 }}
-              animate={
-                reduceMotion ? { opacity: 1 } : { opacity: 1, height: 'auto' }
-              }
-              exit={reduceMotion ? { opacity: 0 } : { opacity: 0, height: 0 }}
-              transition={{ duration: 0.24, ease: [0.22, 1, 0.36, 1] }}
-              className="overflow-hidden md:hidden"
-            >
-              <div className="flex flex-col gap-1 border-t border-line/10 py-4">
-                {NAV_LINKS.map((link) => (
-                  <Link
-                    key={link.href}
-                    href={link.href}
-                    onClick={() => setIsOpen(false)}
-                    className="flex min-h-[44px] items-center rounded-control px-2 text-base font-medium text-fg-muted transition-colors duration-base hover:bg-fg/[0.05] hover:text-fg"
-                  >
-                    {link.label}
-                  </Link>
-                ))}
-                <Button asChild size="lg" className="mt-3 w-full">
-                  <a
-                    href={calendlyLink}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    onClick={() => setIsOpen(false)}
-                  >
-                    Book a call
-                  </a>
-                </Button>
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
       </nav>
+
+      <AnimatePresence initial={false}>
+        {mobileOpen && (
+          <motion.div
+            ref={mobilePanelRef}
+            id="mobile-menu"
+            initial={reduceMotion ? { opacity: 0 } : { opacity: 0, y: -8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={reduceMotion ? { opacity: 0 } : { opacity: 0, y: -8 }}
+            transition={{ duration: 0.24, ease: EASE }}
+            className="h-[calc(100dvh-68px)] overflow-y-auto border-t border-hairline bg-surface md:hidden"
+          >
+            <div className="site-container flex min-h-full flex-col pb-8 pt-5">
+              <p className="type-mono-sm text-fg-subtle">Solutions</p>
+              <ul className="mt-2">
+                {primaryServices.map((s) => (
+                  <li key={s.slug} className="border-b border-hairline">
+                    <Link
+                      href={`/services/${s.slug}`}
+                      onClick={() => setMobileOpen(false)}
+                      className="flex min-h-[56px] items-center justify-between gap-4 text-lg font-semibold tracking-[-0.01em] text-fg"
+                    >
+                      {s.navLabel}
+                      <ArrowRight aria-hidden className="h-4 w-4 text-signal" />
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+
+              <ul className="mt-6 flex flex-col">
+                {[...PAGE_LINKS, { href: '/contact', label: 'Contact' }].map((link) => (
+                  <li key={link.href}>
+                    <Link
+                      href={link.href}
+                      onClick={() => setMobileOpen(false)}
+                      className="flex min-h-[48px] items-center text-base font-medium text-fg-muted transition-colors hover:text-fg"
+                    >
+                      {link.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+
+              <p className="mt-6 text-sm text-fg-subtle">
+                Also:{' '}
+                {additionalServices.map((s, i) => (
+                  <span key={s.slug}>
+                    {i > 0 && ' · '}
+                    <Link
+                      href={`/services/${s.slug}`}
+                      onClick={() => setMobileOpen(false)}
+                      className="inline-flex min-h-[44px] items-center text-fg-muted underline underline-offset-4"
+                    >
+                      {s.navLabel}
+                    </Link>
+                  </span>
+                ))}
+              </p>
+
+              <Button asChild size="lg" className="mt-auto w-full">
+                <Link href="/contact" onClick={() => setMobileOpen(false)}>
+                  Discuss your project
+                </Link>
+              </Button>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </header>
   );
 }

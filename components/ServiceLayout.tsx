@@ -4,7 +4,7 @@ import Link from "next/link";
 import dynamic from "next/dynamic";
 import { ArrowRight } from "lucide-react";
 
-import { calendlyLink, serviceFeatureCards } from "@/config/content";
+import { serviceFeatureCards, services, voiceDemoBookingLink } from "@/config/content";
 import FinalCTA from '@/components/FinalCTA';
 import { Section } from "@/components/ui/section";
 import { SectionHeading } from "@/components/ui/section-heading";
@@ -12,16 +12,17 @@ import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
 import { GlowCard } from "@/components/ui/glow-card";
 import { Reveal, RevealGroup, RevealItem } from "@/components/ui/reveal";
-import GlowBackdrop from "@/components/ui/glow-backdrop";
 import { DeferredWebGL } from "@/components/ui/deferred-webgl";
 import { CountUp } from "@/components/ui/count-up";
 import VoiceDemoPlayer from "@/components/VoiceDemoPlayer";
+import { AutomationDemo, VideoDemo } from "@/components/ServiceDemos";
+import { BrowserFrame, ConceptTag, MockCanvas, PhoneFrame, Shot } from "@/components/home/frames";
 import {
-  AutomationDemo,
-  SaaSDemo,
-  VideoDemo,
-  WebsiteDemo,
-} from "@/components/ServiceDemos";
+  BookingPhoneMock,
+  ClinicSiteMock,
+  CrmPipelineMock,
+  CrmRecordMock,
+} from "@/components/home/mocks";
 
 /**
  * One layout for every service page.
@@ -53,6 +54,9 @@ export type ServiceLayoutProps = {
     features: string[];
     demoAudioUrl?: string;
     demoVideoUrl?: string;
+    contactType?: string;
+    tier?: "primary" | "additional";
+    related?: { label: string; slug: string }[];
   };
 };
 
@@ -130,9 +134,71 @@ function ServiceHeroMedia({ service }: ServiceLayoutProps) {
         />
       ) : null;
     case "websites":
-      return <WebsiteDemo className="h-80 w-full sm:h-96 lg:h-[28rem]" />;
+      return (
+        <figure>
+          <div className="relative pb-[12%]">
+            <BrowserFrame label="Linden Physio">
+              <MockCanvas ratio={1.5}>
+                <ClinicSiteMock />
+              </MockCanvas>
+            </BrowserFrame>
+            <div className="absolute bottom-0 right-[4%] w-[24%]">
+              <PhoneFrame>
+                <MockCanvas ratio={0.5} units={40}>
+                  <BookingPhoneMock />
+                </MockCanvas>
+              </PhoneFrame>
+            </div>
+            <ConceptTag className="absolute -top-3 left-4 z-raised" />
+          </div>
+          <figcaption className="mt-4 text-sm text-fg-muted">
+            Illustrative concept of a clinic website and booking step. Not client work.
+          </figcaption>
+        </figure>
+      );
+    case "crm-business-systems":
+      return (
+        <figure>
+          <div className="relative pb-[14%]">
+            <BrowserFrame label="Pipeline">
+              <MockCanvas ratio={1.5}>
+                <CrmPipelineMock />
+              </MockCanvas>
+            </BrowserFrame>
+            <div className="absolute bottom-0 left-[-3%] w-[36%] overflow-hidden rounded-[14px] shadow-frame ring-1 ring-[#111814]/[0.07]">
+              <MockCanvas ratio={1.05} units={24}>
+                <CrmRecordMock />
+              </MockCanvas>
+            </div>
+            <ConceptTag className="absolute -top-3 right-4 z-raised" />
+          </div>
+          <figcaption className="mt-4 text-sm text-fg-muted">
+            Illustrative concept of a custom CRM pipeline and contact record. Not client work.
+          </figcaption>
+        </figure>
+      );
     case "saas-products":
-      return <SaaSDemo className="h-80 w-full sm:h-96 lg:h-[28rem]" />;
+      return (
+        <figure>
+          <BrowserFrame label="Football Intelligence OS" tone="dark">
+            <Shot
+              src="/football-intelligence-os.webp"
+              srcSmall="/football-intelligence-os-800.webp"
+              width={1536}
+              height={1024}
+              alt="Football Intelligence OS overview dashboard."
+              sizes="(min-width: 1024px) 600px, 92vw"
+              priority
+            />
+          </BrowserFrame>
+          <figcaption className="mt-4 text-sm text-fg-muted">
+            Football Intelligence OS, a club operations platform built by Keeel.{" "}
+            <Link href="/work#football-intelligence-os" className="font-medium text-signal underline-offset-4 hover:underline">
+              Project details
+            </Link>
+          </figcaption>
+        </figure>
+      );
     default:
       return null;
   }
@@ -141,29 +207,35 @@ function ServiceHeroMedia({ service }: ServiceLayoutProps) {
 export default function ServiceLayout({ service }: ServiceLayoutProps) {
   const featureCards = serviceFeatureCards[service.slug] ?? [];
   const media = ServiceHeroMedia({ service });
+  const contactHref = service.contactType
+    ? `/contact?type=${encodeURIComponent(service.contactType)}`
+    : "/contact";
+  // Resolve related links against the live service list so a renamed or
+  // removed page can never leave a dead link here.
+  const related = (service.related ?? []).filter((r) =>
+    services.some((s) => s.slug === r.slug),
+  );
 
   return (
     <>
       {/* ── Hero ─────────────────────────────────────────────────────── */}
-      <section className="relative isolate overflow-hidden bg-surface px-5 pb-20 pt-36 sm:px-8 sm:pt-40">
-        <div
-          aria-hidden
-          className="absolute inset-0 z-base [background-image:linear-gradient(to_right,rgb(var(--line)/0.07)_1px,transparent_1px),linear-gradient(to_bottom,rgb(var(--line)/0.07)_1px,transparent_1px)] [background-size:72px_72px] [mask-image:radial-gradient(ellipse_75%_60%_at_50%_25%,black,transparent)]"
-        />
-        <GlowBackdrop variant="hero" className="z-base" />
-
-        <div className="relative z-raised mx-auto grid w-full max-w-content grid-cols-1 items-center gap-14 lg:grid-cols-2">
+      <section className="relative isolate overflow-hidden bg-surface pb-[calc(var(--section-y)*0.8)] pt-[calc(68px+clamp(2.5rem,6vw,5rem))]">
+        <div className="site-container relative z-raised grid grid-cols-1 items-center gap-12 lg:grid-cols-2 lg:gap-16">
           <div>
             <Reveal>
-              <span className="type-label inline-flex items-center gap-2.5 border border-line/15 bg-fg/[0.04] px-3.5 py-2 text-accent-700">
+              <Link
+                href="/services"
+                className="type-label inline-flex items-center gap-2.5 text-signal underline-offset-4 hover:underline"
+              >
+                <span aria-hidden className="h-1.5 w-1.5 rounded-full bg-emerald" />
                 {service.title}
-              </span>
+              </Link>
             </Reveal>
 
             {/* shortDescription is a sentence; outcomeStatement is often a
                 comma-list of capabilities, which reads badly at display size. */}
             <Reveal delay={0.05}>
-              <h1 className="type-h1 mt-7 text-fg text-balance">
+              <h1 className="type-h1 mt-5 text-fg text-balance">
                 {service.shortDescription || service.title}
               </h1>
             </Reveal>
@@ -174,10 +246,11 @@ export default function ServiceLayout({ service }: ServiceLayoutProps) {
               </p>
             </Reveal>
 
-            {service.outcomeStatement && (
+            {/* On the four primary pages the description already lists the
+                examples, so the summary line would repeat it. */}
+            {service.outcomeStatement && service.tier !== "primary" && (
               <Reveal delay={0.13}>
-                <p className="type-label mt-5 flex items-center gap-2.5 text-fg-subtle">
-                  <span className="inline-block h-px w-6 shrink-0 bg-accent-500" />
+                <p className="mt-5 text-[0.9375rem] text-fg-subtle">
                   {service.outcomeStatement}
                 </p>
               </Reveal>
@@ -216,20 +289,45 @@ export default function ServiceLayout({ service }: ServiceLayoutProps) {
             <Reveal delay={0.2}>
               <div className="mt-10 flex flex-col gap-3 sm:flex-row sm:items-center">
                 <Button asChild size="lg">
-                  <a
-                    href={calendlyLink}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    Design my AI system
+                  <Link href={contactHref}>
+                    Discuss your project
                     <ArrowRight className="h-4 w-4" aria-hidden />
-                  </a>
+                  </Link>
                 </Button>
-                <Button asChild size="lg" variant="secondary">
-                  <Link href="/contact">Talk to us</Link>
-                </Button>
+                {/* The existing Cal.com event is a voice agent demo, so it is
+                    offered on the voice page and nowhere else. */}
+                {service.slug === "voice-ai" ? (
+                  <Button asChild size="lg" variant="secondary">
+                    <a href={voiceDemoBookingLink} target="_blank" rel="noopener noreferrer">
+                      Book a voice agent demo
+                    </a>
+                  </Button>
+                ) : (
+                  <Button asChild size="lg" variant="secondary">
+                    <Link href="/work">Explore our work</Link>
+                  </Button>
+                )}
               </div>
             </Reveal>
+
+            {related.length > 0 && (
+              <Reveal delay={0.24}>
+                <p className="mt-6 text-sm text-fg-muted">
+                  Related:{" "}
+                  {related.map((r, i) => (
+                    <span key={r.slug}>
+                      {i > 0 && " · "}
+                      <Link
+                        href={`/services/${r.slug}`}
+                        className="font-medium text-signal underline-offset-4 hover:underline"
+                      >
+                        {r.label}
+                      </Link>
+                    </span>
+                  ))}
+                </p>
+              </Reveal>
+            )}
           </div>
 
           {media && (
@@ -245,8 +343,8 @@ export default function ServiceLayout({ service }: ServiceLayoutProps) {
         <Section tone="raised" spacing="lg">
           <SectionHeading
             eyebrow="Capabilities"
-            title="What's included"
-            lead="Everything below ships as part of the engagement, not as an upsell later."
+            title="What we can build"
+            lead="Every project is scoped individually. These are the pieces this kind of work most often includes."
           />
 
           <RevealGroup className="mt-14 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -262,7 +360,7 @@ export default function ServiceLayout({ service }: ServiceLayoutProps) {
                     className="flex h-full items-center gap-4 p-6"
                     title={card.desc}
                   >
-                    <span className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-control border border-line/15 bg-ink/10 text-accent-700">
+                    <span className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-control bg-mint text-signal">
                       <Icon name={card.icon} size={20} />
                     </span>
                     <h3 className="type-h4 text-fg text-balance">
@@ -282,9 +380,9 @@ export default function ServiceLayout({ service }: ServiceLayoutProps) {
           <div className="grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-16">
             <div className="lg:col-span-5">
               <SectionHeading
-                eyebrow="Best fit"
-                title="Where this works hardest"
-                lead="If you recognise your business here, the payback tends to arrive fastest."
+                eyebrow="Typical fit"
+                title="Where this usually fits"
+                lead="The situations we most often see behind this kind of project."
               />
             </div>
             <ul className="lg:col-span-7">
@@ -308,7 +406,8 @@ export default function ServiceLayout({ service }: ServiceLayoutProps) {
       <FinalCTA
         // Not `.toLowerCase()` — that rendered "voice ai", and the acronym
         // matters more than the sentence case does.
-        heading={`Ready to put ${service.title} to work?`}
+        heading="What are you ready to build?"
+        contactHref={contactHref}
       />
     </>
   );

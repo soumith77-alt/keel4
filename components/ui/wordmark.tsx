@@ -11,15 +11,13 @@ import { cn } from "@/lib/utils";
  * logo, just with the white ground removed.
  *
  * It is applied as a CSS mask over `bg-fg` rather than drawn as an <img>, so
- * the mark inherits the theme foreground: navy on the warm canvas, near-white
- * inside a `.theme-dark` band. That is why it can now sit on the navy footer
- * or CTA, which the previous white-square asset could not.
+ * the mark inherits the theme foreground: #111814 ink on the light page,
+ * near-white on the dark surface.
  *
- * COLOUR NOTE: the source artwork is #1e4a7b — a third navy, one step off the
- * site ink (#0e1836). Tinting via the mask folds it into the single navy the
- * rest of the site uses. To restore the exact original colour instead, drop
- * the mask and render `public/brand-logo.png` (same letterforms, transparent
- * background, original navy) as a plain <img>.
+ * COLOUR NOTE: the source artwork is navy (#1e4a7b). Tinting via the mask
+ * folds it into the site ink. To restore the original colour, render
+ * `public/brand-logo.png` (same letterforms, transparent background) as an
+ * <img> instead. Width follows from the height via `aspect-ratio`.
  *
  * SPELLING: the mark reads "keeel", three e's. The site text and the artwork
  * disagreed for one commit — the copy was renamed before the logo existed —
@@ -47,7 +45,7 @@ export function Wordmark({
       aria-label="Keeel"
       className={cn("inline-block h-9 shrink-0 bg-fg", className)}
       style={{
-        width: `${9 * 0.25 * ASPECT}rem`,
+        aspectRatio: ASPECT,
         WebkitMaskImage: "url(/brand-logo-mask.png)",
         maskImage: "url(/brand-logo-mask.png)",
         WebkitMaskRepeat: "no-repeat",

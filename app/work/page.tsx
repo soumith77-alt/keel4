@@ -1,25 +1,25 @@
-import { projectChapterEnv, projects } from '@/config/content';
+import { SITE_URL, projectChapterEnv, projects } from '@/config/content';
 import PageHero from '@/components/ui/page-hero';
 import { ProjectChapter } from '@/components/FeaturedWork';
 import FinalCTA from '@/components/FinalCTA';
 
+const DESCRIPTION =
+  'Selected Keeel projects: SaaS platforms, marketplaces, websites and automation, with what we built for each.';
+
 export const metadata = {
-  title: 'Work - AI Systems We’ve Built',
-  description:
-    'Selected Keeel engagements: AI voice agents, business automations, UGC campaigns, and conversion focused websites, with the outcomes each delivered.',
-  alternates: { canonical: 'https://saykeel.com/work' },
+  title: 'Work - Products and Systems We’ve Built',
+  description: DESCRIPTION,
+  alternates: { canonical: `${SITE_URL}/work` },
   openGraph: {
-    title: 'Work - AI Systems We’ve Built | Keeel',
-    description:
-      'Selected engagements across voice AI, automations, video, and websites.',
-    url: 'https://saykeel.com/work',
+    title: 'Work | Keeel',
+    description: DESCRIPTION,
+    url: `${SITE_URL}/work`,
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Work | Keeel',
-    description:
-      'Selected engagements across voice AI, automations, video, and websites.',
+    description: DESCRIPTION,
   },
 };
 
@@ -27,8 +27,8 @@ const workSchema = {
   '@context': 'https://schema.org',
   '@type': 'CollectionPage',
   name: 'Keeel Work',
-  url: 'https://saykeel.com/work',
-  description: 'Selected AI engagements delivered by Keeel.',
+  url: `${SITE_URL}/work`,
+  description: DESCRIPTION,
 };
 
 export default function WorkPage() {
@@ -41,8 +41,8 @@ export default function WorkPage() {
 
       <PageHero
         eyebrow="Work"
-        title="Systems we’ve shipped."
-        lead="Each engagement scoped to a metric, built end to end, and measured against what it was supposed to move."
+        title="Products and systems we’ve built."
+        lead="Platforms, marketplaces, websites and automation, each designed and built end to end."
         className="pb-4"
       />
 

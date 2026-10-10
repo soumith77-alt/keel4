@@ -6,37 +6,34 @@ import { cn } from "@/lib/utils";
 
 /**
  * Button variants. Theme-aware: `secondary` and `ghost` resolve through the
- * fg/line variables, so they invert automatically inside a `theme-dark` band.
+ * fg/hairline variables, so they invert automatically inside a `theme-dark`
+ * band.
  *
- * `primary` is the locked brand navy as a FILL with white text — 10.3:1, and
- * the one place #253c80 runs at full strength. It reads on both themes.
- *
- * `link` uses accent-700, not accent-500: green text on the off-white canvas
- * needs the darker step to clear 4.5:1. See the contrast rule in tailwind.config.
+ * `primary` is the emerald fill with white text — 6.4:1, darkening to 8.2:1 on
+ * hover. `inverse` is for the dark surface: page-white fill, ink text.
  *
  * All sizes meet the 44px minimum touch target. Use `asChild` to render an
  * anchor or a next/link while keeping the styling.
  */
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-card font-semibold transition duration-base ease-out cursor-pointer disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0",
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-pill font-semibold tracking-[-0.01em] transition-[background-color,border-color,color,box-shadow,transform] duration-fast ease-micro cursor-pointer disabled:pointer-events-none disabled:opacity-50 active:scale-[0.98] [&_svg]:pointer-events-none [&_svg]:shrink-0",
   {
     variants: {
       variant: {
         primary:
-          "bg-ink text-white shadow-glow-sm hover:bg-brand-600 hover:shadow-glow-md active:scale-[0.98]",
+          "bg-emerald text-white shadow-accent hover:bg-emerald-hover",
         secondary:
-          "border border-line/20 bg-fg/[0.05] text-fg backdrop-blur-sm hover:border-line/25 hover:bg-fg/[0.06] active:scale-[0.98]",
+          "border border-hairline bg-surface-raised text-fg shadow-glow-sm hover:border-line/25 hover:bg-surface-raised",
         ghost: "text-fg-muted hover:bg-fg/[0.05] hover:text-fg",
-        // On the full-strength navy CTA band, invert: white fill on navy.
-        inverse: "bg-white text-ink hover:bg-fg/10 active:scale-[0.98]",
-        link: "text-accent-700 underline-offset-4 hover:text-accent-600 hover:underline",
+        inverse: "bg-[#F6F5F0] text-[#111814] hover:bg-white",
+        link: "text-signal underline-offset-4 hover:underline",
         destructive:
           "bg-destructive text-destructive-foreground hover:bg-destructive/90",
       },
       size: {
-        sm: "h-11 px-4 text-sm",
-        default: "h-12 px-6 text-sm",
-        lg: "h-14 px-8 text-base",
+        sm: "h-11 px-5 text-sm",
+        default: "h-12 px-6 text-[0.9375rem]",
+        lg: "h-[3.25rem] px-7 text-base",
         icon: "h-11 w-11",
       },
     },

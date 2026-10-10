@@ -7,10 +7,10 @@ import { cn } from "@/lib/utils";
  */
 
 const WIDTHS = {
-  prose: "max-w-prose", // 704px, long-form copy
-  default: "max-w-content", // 1152px, standard sections
-  wide: "max-w-wide", // 1344px, full-width grids
-  bleed: "max-w-none", // edge-to-edge; caller handles insets
+  prose: "site-container max-w-[calc(44rem+2*var(--gutter))]", // long-form copy
+  default: "site-container", // the 1240px site column
+  wide: "site-container",
+  bleed: "w-full", // edge-to-edge; caller handles insets
 } as const;
 
 /**
@@ -18,8 +18,7 @@ const WIDTHS = {
  * `theme-dark` re-point the --canvas / --fg / --line variables for the whole
  * subtree, so inverting a band costs one prop and every child follows.
  *
- * `dark` is the BIDATA mid-scroll inversion — deep navy, full bleed, abrupt.
- * Do not soften the boundary with a gradient; the hard cut is the effect.
+ * `dark` is the #101A15 feature surface, full bleed with a hard edge.
  */
 const TONES = {
   light: "theme-light bg-surface text-fg",
@@ -34,22 +33,19 @@ const TONES = {
 } as const;
 
 /**
- * Vertical rhythm. The phone values came down roughly a quarter (12 → 9,
- * i.e. 48px → 36px of padding a side): every section was setting the same
- * py-12 regardless of tier, so a phone got desktop-sized breathing room
- * between blocks that were already short, and the page read as mostly gaps.
- * The desktop tiers are unchanged — that is where the rhythm was working.
+ * Vertical rhythm. `md` and `lg` are the site rhythm (~56px on a phone, ~120px
+ * on a desktop, see --section-y); `sm` is for tightly coupled follow-ons.
  */
 const SPACING = {
   none: "",
-  sm: "py-9 sm:py-20",
-  md: "py-10 sm:py-28",
-  lg: "py-12 sm:py-32",
+  sm: "py-[calc(var(--section-y)*0.6)]",
+  md: "section-y",
+  lg: "section-y",
 } as const;
 
 type SectionProps = {
   children: React.ReactNode;
-  /** Container width. Defaults to the 1152px content column. */
+  /** Container width. Defaults to the 1240px site column. */
   width?: keyof typeof WIDTHS;
   /** Background treatment. */
   tone?: keyof typeof TONES;
@@ -83,13 +79,7 @@ export function Section({
       )}
       {...rest}
     >
-      <div
-        className={cn(
-          "mx-auto w-full px-5 sm:px-8",
-          WIDTHS[width],
-          containerClassName
-        )}
-      >
+      <div className={cn(WIDTHS[width], containerClassName)}>
         {children}
       </div>
     </section>

@@ -2,34 +2,14 @@
 
 import { useEffect, useRef, useState } from 'react';
 
-const serviceOptions = [
-  'Voice AI',
-  'Agentic AI Automations',
-  'UGC Ads',
-  'Animation / AI Video',
-  'Conversion Websites',
-  'Multiple Services',
-  'Not Sure Yet'
-];
+import { CONTACT_EMAIL, contactTypes } from '@/config/content';
 
 /**
- * The homepage brief hands off here. It carries `focus` (the area the visitor
- * chose) and `note` (their one line about the bottleneck) as query params,
- * and this is where they land: `note` becomes the opening line of the details
- * field, prefixed with the chosen area so the context is not lost.
- *
- * `focus` deliberately does NOT map onto the service dropdown — "Revenue" is
- * not a service, and guessing that revenue means Voice AI would put words in
- * the visitor's mouth. It stays as stated context.
+ * The homepage brief and every service page hand off here with `type` (one
+ * of `contactTypes`) and `note` (a short description) as query parameters.
+ * A recognised `type` pre-selects the dropdown; `note` opens the details
+ * field. Unknown values are ignored rather than guessed at.
  */
-const FOCUS_LABELS: Record<string, string> = {
-  revenue: 'Revenue',
-  operations: 'Operations',
-  'customer-experience': 'Customer experience',
-  product: 'Product',
-  content: 'Content',
-};
-
 export default function ContactForm() {
   const [prefilled, setPrefilled] = useState(false);
   const [formData, setFormData] = useState({
@@ -68,21 +48,19 @@ export default function ContactForm() {
    */
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
-    const focus = params.get('focus');
-    const note = params.get('note');
-    if (!focus && !note) return;
+    const type = params.get('type');
+    const note = params.get('note')?.trim();
+    const service = type && (contactTypes as readonly string[]).includes(type) ? type : '';
+    if (!service && !note) return;
 
-    const area = focus ? FOCUS_LABELS[focus] : null;
-    const details = [
-      area ? `Area to improve: ${area}.` : null,
-      note?.trim() || null,
-    ]
-      .filter(Boolean)
-      .join('\n\n');
-
-    if (!details) return;
-    setFormData((prev) => (prev.details ? prev : { ...prev, details }));
-    setPrefilled(true);
+    setFormData((prev) => ({
+      ...prev,
+      service: prev.service || service,
+      details: prev.details || note || '',
+    }));
+    // The notice is only for carried-over text; a pre-selected dropdown is
+    // self-evident.
+    if (note) setPrefilled(true);
   }, []);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
@@ -128,7 +106,7 @@ export default function ContactForm() {
         });
         if (!res.ok) throw new Error(`Request failed: ${res.status}`);
       } else {
-        const subject = `New enquiry — ${formData.service || 'General'}`;
+        const subject = `New project enquiry — ${formData.service || 'General'}`;
         const body = [
           `Name: ${formData.name}`,
           `Email: ${formData.email}`,
@@ -139,7 +117,7 @@ export default function ContactForm() {
         ]
           .filter((line) => line !== null)
           .join('\n');
-        window.location.href = `mailto:hello@saykeel.com?subject=${encodeURIComponent(
+        window.location.href = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(
           subject,
         )}&body=${encodeURIComponent(body)}`;
       }
@@ -189,16 +167,16 @@ export default function ContactForm() {
         {prefilled && (
           <p
             role="status"
-            className="type-body rounded-control border border-accent-600/40 bg-accent-500/10 p-4 text-fg-muted"
+            className="type-body rounded-control border border-[#146C50]/25 bg-mint p-4 text-fg-muted"
           >
-            We&apos;ve carried your answers over into the details below. Add
-            your name and email and it&apos;s ready to send.
+            We&apos;ve carried your description over into the details below.
+            Add your name and email and it&apos;s ready to send.
           </p>
         )}
 
         {/* Name */}
         <div>
-          <label htmlFor="name" className="block text-sm font-medium text-fg-muted mb-2">
+          <label htmlFor="name" className="mb-2 block text-[0.9375rem] font-medium text-fg">
             Name *
           </label>
           <input
@@ -208,15 +186,15 @@ export default function ContactForm() {
             required
             value={formData.name}
             onChange={handleChange}
-            className="w-full px-4 py-3 border-2 border-line/15 rounded-control focus:border-accent-600 focus:outline-none transition-colors"
+            className="w-full rounded-control border border-hairline bg-surface-raised px-4 py-3 text-base text-fg transition-colors duration-fast placeholder:text-fg-subtle hover:border-line/25 focus:border-emerald focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#146C50]"
             placeholder="Your name"
           />
         </div>
 
         {/* Email */}
         <div>
-          <label htmlFor="email" className="block text-sm font-medium text-fg-muted mb-2">
-            Work Email *
+          <label htmlFor="email" className="mb-2 block text-[0.9375rem] font-medium text-fg">
+            Work email *
           </label>
           <input
             type="email"
@@ -225,15 +203,15 @@ export default function ContactForm() {
             required
             value={formData.email}
             onChange={handleChange}
-            className="w-full px-4 py-3 border-2 border-line/15 rounded-control focus:border-accent-600 focus:outline-none transition-colors"
+            className="w-full rounded-control border border-hairline bg-surface-raised px-4 py-3 text-base text-fg transition-colors duration-fast placeholder:text-fg-subtle hover:border-line/25 focus:border-emerald focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#146C50]"
             placeholder="you@company.com"
           />
         </div>
 
         {/* Company */}
         <div>
-          <label htmlFor="company" className="block text-sm font-medium text-fg-muted mb-2">
-            Business Name
+          <label htmlFor="company" className="mb-2 block text-[0.9375rem] font-medium text-fg">
+            Business name
           </label>
           <input
             type="text"
@@ -241,15 +219,15 @@ export default function ContactForm() {
             name="company"
             value={formData.company}
             onChange={handleChange}
-            className="w-full px-4 py-3 border-2 border-line/15 rounded-control focus:border-accent-600 focus:outline-none transition-colors"
+            className="w-full rounded-control border border-hairline bg-surface-raised px-4 py-3 text-base text-fg transition-colors duration-fast placeholder:text-fg-subtle hover:border-line/25 focus:border-emerald focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#146C50]"
             placeholder="Your company name"
           />
         </div>
 
         {/* Service Dropdown */}
         <div>
-          <label htmlFor="service" className="block text-sm font-medium text-fg-muted mb-2">
-            What do you need? *
+          <label htmlFor="service" className="mb-2 block text-[0.9375rem] font-medium text-fg">
+            What are you looking to build? *
           </label>
           <select
             id="service"
@@ -257,10 +235,10 @@ export default function ContactForm() {
             required
             value={formData.service}
             onChange={handleChange}
-            className="w-full px-4 py-3 border-2 border-line/15 rounded-control focus:border-accent-600 focus:outline-none transition-colors bg-surface"
+            className="w-full rounded-control border border-hairline bg-surface-raised px-4 py-3 text-base text-fg transition-colors duration-fast placeholder:text-fg-subtle hover:border-line/25 focus:border-emerald focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#146C50]"
           >
-            <option value="">Select a service</option>
-            {serviceOptions.map((option) => (
+            <option value="">Select a project type</option>
+            {contactTypes.map((option) => (
               <option key={option} value={option}>
                 {option}
               </option>
@@ -270,7 +248,7 @@ export default function ContactForm() {
 
         {/* Details */}
         <div>
-          <label htmlFor="details" className="block text-sm font-medium text-fg-muted mb-2">
+          <label htmlFor="details" className="mb-2 block text-[0.9375rem] font-medium text-fg">
             Details
           </label>
           <textarea
@@ -279,8 +257,8 @@ export default function ContactForm() {
             rows={5}
             value={formData.details}
             onChange={handleChange}
-            className="w-full px-4 py-3 border-2 border-line/15 rounded-control focus:border-accent-600 focus:outline-none transition-colors resize-none"
-            placeholder="Tell us about your project, goals, or questions..."
+            className="w-full rounded-control border border-hairline bg-surface-raised px-4 py-3 text-base text-fg transition-colors duration-fast placeholder:text-fg-subtle hover:border-line/25 focus:border-emerald focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#146C50] resize-none"
+            placeholder="What are you building, who is it for, and what does it need to connect to?"
           />
         </div>
 
@@ -288,16 +266,16 @@ export default function ContactForm() {
         <button
           type="submit"
           disabled={isSubmitting}
-          className="w-full bg-ink text-white px-8 py-4 rounded-card font-semibold type-body hover:bg-brand-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          className="h-[3.25rem] w-full rounded-pill bg-emerald px-8 text-base font-semibold text-white shadow-accent transition-colors duration-fast hover:bg-emerald-hover disabled:cursor-not-allowed disabled:opacity-50"
         >
-          {isSubmitting ? 'Sending...' : 'Send Message'}
+          {isSubmitting ? 'Sending…' : 'Send message'}
         </button>
 
         {/* Success Message */}
         {submitStatus === 'success' && (
           <div
             role="status"
-            className="rounded-control border-2 border-accent-600/30 bg-accent-500/10 p-4 text-fg"
+            className="rounded-control border border-[#146C50]/25 bg-mint p-4 text-fg"
           >
             {process.env.NEXT_PUBLIC_FORM_ENDPOINT
               ? "Thank you! We'll get back to you within one business day."
@@ -314,9 +292,9 @@ export default function ContactForm() {
         {submitStatus === 'error' && (
           <div
             role="alert"
-            className="rounded-control border-2 border-destructive/30 bg-destructive/10 p-4 text-fg"
+            className="rounded-control border border-destructive/30 bg-destructive/10 p-4 text-fg"
           >
-            Something went wrong. Please try again or email us directly at hello@saykeel.com
+            Something went wrong. Please try again or email us directly at {CONTACT_EMAIL}
           </div>
         )}
       </div>

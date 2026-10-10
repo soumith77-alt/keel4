@@ -2,24 +2,25 @@ import { Section } from '@/components/ui/section';
 import PageHero from '@/components/ui/page-hero';
 import { Reveal, RevealGroup, RevealItem } from '@/components/ui/reveal';
 import FinalCTA from '@/components/FinalCTA';
+import { CONTACT_EMAIL, SITE_URL } from '@/config/content';
+
+const DESCRIPTION =
+  'Keeel is a product and software studio. We design and build SaaS products, custom CRMs and business systems, websites, and the automation that connects them.';
 
 export const metadata = {
-  title: 'About - Agentic AI Solutions Studio',
-  description:
-    'Keeel is an Agentic AI Solutions Studio building Voice AI systems, business automations, UGC content, AI video, and high converting websites. Real results in 2 to 4 weeks.',
-  alternates: { canonical: 'https://saykeel.com/about' },
+  title: 'About - Product & Software Studio',
+  description: DESCRIPTION,
+  alternates: { canonical: `${SITE_URL}/about` },
   openGraph: {
-    title: 'About Keeel - Agentic AI Solutions Studio',
-    description:
-      'We build Voice AI, automations, UGC content, and websites for businesses that scale. Real measurable results.',
-    url: 'https://saykeel.com/about',
+    title: 'About Keeel - Product & Software Studio',
+    description: DESCRIPTION,
+    url: `${SITE_URL}/about`,
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'About Keeel - Agentic AI Solutions Studio',
-    description:
-      'Voice AI, automations, UGC content, and websites for businesses that scale.',
+    title: 'About Keeel - Product & Software Studio',
+    description: DESCRIPTION,
   },
 };
 
@@ -27,62 +28,43 @@ const aboutSchema = {
   '@context': 'https://schema.org',
   '@type': 'AboutPage',
   name: 'About Keeel',
-  url: 'https://saykeel.com/about',
-  description:
-    'Keeel is an Agentic AI Solutions Studio building Voice AI, automations, UGC content, AI video, and websites.',
+  url: `${SITE_URL}/about`,
+  description: DESCRIPTION,
   mainEntity: {
     '@type': 'Organization',
     name: 'Keeel',
-    url: 'https://saykeel.com',
-    email: 'hello@saykeel.com',
-    description:
-      'We build premium AI solutions that drive measurable business outcomes. Voice AI, automations, UGC ads, AI video, and websites.',
+    url: SITE_URL,
+    email: CONTACT_EMAIL,
+    description: DESCRIPTION,
   },
 };
 
 /**
- * ABOUT — the same system as every other route.
- *
- * This page used to run its own design language: the old heavy display face,
- * a four-up grid of glow cards, its own spacing rhythm, and a bespoke navy
- * CTA band with a radial highlight that appeared nowhere else. Read next to
- * the homepage it looked like the previous version of the website, which is
- * precisely what a visitor moving between the two would conclude.
- *
- * Nothing here is About-specific any more. It uses the shared type roles, the
- * shared section rhythm, the shared border and label system, and the shared
- * final CTA — and its one expressive moment ("a number") is the same editorial
- * serif the homepage gives to "compound", used once, on purpose.
- */
-
-/**
- * FOUR COMMITMENTS. Not three principles AND four commitments.
- *
- * The page previously ran both lists, and they said the same things twice:
- * "Move in weeks" beside "Fast deployment", "Build the whole system" beside
- * "One system, not four projects". Two sections, eight items, four ideas.
- * This is the merge — every idea kept, said once.
+ * Four commitments, each one something the rest of the site can back up.
+ * The previous set promised a 2 to 4 week launch for every project, which
+ * does not hold for a SaaS build or a CRM, and "stay after launch", which
+ * implied support is included. Support is offered separately (see the FAQ).
  */
 const COMMITMENTS = [
   {
     n: '01',
-    title: 'Find the number first',
-    body: 'Goals and bottlenecks before tools. If a build won’t move the metric, we say so before you pay for it.',
+    title: 'Start with the problem',
+    body: 'The users, the workflow and the scope come before the tools. If something shouldn’t be built, we say so before you pay for it.',
   },
   {
     n: '02',
-    title: 'One system, not four projects',
-    body: 'Voice, automation, video and web are designed to feed each other rather than sit in separate silos.',
+    title: 'One system, not separate projects',
+    body: 'Product, website, CRM and integrations are designed to work together rather than sit in separate silos.',
   },
   {
     n: '03',
-    title: 'Move in weeks',
-    body: 'Most solutions launch within 2 to 4 weeks. Voice agents can be live in as little as one week.',
+    title: 'Ship working software',
+    body: 'A deployed, usable product at handoff, not a deck or a disconnected prototype.',
   },
   {
     n: '04',
-    title: 'Stay after launch',
-    body: 'Most of the gain arrives from tuning against real traffic, not from the first release.',
+    title: 'You own what we build',
+    body: 'Repositories, accounts, documentation and credentials stay with you from handoff.',
   },
 ];
 
@@ -96,8 +78,8 @@ export default function AboutPage() {
 
       <PageHero
         eyebrow="About"
-        title="We build AI that moves a number."
-        lead="We solve real business problems with AI without buzzwords or half-finished experiments."
+        title="We build products and the systems behind them."
+        lead="Keeel is a product and software studio. We design and build SaaS products, custom CRMs, websites and the workflows that connect them, and use AI where it genuinely helps."
         className="pb-12"
       />
 
@@ -107,12 +89,9 @@ export default function AboutPage() {
         <div className="grid gap-10 lg:grid-cols-12 lg:gap-16">
           <div className="lg:col-span-5">
             <Reveal>
-              <span className="type-label flex items-center gap-3 text-signal">
-                <span aria-hidden className="h-px w-8 bg-accent-600" />
-                How we work
-              </span>
+              <span className="type-label text-signal">How we work</span>
               <h2 className="type-h2 mt-4 text-fg text-balance">
-                Start with the metric, not with the tech.
+                Start with the work, not with the tech.
               </h2>
               <p className="type-body measure mt-5 text-fg-muted text-pretty">
                 Four commitments shape every engagement, and they are the things

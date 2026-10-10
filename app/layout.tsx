@@ -4,6 +4,7 @@ import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import WhatsAppFloatingButton from "@/components/WhatsAppFloatingButton";
+import { CONTACT_EMAIL, SITE_URL, services } from "@/config/content";
 
 /**
  * THREE FAMILIES, THREE JOBS. Nothing else is loaded.
@@ -45,29 +46,31 @@ const plexMono = IBM_Plex_Mono({
   display: "swap",
 });
 
+const TITLE = "Keeel — Product & Software Studio";
+const DESCRIPTION =
+  "Keeel designs and builds SaaS products, custom CRMs and business systems, and websites, with the integrations and automation that connect them.";
+
 export const metadata: Metadata = {
-  metadataBase: new URL("https://saykeel.com"),
+  metadataBase: new URL(SITE_URL),
   title: {
-    default: "Keeel - Agentic AI Solutions Studio",
+    default: TITLE,
     template: "%s | Keeel",
   },
-  description:
-    "Keeel builds AI voice agents, autonomous business automations, UGC ad campaigns, AI video, and high converting websites for businesses that scale. Most projects launch in 2 to 4 weeks.",
+  description: DESCRIPTION,
   keywords: [
-    "AI voice agent",
-    "agentic AI automation",
-    "AI solutions studio",
-    "voice AI for business",
-    "AI automation agency",
-    "UGC ads AI",
-    "AI video production",
-    "website development AI",
-    "business automation",
-    "lead reactivation AI",
-    "conversational AI",
-    "AI receptionist",
+    "product studio",
+    "software studio",
+    "SaaS development",
+    "MVP development",
+    "custom CRM development",
+    "business systems",
+    "client portal development",
+    "internal tools",
+    "website design and development",
+    "workflow automation",
+    "systems integration",
   ],
-  authors: [{ name: "Keeel", url: "https://saykeel.com" }],
+  authors: [{ name: "Keeel", url: SITE_URL }],
   robots: {
     index: true,
     follow: true,
@@ -78,34 +81,30 @@ export const metadata: Metadata = {
     apple: "/favicon-256.png",
   },
   openGraph: {
-    title: "Keeel - Agentic AI Solutions Studio",
-    description:
-      "AI voice agents, business automations, UGC ads & AI video, and websites. The complete AI stack for businesses that scale.",
+    title: TITLE,
+    description: DESCRIPTION,
     type: "website",
-    url: "https://saykeel.com",
+    url: SITE_URL,
     siteName: "Keeel",
     locale: "en_US",
     images: [
       {
         url: "/brand_logo_og.jpg",
-        // The asset is SQUARE. This said 630 while the file has always been
-        // 1200x1200, so every platform that trusts the declared box was
-        // reserving the wrong shape and letterboxing the mark.
+        // The asset is square: 1200x1200.
         width: 1200,
         height: 1200,
-        alt: "Keeel - Agentic AI Solutions Studio",
+        alt: "Keeel",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Keeel - Agentic AI Solutions Studio",
-    description:
-      "AI voice agents, business automations, UGC ads & AI video, and websites that scale.",
+    title: TITLE,
+    description: DESCRIPTION,
     images: ["/brand_logo_og.jpg"],
   },
   alternates: {
-    canonical: "https://saykeel.com",
+    canonical: SITE_URL,
   },
 };
 
@@ -113,69 +112,37 @@ const organizationSchema = {
   "@context": "https://schema.org",
   "@type": "Organization",
   name: "Keeel",
-  alternateName: "Saykeel",
-  url: "https://saykeel.com",
-  logo: "https://saykeel.com/brand_logo_og.jpg",
-  description:
-    "Agentic AI Solutions Studio. We build Voice AI systems, autonomous business automations, UGC ad campaigns, AI video, and high converting websites for businesses that want to scale.",
-  email: "hello@saykeel.com",
+  url: SITE_URL,
+  logo: `${SITE_URL}/brand_logo_og.jpg`,
+  description: DESCRIPTION,
+  email: CONTACT_EMAIL,
   contactPoint: {
     "@type": "ContactPoint",
-    contactType: "customer support",
-    email: "hello@saykeel.com",
+    contactType: "sales",
+    email: CONTACT_EMAIL,
     availableLanguage: "English",
   },
   knowsAbout: [
-    "Voice AI",
-    "Agentic AI",
-    "Business Automation",
-    "UGC Advertising",
-    "AI Video Production",
-    "Website Development",
-    "Lead Generation",
-    "Conversational AI",
+    "SaaS product development",
+    "Custom CRM development",
+    "Business systems",
+    "Website design and development",
+    "Workflow automation",
+    "Systems integration",
+    "Voice agents",
   ],
   hasOfferCatalog: {
     "@type": "OfferCatalog",
-    name: "AI Solutions",
-    itemListElement: [
-      {
-        "@type": "Offer",
-        itemOffered: {
-          "@type": "Service",
-          name: "Voice AI",
-          description:
-            "Inbound and outbound AI voice agents that answer calls, book appointments, and reactivate leads 24/7.",
-        },
+    name: "Services",
+    itemListElement: services.map((service) => ({
+      "@type": "Offer",
+      itemOffered: {
+        "@type": "Service",
+        name: service.title,
+        description: service.description,
+        url: `${SITE_URL}/services/${service.slug}`,
       },
-      {
-        "@type": "Offer",
-        itemOffered: {
-          "@type": "Service",
-          name: "Agentic AI Automations",
-          description:
-            "Autonomous AI agents that handle complex workflows, data processing, and business operations end to end.",
-        },
-      },
-      {
-        "@type": "Offer",
-        itemOffered: {
-          "@type": "Service",
-          name: "UGC Ads & AI Video",
-          description:
-            "Authentic UGC ads and AI powered video that drive engagement and conversion at scale.",
-        },
-      },
-      {
-        "@type": "Offer",
-        itemOffered: {
-          "@type": "Service",
-          name: "Conversion Websites",
-          description:
-            "Premium, conversion focused websites built with modern tech and AI enhanced performance.",
-        },
-      },
-    ],
+    })),
   },
 };
 
@@ -183,9 +150,8 @@ const websiteSchema = {
   "@context": "https://schema.org",
   "@type": "WebSite",
   name: "Keeel",
-  url: "https://saykeel.com",
-  description:
-    "Agentic AI Solutions Studio, Voice AI, automations, UGC ads, AI video, and websites for businesses that scale.",
+  url: SITE_URL,
+  description: DESCRIPTION,
 };
 
 export default function RootLayout({

@@ -1,12 +1,7 @@
 import { notFound } from 'next/navigation';
 
-import { services } from '@/config/content';
+import { SITE_URL, services } from '@/config/content';
 import ServiceLayout from '@/components/ServiceLayout';
-
-type ServiceWithDemo = (typeof services)[0] & {
-  demoAudioUrl?: string;
-  demoVideoUrl?: string;
-};
 
 export async function generateStaticParams() {
   return services.map((service) => ({ slug: service.slug }));
@@ -20,13 +15,13 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   }
 
   return {
-    title: `${service.title} - AI Solutions`,
+    title: service.title,
     description: service.description,
-    alternates: { canonical: `https://saykeel.com/services/${service.slug}` },
+    alternates: { canonical: `${SITE_URL}/services/${service.slug}` },
     openGraph: {
       title: `${service.title} - Keeel`,
       description: service.description,
-      url: `https://saykeel.com/services/${service.slug}`,
+      url: `${SITE_URL}/services/${service.slug}`,
       type: 'website' as const,
     },
     twitter: {
@@ -38,9 +33,7 @@ export async function generateMetadata({ params }: { params: { slug: string } })
 }
 
 export default function ServicePage({ params }: { params: { slug: string } }) {
-  const service = services.find((s) => s.slug === params.slug) as
-    | ServiceWithDemo
-    | undefined;
+  const service = services.find((s) => s.slug === params.slug);
 
   if (!service) {
     notFound();
@@ -54,9 +47,9 @@ export default function ServicePage({ params }: { params: { slug: string } }) {
     provider: {
       '@type': 'Organization',
       name: 'Keeel',
-      url: 'https://saykeel.com',
+      url: SITE_URL,
     },
-    url: `https://saykeel.com/services/${service.slug}`,
+    url: `${SITE_URL}/services/${service.slug}`,
     audience: {
       '@type': 'BusinessAudience',
       audienceType: service.useCases.join(', '),
@@ -67,18 +60,18 @@ export default function ServicePage({ params }: { params: { slug: string } }) {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
     itemListElement: [
-      { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://saykeel.com' },
+      { '@type': 'ListItem', position: 1, name: 'Home', item: SITE_URL },
       {
         '@type': 'ListItem',
         position: 2,
         name: 'Services',
-        item: 'https://saykeel.com/services',
+        item: `${SITE_URL}/services`,
       },
       {
         '@type': 'ListItem',
         position: 3,
         name: service.title,
-        item: `https://saykeel.com/services/${service.slug}`,
+        item: `${SITE_URL}/services/${service.slug}`,
       },
     ],
   };

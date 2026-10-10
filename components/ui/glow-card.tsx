@@ -45,7 +45,7 @@ export function GlowCard({ children, className, innerClassName }: GlowCardProps)
       className={cn(
         "group/glow relative rounded-card p-px",
         // Border layer: a radial highlight over a faint static border
-        "bg-fg/[0.12] transition-shadow duration-slow ease-out hover:shadow-glow-md",
+        "bg-hairline transition-shadow duration-base ease-out hover:shadow-glow-md",
         className
       )}
       style={
@@ -58,10 +58,10 @@ export function GlowCard({ children, className, innerClassName }: GlowCardProps)
       {/* The travelling highlight, sits in the 1px padding gap */}
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0 rounded-card opacity-0 transition-opacity duration-slow ease-out group-hover/glow:opacity-100"
+        className="pointer-events-none absolute inset-0 rounded-card opacity-0 transition-opacity duration-base ease-out group-hover/glow:opacity-100"
         style={{
           background:
-            "radial-gradient(18rem 18rem at var(--glow-x) var(--glow-y), rgba(0,199,118,0.85), rgba(14,24,54,0.55) 40%, transparent 70%)",
+            "radial-gradient(16rem 16rem at var(--glow-x) var(--glow-y), rgba(20,108,80,0.6), rgba(20,108,80,0.15) 45%, transparent 70%)",
         }}
       />
 
