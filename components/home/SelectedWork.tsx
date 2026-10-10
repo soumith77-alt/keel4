@@ -1,22 +1,24 @@
 import Link from 'next/link';
-import { ArrowRight, Check } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 
 import { projects, type Project } from '@/config/content';
 import { Reveal } from '@/components/ui/reveal';
+import { Eyebrow } from '@/components/ui/keel';
 import { cn } from '@/lib/utils';
-import { BrowserFrame, Shot } from './frames';
+import { CropShot } from './frames';
 
 /**
  * SELECTED WORK — real products, straight after the hero.
  *
- * One featured project (large), one complementary project (narrow), and one
- * supporting automation case study (wide, shorter). Every line of copy comes
- * from the project record in config/content.ts, which is traceable to the
- * long-form summary on /work. Scope numbers are presented as scope, never as
- * a commercial result.
+ * The hero shows Football Intelligence OS whole; here each project shows ONE
+ * focused, legible region instead (`focus` in config/content.ts), so the two
+ * sections never repeat the same dashboard at two sizes.
  *
- * Mobile order is the DOM order: featured, complementary, supporting — each
- * image first, then its facts.
+ * Copy is deliberately short: a purpose line and two or three highlight
+ * chips. Everything deeper (challenge, system, full summary) lives on /work.
+ * Scope numbers are presented as scope, never as a commercial result.
+ *
+ * Mobile order is the DOM order: featured, complementary, supporting.
  */
 
 const FEATURED = 'football-intelligence-os';
@@ -27,51 +29,36 @@ function find(slug: string) {
   return projects.find((p) => p.slug === slug);
 }
 
-function Media({ project, sizes, className }: { project: Project; sizes: string; className?: string }) {
-  if (!project.image || !project.imageWidth || !project.imageHeight) return null;
+function Focus({ project, sizes, className }: { project: Project; sizes: string; className?: string }) {
+  const { image, imageWidth, imageHeight, focus } = project;
+  if (!image || !imageWidth || !imageHeight || !focus) return null;
   return (
-    <div
-      className={cn(
-        'relative overflow-hidden bg-[radial-gradient(110%_80%_at_80%_0%,#D6EADF_0%,#E5F1EA_50%,#EEF2EA_100%)] p-[clamp(1rem,3vw,2.25rem)]',
-        className,
-      )}
-    >
-      <BrowserFrame label={project.title} tone="dark" className="transition-transform duration-base ease-out group-hover:-translate-y-1">
-        <Shot
-          src={project.image}
+    <figure className={cn('bg-[radial-gradient(110%_80%_at_80%_0%,#DCE3F3_0%,#E7ECF6_50%,#EEF0F4_100%)] p-3 sm:p-4', className)}>
+      <div className="w-full overflow-hidden rounded-[12px] shadow-frame ring-1 ring-[#0e1836]/10 transition-transform duration-base ease-out group-hover:-translate-y-0.5">
+        <CropShot
+          src={image}
           srcSmall={project.imageSmall}
-          width={project.imageWidth}
-          height={project.imageHeight}
-          alt={`${project.title}: product interface designed and built by Keeel.`}
+          width={imageWidth}
+          height={imageHeight}
+          crop={focus}
+          alt={`${project.title}: ${focus.label}.`}
           sizes={sizes}
         />
-      </BrowserFrame>
-    </div>
+      </div>
+    </figure>
   );
 }
 
-function Meta({ project }: { project: Project }) {
+function Highlights({ items }: { items?: string[] }) {
+  if (!items?.length) return null;
   return (
-    <p className="type-mono-sm text-fg-subtle">
-      {project.category}
-    </p>
-  );
-}
-
-function Built({ project }: { project: Project }) {
-  if (!project.built?.length) return null;
-  return (
-    <div>
-      <h4 className="type-mono-sm text-fg-subtle">What Keeel built</h4>
-      <ul className="mt-3 space-y-2.5">
-        {project.built.map((line) => (
-          <li key={line} className="flex gap-2.5 text-[0.9375rem] leading-snug text-fg-muted">
-            <Check aria-hidden className="mt-[0.2rem] h-4 w-4 shrink-0 text-signal" strokeWidth={2.25} />
-            <span className="text-pretty">{line}</span>
-          </li>
-        ))}
-      </ul>
-    </div>
+    <ul className="flex flex-wrap gap-2" aria-label="Highlights">
+      {items.map((h) => (
+        <li key={h} className="rounded-pill border border-hairline bg-surface px-3 py-1 text-[0.8125rem] text-fg-muted">
+          {h}
+        </li>
+      ))}
+    </ul>
   );
 }
 
@@ -79,9 +66,9 @@ function DetailsLink({ project }: { project: Project }) {
   return (
     <Link
       href={`/work#${project.slug}`}
-      className="group/link inline-flex min-h-[44px] items-center gap-2 text-[0.9375rem] font-semibold text-fg"
+      className="group/link inline-flex min-h-[44px] shrink-0 items-center gap-2 text-[0.9375rem] font-semibold text-fg"
     >
-      <span className="border-b border-fg/30 pb-0.5 transition-colors duration-fast group-hover/link:border-emerald group-hover/link:text-signal">
+      <span className="border-b border-fg/30 pb-0.5 transition-colors duration-fast group-hover/link:border-accent-500 group-hover/link:text-signal">
         Project details
       </span>
       <ArrowRight
@@ -100,12 +87,12 @@ export default function SelectedWork() {
   if (!featured || !complement) return null;
 
   return (
-    <section id="work" aria-labelledby="work-heading" className="bg-surface pb-[var(--section-y)] pt-[calc(var(--section-y)*0.35)]">
+    <section id="work" aria-labelledby="work-heading" className="bg-surface pb-[calc(var(--section-y)*0.6)] pt-[calc(var(--section-y)*0.4)]">
       <div className="site-container">
-        <Reveal className="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
+        <Reveal className="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <p className="type-label text-signal">Selected work</p>
-            <h2 id="work-heading" className="type-h2 mt-4 max-w-[16ch] text-fg text-balance">
+            <Eyebrow>Selected work</Eyebrow>
+            <h2 id="work-heading" className="type-h2 mt-4 max-w-[18ch] text-fg text-balance">
               Products we’ve brought to life.
             </h2>
           </div>
@@ -113,31 +100,30 @@ export default function SelectedWork() {
             href="/work"
             className="group inline-flex min-h-[44px] items-center gap-2 self-start text-[0.9375rem] font-semibold text-fg sm:self-end"
           >
-            <span className="border-b border-fg/30 pb-0.5 transition-colors duration-fast group-hover:border-emerald group-hover:text-signal">
+            <span className="border-b border-fg/30 pb-0.5 transition-colors duration-fast group-hover:border-accent-500 group-hover:text-signal">
               All work
             </span>
             <ArrowRight aria-hidden className="h-4 w-4 transition-transform duration-fast ease-micro group-hover:translate-x-1" />
           </Link>
         </Reveal>
 
-        <div className="mt-10 grid gap-5 sm:mt-14 lg:grid-cols-12 lg:gap-6">
+        <div className="mt-8 grid gap-5 sm:mt-10 lg:grid-cols-12 lg:gap-6">
           {/* Featured */}
           <Reveal className="lg:col-span-8">
             <article className="group flex h-full flex-col overflow-hidden rounded-panel border border-hairline bg-surface-raised shadow-glow-sm">
-              <Media
-                project={featured}
-                sizes="(min-width: 1024px) 760px, 92vw"
-              />
-              <div className="grid flex-1 gap-8 p-6 sm:p-8 md:grid-cols-[1fr_1.05fr] md:gap-10">
-                <div>
-                  <Meta project={featured} />
-                  <h3 className="type-h3 mt-3 text-fg">{featured.title}</h3>
-                  <p className="type-body mt-3 text-fg-muted text-pretty">{featured.purpose}</p>
-                  <div className="mt-5">
-                    <DetailsLink project={featured} />
+              <Focus project={featured} sizes="(min-width: 1024px) 1250px, 150vw" />
+              <div className="flex flex-1 flex-col gap-4 p-6 sm:p-7">
+                <Eyebrow as="div" index="01" className="text-fg-subtle">
+                  {featured.category}
+                </Eyebrow>
+                <div className="grid gap-4 md:grid-cols-[1fr_auto] md:items-end md:gap-8">
+                  <div>
+                    <h3 className="type-h3 text-fg">{featured.title}</h3>
+                    <p className="type-body mt-2 max-w-[34rem] text-fg-muted text-pretty">{featured.purpose}</p>
                   </div>
+                  <DetailsLink project={featured} />
                 </div>
-                <Built project={featured} />
+                <Highlights items={featured.highlights} />
               </div>
             </article>
           </Reveal>
@@ -145,53 +131,49 @@ export default function SelectedWork() {
           {/* Complementary */}
           <Reveal delay={0.06} className="lg:col-span-4">
             <article className="group flex h-full flex-col overflow-hidden rounded-panel border border-hairline bg-surface-raised shadow-glow-sm">
-              <Media
-                project={complement}
-                sizes="(min-width: 1024px) 380px, 92vw"
-              />
-              <div className="flex flex-1 flex-col p-6 sm:p-8">
-                <Meta project={complement} />
-                <h3 className="type-h3 mt-3 text-fg">{complement.title}</h3>
-                <p className="type-body mt-3 text-fg-muted text-pretty">{complement.purpose}</p>
-                <div className="mt-6">
-                  <Built project={complement} />
+              <Focus project={complement} sizes="(min-width: 1024px) 950px, 230vw" />
+              <div className="flex flex-1 flex-col gap-4 p-6 sm:p-7">
+                <Eyebrow as="div" index="02" className="text-fg-subtle">
+                  {complement.category}
+                </Eyebrow>
+                <div>
+                  <h3 className="type-h3 text-fg">{complement.title}</h3>
+                  <p className="type-body mt-2 text-fg-muted text-pretty">{complement.purpose}</p>
                 </div>
-                <div className="mt-auto pt-5">
+                <Highlights items={complement.highlights} />
+                <div className="mt-auto">
                   <DetailsLink project={complement} />
                 </div>
               </div>
             </article>
           </Reveal>
 
-          {/* Supporting automation case study */}
+          {/* Supporting automation case study — compact, horizontal */}
           {supporting && (
             <Reveal className="lg:col-span-12">
-              <article className="group grid overflow-hidden rounded-panel border border-hairline bg-surface-raised shadow-glow-sm md:grid-cols-[1.1fr_1fr]">
-                <div className="order-2 flex flex-col p-6 sm:p-8 md:order-1 lg:p-10">
-                  <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
-                    <span className="type-mono-sm rounded-pill bg-mint px-2.5 py-1 text-signal">
-                      Supporting case study
-                    </span>
-                    <Meta project={supporting} />
+              <article className="group grid overflow-hidden rounded-panel border border-hairline bg-surface-raised shadow-glow-sm md:grid-cols-[1fr_minmax(0,0.9fr)]">
+                <div className="order-2 flex flex-col gap-4 p-6 sm:p-7 md:order-1 lg:p-9">
+                  <Eyebrow as="div" index="03" className="text-fg-subtle">
+                    Supporting case study · {supporting.category}
+                  </Eyebrow>
+                  <div>
+                    <h3 className="type-h3 text-fg">{supporting.title}</h3>
+                    <p className="type-body mt-2 max-w-[34rem] text-fg-muted text-pretty">{supporting.purpose}</p>
                   </div>
-                  <h3 className="type-h3 mt-4 text-fg">{supporting.title}</h3>
-                  <p className="type-body mt-3 max-w-[34rem] text-fg-muted text-pretty">{supporting.purpose}</p>
-                  <div className="mt-6 grid gap-6 sm:grid-cols-[1fr_auto] sm:items-start">
-                    <Built project={supporting} />
+                  <Highlights items={supporting.highlights} />
+                  <div className="mt-auto flex flex-wrap items-center gap-x-6 gap-y-2">
                     {supporting.scope && (
-                      <dl className="rounded-card border border-hairline bg-surface px-5 py-4">
-                        <dt className="type-mono-sm text-fg-subtle">Project scope</dt>
-                        <dd className="mt-1 text-[0.9375rem] font-semibold text-fg">{supporting.scope}</dd>
-                      </dl>
+                      <p className="text-[0.9375rem] text-fg-muted">
+                        <span className="type-mono-sm mr-2 text-fg-subtle">Scope</span>
+                        <span className="font-semibold text-fg">{supporting.scope}</span>
+                      </p>
                     )}
-                  </div>
-                  <div className="mt-auto pt-6">
                     <DetailsLink project={supporting} />
                   </div>
                 </div>
-                <Media
+                <Focus
                   project={supporting}
-                  sizes="(min-width: 768px) 560px, 92vw"
+                  sizes="(min-width: 768px) 900px, 165vw"
                   className="order-1 flex items-center md:order-2"
                 />
               </article>

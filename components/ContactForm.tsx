@@ -1,16 +1,25 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useId, useRef, useState } from 'react';
+import { ArrowRight } from 'lucide-react';
 
-import { CONTACT_EMAIL, contactTypes } from '@/config/content';
+import { CONTACT_EMAIL, contactTypes, projectTypes } from '@/config/content';
+import { cn } from '@/lib/utils';
 
 /**
- * The homepage brief and every service page hand off here with `type` (one
- * of `contactTypes`) and `note` (a short description) as query parameters.
- * A recognised `type` pre-selects the dropdown; `note` opens the details
- * field. Unknown values are ignored rather than guessed at.
+ * One form, two layouts, one submission path.
+ *
+ *   · default  — the full /contact form. Service pages link here with `type`
+ *                (one of `contactTypes`) and `note` as query parameters; a
+ *                recognised `type` pre-selects the dropdown and `note` fills
+ *                the details. Unknown values are ignored, not guessed at.
+ *   · compact  — the homepage enquiry: name, email, project type and a short
+ *                description, sent directly. No second page, no hand-off.
+ *
+ * Both post the same payload to the same endpoint, with the same honeypot.
  */
-export default function ContactForm() {
+export default function ContactForm({ compact = false }: { compact?: boolean }) {
+  const uid = useId();
   const [prefilled, setPrefilled] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
@@ -144,6 +153,113 @@ export default function ContactForm() {
     }));
   };
 
+
+  const status = (
+    <>
+      {submitStatus === 'success' && (
+        <div role="status" className="rounded-control border border-[#00794a]/25 bg-mint p-4 text-fg">
+          {process.env.NEXT_PUBLIC_FORM_ENDPOINT
+            ? "Thanks, it's with us. We'll reply within one business day."
+            : "Your email client should have opened with the message ready — send it and we'll reply within one business day."}
+        </div>
+      )}
+      {submitStatus === 'error' && (
+        <div role="alert" className="rounded-control border border-destructive/30 bg-destructive/10 p-4 text-fg">
+          Something went wrong. Please try again or email us directly at {CONTACT_EMAIL}
+        </div>
+      )}
+    </>
+  );
+
+  const field =
+    'w-full rounded-control border border-hairline bg-surface px-4 py-3 text-base text-fg transition-colors duration-fast placeholder:text-fg-subtle hover:border-line/25 focus:border-accent-600 focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#00794a]';
+
+  if (compact) {
+    return (
+      <form onSubmit={handleSubmit}>
+        <div className="absolute left-[-9999px]" aria-hidden>
+          <label htmlFor={`${uid}-gotcha`}>Leave this field empty</label>
+          <input type="text" id={`${uid}-gotcha`} name="_gotcha" ref={honeypotRef} tabIndex={-1} autoComplete="off" defaultValue="" />
+        </div>
+
+        <div className="grid gap-4 sm:grid-cols-2">
+          <div>
+            <label htmlFor={`${uid}-name`} className="mb-2 block text-[0.9375rem] font-medium text-fg">Name</label>
+            <input id={`${uid}-name`} name="name" type="text" required autoComplete="name" value={formData.name} onChange={handleChange} className={field} placeholder="Your name" />
+          </div>
+          <div>
+            <label htmlFor={`${uid}-email`} className="mb-2 block text-[0.9375rem] font-medium text-fg">Work email</label>
+            <input id={`${uid}-email`} name="email" type="email" required autoComplete="email" value={formData.email} onChange={handleChange} className={field} placeholder="you@company.com" />
+          </div>
+        </div>
+
+        <fieldset className="mt-6">
+          <legend className="text-[0.9375rem] font-medium text-fg">What are you building?</legend>
+          <div className="mt-3 flex flex-wrap gap-2">
+            {projectTypes.map((option) => {
+              const id = `${uid}-${option.replace(/\W+/g, '-')}`;
+              const selected = formData.service === option;
+              return (
+                <div key={option}>
+                  <input
+                    type="radio"
+                    id={id}
+                    name="service"
+                    value={option}
+                    checked={selected}
+                    onChange={handleChange}
+                    className="peer sr-only"
+                  />
+                  <label
+                    htmlFor={id}
+                    className={cn(
+                      'flex min-h-[44px] cursor-pointer items-center rounded-pill border px-4 text-[0.9375rem] transition-colors duration-fast ease-micro',
+                      'peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-[#00794a]',
+                      selected
+                        ? 'border-accent-500 bg-accent-500 font-semibold text-ink'
+                        : 'border-hairline bg-surface text-fg-muted hover:border-line/25 hover:text-fg',
+                    )}
+                  >
+                    {option}
+                  </label>
+                </div>
+              );
+            })}
+          </div>
+        </fieldset>
+
+        <div className="mt-6">
+          <label htmlFor={`${uid}-details`} className="mb-2 block text-[0.9375rem] font-medium text-fg">
+            A few lines about it
+          </label>
+          <textarea
+            id={`${uid}-details`}
+            name="details"
+            rows={3}
+            required
+            value={formData.details}
+            onChange={handleChange}
+            className={cn(field, 'resize-none')}
+            placeholder="e.g. A client portal where customers can track orders and download invoices."
+          />
+        </div>
+
+        <div className="mt-6 flex flex-col gap-4 sm:flex-row sm:items-center">
+          <button
+            type="submit"
+            disabled={isSubmitting}
+            className="inline-flex h-[3.25rem] items-center justify-center gap-2 rounded-pill bg-ink px-7 text-base font-semibold text-white shadow-glow-sm transition-colors duration-fast hover:bg-brand-600 disabled:cursor-not-allowed disabled:opacity-50"
+          >
+            {isSubmitting ? 'Sending…' : 'Send enquiry'}
+            {!isSubmitting && <ArrowRight className="h-4 w-4" aria-hidden />}
+          </button>
+          <p className="text-sm text-fg-subtle">We reply within one business day.</p>
+        </div>
+        <div className="mt-4">{status}</div>
+      </form>
+    );
+  }
+
   return (
     <form onSubmit={handleSubmit} className="max-w-2xl mx-auto">
       {/* Positioned off-screen rather than `display: none` — some bots skip
@@ -167,7 +283,7 @@ export default function ContactForm() {
         {prefilled && (
           <p
             role="status"
-            className="type-body rounded-control border border-[#146C50]/25 bg-mint p-4 text-fg-muted"
+            className="type-body rounded-control border border-[#00794a]/25 bg-mint p-4 text-fg-muted"
           >
             We&apos;ve carried your description over into the details below.
             Add your name and email and it&apos;s ready to send.
@@ -186,7 +302,7 @@ export default function ContactForm() {
             required
             value={formData.name}
             onChange={handleChange}
-            className="w-full rounded-control border border-hairline bg-surface-raised px-4 py-3 text-base text-fg transition-colors duration-fast placeholder:text-fg-subtle hover:border-line/25 focus:border-emerald focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#146C50]"
+            className="w-full rounded-control border border-hairline bg-surface-raised px-4 py-3 text-base text-fg transition-colors duration-fast placeholder:text-fg-subtle hover:border-line/25 focus:border-accent-600 focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#00794a]"
             placeholder="Your name"
           />
         </div>
@@ -203,7 +319,7 @@ export default function ContactForm() {
             required
             value={formData.email}
             onChange={handleChange}
-            className="w-full rounded-control border border-hairline bg-surface-raised px-4 py-3 text-base text-fg transition-colors duration-fast placeholder:text-fg-subtle hover:border-line/25 focus:border-emerald focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#146C50]"
+            className="w-full rounded-control border border-hairline bg-surface-raised px-4 py-3 text-base text-fg transition-colors duration-fast placeholder:text-fg-subtle hover:border-line/25 focus:border-accent-600 focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#00794a]"
             placeholder="you@company.com"
           />
         </div>
@@ -219,7 +335,7 @@ export default function ContactForm() {
             name="company"
             value={formData.company}
             onChange={handleChange}
-            className="w-full rounded-control border border-hairline bg-surface-raised px-4 py-3 text-base text-fg transition-colors duration-fast placeholder:text-fg-subtle hover:border-line/25 focus:border-emerald focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#146C50]"
+            className="w-full rounded-control border border-hairline bg-surface-raised px-4 py-3 text-base text-fg transition-colors duration-fast placeholder:text-fg-subtle hover:border-line/25 focus:border-accent-600 focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#00794a]"
             placeholder="Your company name"
           />
         </div>
@@ -235,7 +351,7 @@ export default function ContactForm() {
             required
             value={formData.service}
             onChange={handleChange}
-            className="w-full rounded-control border border-hairline bg-surface-raised px-4 py-3 text-base text-fg transition-colors duration-fast placeholder:text-fg-subtle hover:border-line/25 focus:border-emerald focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#146C50]"
+            className="w-full rounded-control border border-hairline bg-surface-raised px-4 py-3 text-base text-fg transition-colors duration-fast placeholder:text-fg-subtle hover:border-line/25 focus:border-accent-600 focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#00794a]"
           >
             <option value="">Select a project type</option>
             {contactTypes.map((option) => (
@@ -257,7 +373,7 @@ export default function ContactForm() {
             rows={5}
             value={formData.details}
             onChange={handleChange}
-            className="w-full rounded-control border border-hairline bg-surface-raised px-4 py-3 text-base text-fg transition-colors duration-fast placeholder:text-fg-subtle hover:border-line/25 focus:border-emerald focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#146C50] resize-none"
+            className="w-full rounded-control border border-hairline bg-surface-raised px-4 py-3 text-base text-fg transition-colors duration-fast placeholder:text-fg-subtle hover:border-line/25 focus:border-accent-600 focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#00794a] resize-none"
             placeholder="What are you building, who is it for, and what does it need to connect to?"
           />
         </div>
@@ -266,7 +382,7 @@ export default function ContactForm() {
         <button
           type="submit"
           disabled={isSubmitting}
-          className="h-[3.25rem] w-full rounded-pill bg-emerald px-8 text-base font-semibold text-white shadow-accent transition-colors duration-fast hover:bg-emerald-hover disabled:cursor-not-allowed disabled:opacity-50"
+          className="h-[3.25rem] w-full rounded-pill bg-ink px-8 text-base font-semibold text-white shadow-glow-sm transition-colors duration-fast hover:bg-brand-600 disabled:cursor-not-allowed disabled:opacity-50"
         >
           {isSubmitting ? 'Sending…' : 'Send message'}
         </button>
@@ -275,7 +391,7 @@ export default function ContactForm() {
         {submitStatus === 'success' && (
           <div
             role="status"
-            className="rounded-control border border-[#146C50]/25 bg-mint p-4 text-fg"
+            className="rounded-control border border-[#00794a]/25 bg-mint p-4 text-fg"
           >
             {process.env.NEXT_PUBLIC_FORM_ENDPOINT
               ? "Thank you! We'll get back to you within one business day."

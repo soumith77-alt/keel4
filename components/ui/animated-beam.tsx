@@ -7,7 +7,7 @@
  *
  * Changes from the original:
  *   · `motion/react` → `framer-motion` (the dependency this repo already has).
- *   · Emerald defaults and a hairline track, per the Keeel tokens.
+ *   · Brand defaults (navy track, green beam), per the Keeel tokens.
  *   · Reduced motion: the travelling gradient is not rendered; the track is
  *     drawn at full strength instead, so the connection still reads.
  *   · The beam only animates while its container is on screen.
@@ -53,11 +53,11 @@ export function AnimatedBeam({
   reverse = false,
   duration = 3.2,
   delay = 0,
-  pathColor = '#146C50',
+  pathColor = '#253c80',
   pathWidth = 2,
   pathOpacity = 0.18,
-  gradientStartColor = '#1F8A63',
-  gradientStopColor = '#6FD3A5',
+  gradientStartColor = '#00c776',
+  gradientStopColor = '#3fe0a0',
   repeatDelay = 0.8,
   startXOffset = 0,
   startYOffset = 0,

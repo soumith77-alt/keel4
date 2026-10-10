@@ -45,7 +45,7 @@ export default function Footer() {
             </p>
             <Button asChild className="mt-7">
               <Link href="/contact">
-                Discuss your project
+                Start a project
                 <ArrowRight className="h-4 w-4" aria-hidden />
               </Link>
             </Button>

@@ -12,18 +12,18 @@ const DESCRIPTION =
   'Tell Keeel about the product, website, CRM or workflow you have in mind. We reply within one business day.';
 
 export const metadata = {
-  title: 'Contact - Discuss Your Project',
+  title: 'Contact - Start a Project',
   description: DESCRIPTION,
   alternates: { canonical: `${SITE_URL}/contact` },
   openGraph: {
-    title: 'Contact Keeel - Discuss Your Project',
+    title: 'Contact Keeel - Start a Project',
     description: DESCRIPTION,
     url: `${SITE_URL}/contact`,
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Contact Keeel - Discuss Your Project',
+    title: 'Contact Keeel - Start a Project',
     description: DESCRIPTION,
   },
 };
@@ -80,7 +80,7 @@ export default function ContactPage() {
 
       <PageHero
         eyebrow="Contact"
-        title="Discuss your project."
+        title="Start a project."
         lead="Tell us about the product, website, CRM or workflow you have in mind. We reply within one business day."
         className="pb-20"
       />

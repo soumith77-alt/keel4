@@ -18,7 +18,7 @@ const PAGE_LINKS = [
 
 /** One line per offering in the Solutions menu. */
 const SOLUTION_BLURBS: Record<string, string> = {
-  'saas-products': 'MVPs, customer platforms, subscription products',
+  'saas-products': 'MVPs, customer platforms, LMS, subscriptions',
   'crm-business-systems': 'Custom CRMs, client portals, internal tools',
   websites: 'Marketing sites, ecommerce, booking experiences',
   'agentic-automations': 'Workflow automation, data sync, AI assistants',
@@ -306,7 +306,7 @@ export default function Navbar() {
             </ul>
 
             <Button asChild size="sm">
-              <Link href="/contact">Discuss your project</Link>
+              <Link href="/contact">Start a project</Link>
             </Button>
           </div>
 
@@ -389,7 +389,7 @@ export default function Navbar() {
 
               <Button asChild size="lg" className="mt-auto w-full">
                 <Link href="/contact" onClick={() => setMobileOpen(false)}>
-                  Discuss your project
+                  Start a project
                 </Link>
               </Button>
             </div>

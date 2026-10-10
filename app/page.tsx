@@ -12,7 +12,7 @@ import FinalCTA from '@/components/home/FinalCTA';
  *   2 Selected work   page    real products, immediately after the hero
  *   3 Solutions       page    the four offerings, asymmetric grid
  *   4 Process         white   four stages
- *   5 Ownership       dark    the one #101A15 section
+ *   5 Ownership       dark    the one #0e1836 section
  *   6 Final CTA       page    two-question brief → /contact
  */
 export default function Home() {

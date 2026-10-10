@@ -1,15 +1,17 @@
 'use client';
 
 import Link from 'next/link';
-import { useId, useRef, useState } from 'react';
+import { useEffect, useId, useRef, useState } from 'react';
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import { ArrowRight, ArrowUpRight } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import { Reveal } from '@/components/ui/reveal';
 import { cn } from '@/lib/utils';
-import { BrowserFrame, ConceptTag, MockCanvas, PhoneFrame, Shot } from './frames';
-import { BookingPhoneMock, ClinicSiteMock, CrmPipelineMock, CrmRecordMock } from './mocks';
+import { BrowserFrame, ConceptTag, CropShot, MockCanvas, PhoneFrame, Shot } from './frames';
+import { Eyebrow, KeelMark } from '@/components/ui/keel';
+import { CrmPipelineMock, CrmRecordMock, StayPhoneMock, StaySiteMock } from './mocks';
+import { Tilt } from '@/components/ui/tilt';
 
 /**
  * HERO — copy left (~45%), product showcase right (~55%).
@@ -21,9 +23,9 @@ import { BookingPhoneMock, ClinicSiteMock, CrmPipelineMock, CrmRecordMock } from
  *
  * THE SELECTOR IS HONEST BY CONSTRUCTION. "SaaS products" shows two real
  * Keeel builds. "Business systems" and "Websites" have no client screenshots
- * to show, so they render coded concepts and the stage carries an
- * "Illustrative concept" tag while either is active — the caption below
- * repeats it in words. A CRM label never sits on an unrelated screenshot.
+ * to show, so they render coded concepts and the stage carries a small
+ * "Illustrative concept" tag while either is active. A CRM label never sits
+ * on an unrelated screenshot.
  *
  * Click/tap or arrow keys only; nothing cycles on its own. The stage has a
  * fixed aspect ratio and every view is absolutely positioned inside it, so
@@ -55,14 +57,14 @@ const VIEWS: {
     id: 'systems',
     label: 'Business systems',
     concept: true,
-    caption: 'Illustrative concept of a custom CRM pipeline and contact record. Not client work.',
+    caption: 'Custom CRMs, client portals and internal tools, shaped around how your team already works.',
     link: { href: '/services/crm-business-systems', label: 'CRMs & business systems' },
   },
   {
     id: 'websites',
     label: 'Websites',
     concept: true,
-    caption: 'Illustrative concept of a clinic website and its mobile booking step. Not client work.',
+    caption: 'Marketing sites, ecommerce and booking experiences that make the next step obvious.',
     link: { href: '/services/websites', label: 'Websites & digital experiences' },
   },
 ];
@@ -85,15 +87,18 @@ function ProductsView() {
           />
         </BrowserFrame>
       </div>
-      <div className="absolute bottom-[3%] left-[-2%] w-[44%] sm:left-[-3%]">
-        <BrowserFrame label="Artizyn" tone="dark">
-          <Shot
+      {/* Not a second whole dashboard: one legible Artizyn interaction,
+          the artisan matches a client receives for a project. */}
+      <div className="absolute bottom-[3%] left-[-2%] w-[40%] sm:left-[-3%]">
+        <BrowserFrame label="Artizyn · Matches" tone="dark">
+          <CropShot
             src="/artizyn-marketplace.webp"
             srcSmall="/artizyn-marketplace-800.webp"
             width={1448}
             height={1086}
-            alt="Artizyn marketplace overview: project pipeline, artisan matches, budget and chat."
-            sizes="(min-width: 1024px) 300px, 44vw"
+            crop={{ x: 530, y: 700, w: 385, h: 285 }}
+            alt="Artizyn: artisan matches for a client project, at 95% and 92% match."
+            sizes="(min-width: 1024px) 1000px, 150vw"
             priority
           />
         </BrowserFrame>
@@ -112,7 +117,7 @@ function SystemsView() {
           </MockCanvas>
         </BrowserFrame>
       </div>
-      <div className="absolute bottom-[3%] left-[-2%] w-[38%] overflow-hidden rounded-[14px] shadow-frame ring-1 ring-[#111814]/[0.07] sm:left-[-3%]">
+      <div className="absolute bottom-[3%] left-[-2%] w-[38%] overflow-hidden rounded-[14px] shadow-frame ring-1 ring-[#0e1836]/[0.07] sm:left-[-3%]">
         <MockCanvas ratio={1.05} units={24}>
           <CrmRecordMock />
         </MockCanvas>
@@ -122,19 +127,21 @@ function SystemsView() {
 }
 
 function WebsitesView() {
+  // Narrower main frame than the other views, so the phone only clips its
+  // edge and never covers the booking bar's call to action.
   return (
     <>
-      <div className="absolute right-[4%] top-[7%] w-[86%]">
-        <BrowserFrame label="Linden Physio">
+      <div className="absolute left-[3%] top-[10%] w-[79%]">
+        <BrowserFrame label="Halden">
           <MockCanvas ratio={1.5}>
-            <ClinicSiteMock />
+            <StaySiteMock />
           </MockCanvas>
         </BrowserFrame>
       </div>
-      <div className="absolute bottom-[3%] right-[1%] w-[24%]">
+      <div className="absolute bottom-[3%] right-[1%] w-[21%]">
         <PhoneFrame>
           <MockCanvas ratio={0.5} units={40}>
-            <BookingPhoneMock />
+            <StayPhoneMock />
           </MockCanvas>
         </PhoneFrame>
       </div>
@@ -158,6 +165,18 @@ function Showcase() {
   const view = VIEWS[index];
   const View = VIEW_COMPONENTS[active];
 
+  // Where the keel notch sits: under the centre of the active tab.
+  const [notchX, setNotchX] = useState<number | null>(null);
+  useEffect(() => {
+    const place = () => {
+      const tab = tabRefs.current[index];
+      if (tab) setNotchX(tab.offsetLeft + tab.offsetWidth / 2 - 12);
+    };
+    place();
+    window.addEventListener('resize', place);
+    return () => window.removeEventListener('resize', place);
+  }, [index]);
+
   const onKeyDown = (e: React.KeyboardEvent) => {
     const last = VIEWS.length - 1;
     let next: number | null = null;
@@ -172,7 +191,7 @@ function Showcase() {
   };
 
   return (
-    <div>
+    <div className="relative">
       <div
         role="tablist"
         aria-label="Showcase"
@@ -206,7 +225,7 @@ function Showcase() {
                   <motion.span
                     layoutId={`${baseId}-pill`}
                     aria-hidden
-                    className="absolute inset-0 -z-10 rounded-pill bg-emerald"
+                    className="absolute inset-0 -z-10 rounded-pill bg-ink"
                     transition={
                       reduceMotion ? { duration: 0 } : { type: 'spring', bounce: 0.15, duration: 0.32 }
                     }
@@ -219,17 +238,34 @@ function Showcase() {
         </div>
       </div>
 
+      {/* The keel line: joins the active tab to the stage below it. */}
+      <div aria-hidden className="relative mt-2 h-[9px]">
+        <span className="absolute inset-x-0 top-0 h-px bg-hairline" />
+        {notchX !== null && (
+          <motion.span
+            className="absolute left-0 top-0 block"
+            initial={false}
+            animate={{ x: notchX }}
+            transition={reduceMotion ? { duration: 0 } : { type: 'spring', bounce: 0.15, duration: 0.32 }}
+          >
+            <KeelMark />
+          </motion.span>
+        )}
+      </div>
+
       <div
         id={`${baseId}-panel`}
         role="tabpanel"
         aria-labelledby={`${baseId}-tab-${active}`}
-        className="mt-4"
+        className="mt-3"
       >
-        {/* The stage. Fixed ratio = stable height for every view. */}
-        <div className="relative aspect-[1.32/1] w-full rounded-panel bg-[radial-gradient(120%_90%_at_85%_0%,#D6EADF_0%,#E5F1EA_45%,#EEF2EA_100%)] ring-1 ring-inset ring-[#146C50]/[0.08]">
+        {/* The stage. Fixed ratio = stable height for every view. A gentle
+            pointer tilt (Motion Primitives "Tilt") gives it depth on desktop. */}
+        <Tilt>
+        <div className="relative aspect-[1.32/1] w-full rounded-panel bg-[radial-gradient(120%_90%_at_85%_0%,#DCE3F3_0%,#E7ECF6_45%,#EEF0F4_100%)] ring-1 ring-inset ring-[#0e1836]/[0.08]">
           <div
             aria-hidden
-            className="absolute inset-0 rounded-panel opacity-60 [background-image:linear-gradient(to_right,rgba(20,108,80,0.07)_1px,transparent_1px),linear-gradient(to_bottom,rgba(20,108,80,0.07)_1px,transparent_1px)] [background-size:32px_32px] [mask-image:radial-gradient(80%_70%_at_70%_30%,black,transparent)]"
+            className="absolute inset-0 rounded-panel opacity-60 [background-image:linear-gradient(to_right,rgba(14,24,54,0.06)_1px,transparent_1px),linear-gradient(to_bottom,rgba(14,24,54,0.06)_1px,transparent_1px)] [background-size:32px_32px] [mask-image:radial-gradient(80%_70%_at_70%_30%,black,transparent)]"
           />
           <AnimatePresence initial={false} mode="sync">
             <motion.div
@@ -248,6 +284,7 @@ function Showcase() {
             <ConceptTag className="absolute left-3 top-3 z-raised sm:left-4 sm:top-4" />
           )}
         </div>
+        </Tilt>
 
         {/* Caption: says in words what the stage shows. Two-line reserve so
             switching views never changes its height. */}
@@ -271,19 +308,18 @@ function Showcase() {
 export default function Hero() {
   return (
     <section className="relative overflow-hidden bg-surface pb-[clamp(2rem,4vw,3rem)] pt-[calc(68px+clamp(1.75rem,4vw,3rem))]">
-      <div className="site-container grid items-center gap-12 lg:grid-cols-[minmax(0,0.82fr)_minmax(0,1fr)] lg:gap-14 xl:gap-20">
-        <div className="min-w-0 max-w-[36rem]">
+      <div className="site-container grid items-center gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)] lg:gap-14 xl:gap-20">
+        <div className="min-w-0">
           <Reveal>
-            <span className="type-label inline-flex items-center gap-2.5 text-signal">
-              <span aria-hidden className="h-1.5 w-1.5 rounded-full bg-emerald" />
-              Product &amp; software studio
-            </span>
+            <Eyebrow>Product &amp; software studio</Eyebrow>
           </Reveal>
           <Reveal delay={0.06}>
-            <h1 className="type-display-xl mt-5 text-fg">
-              Your next product.
-              <br />
-              <span className="text-signal">Built to work.</span>
+            {/* One phrase per line at every width. On desktop the size is
+                tied to the viewport so "Your next product." always fits the
+                ~49% copy column (it measures ~8em). */}
+            <h1 className="type-display-xl mt-5 text-fg lg:text-[clamp(2.5rem,4.7vw,4.3rem)]">
+              <span className="block">Your next product.</span>
+              <span className="block text-signal">Built to work.</span>
             </h1>
           </Reveal>
           <Reveal delay={0.12}>
@@ -295,8 +331,8 @@ export default function Hero() {
           <Reveal delay={0.18}>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
               <Button asChild size="lg">
-                <Link href="/contact">
-                  Discuss your project
+                <Link href="#start">
+                  Start a project
                   <ArrowRight className="h-4 w-4" aria-hidden />
                 </Link>
               </Button>

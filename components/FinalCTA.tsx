@@ -5,6 +5,7 @@ import { cn } from '@/lib/utils';
 import { projectBookingLink } from '@/config/content';
 import { Reveal } from '@/components/ui/reveal';
 import { Button } from '@/components/ui/button';
+import { Eyebrow } from '@/components/ui/keel';
 
 /**
  * THE CLOSING CTA for interior pages — one component, every route.
@@ -33,11 +34,11 @@ export default function FinalCTA({ heading, lead, contactHref = '/contact', clas
         <div className="theme-dark relative overflow-hidden rounded-[28px] bg-surface p-8 text-fg sm:p-12 lg:p-16">
           <div
             aria-hidden
-            className="pointer-events-none absolute inset-0 [background:radial-gradient(60%_80%_at_90%_0%,rgba(31,138,99,0.25),transparent_70%)]"
+            className="pointer-events-none absolute inset-0 [background:radial-gradient(60%_80%_at_90%_0%,rgba(0,199,118,0.18),transparent_70%)]"
           />
           <div className="relative flex flex-col items-start gap-10 lg:flex-row lg:items-end lg:justify-between">
             <Reveal className="max-w-2xl">
-              <p className="type-label text-signal">Start a project</p>
+              <Eyebrow>Start a project</Eyebrow>
               <h2 className="type-h2 mt-4 text-fg text-balance">
                 {heading ?? DEFAULT_HEADING}
               </h2>
@@ -50,7 +51,7 @@ export default function FinalCTA({ heading, lead, contactHref = '/contact', clas
               <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row">
                 <Button asChild size="lg" variant="inverse" className="w-full sm:w-auto">
                   <Link href={contactHref}>
-                    Discuss your project
+                    Start a project
                     <ArrowRight className="h-4 w-4" aria-hidden />
                   </Link>
                 </Button>

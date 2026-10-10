@@ -11,7 +11,7 @@ import { cn } from "@/lib/utils";
  * logo, just with the white ground removed.
  *
  * It is applied as a CSS mask over `bg-fg` rather than drawn as an <img>, so
- * the mark inherits the theme foreground: #111814 ink on the light page,
+ * the mark inherits the theme foreground: #0e1836 ink on the light page,
  * near-white on the dark surface.
  *
  * COLOUR NOTE: the source artwork is navy (#1e4a7b). Tinting via the mask

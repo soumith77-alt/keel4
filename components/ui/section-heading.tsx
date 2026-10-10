@@ -1,6 +1,7 @@
 import * as React from "react";
 import { cn } from "@/lib/utils";
 import { Reveal } from "./reveal";
+import { KeelMark } from "./keel";
 
 /**
  * Mono eyebrow + heading + optional lead. Replaces the ~8 hand-duplicated
@@ -43,11 +44,8 @@ export function SectionHeading({
     >
       {eyebrow && (
         <Reveal>
-          <span className="type-label mb-5 inline-flex items-center gap-2 text-accent-700">
-            <span
-              aria-hidden
-              className="inline-block h-px w-6 bg-accent-500"
-            />
+          <span className="type-label mb-5 inline-flex items-center gap-2.5 text-signal">
+            <KeelMark className="-translate-y-px" />
             {eyebrow}
           </span>
         </Reveal>

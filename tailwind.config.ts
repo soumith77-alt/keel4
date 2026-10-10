@@ -1,24 +1,23 @@
 import type { Config } from "tailwindcss";
 
 /**
- * Design tokens — light editorial product studio, one emerald accent.
+ * Design tokens — the Keeel brand palette on a light editorial layout.
  *
  * `surface`, `fg`, `line`, `hairline`, `signal` and `mint` resolve through CSS
- * variables defined in globals.css under `.theme-light` / `.theme-dark`, so a
- * section inverts by swapping one class and no child needs restyling.
+ * variables in globals.css (`.theme-light` / `.theme-dark`), so a section
+ * inverts by swapping one class.
+ *
+ * BRAND: navy ink #0e1836, brand navy #253c80 (LOCKED, fills only), green
+ * accent #00c776. These are the existing brand colours and must not change.
  *
  * CONTRAST (measured, WCAG 2.x):
- *
- *   #111814 text      on #F6F5F0 page   16.5:1   on #FFFFFF 18.0:1
- *   #526158 secondary on #F6F5F0 page    6.0:1   on #E5F1EA mint 5.6:1
- *   #146C50 emerald   on #F6F5F0 page    5.9:1   on #E5F1EA mint 5.5:1
- *   #FFFFFF on #146C50 (primary button)  6.4:1
- *   #6FD3A5 emerald   on #101A15 dark    9.8:1   ← emerald TEXT on dark
- *   #146C50 emerald   on #101A15 dark    2.8:1   ← FAILS: never text on dark
- *
- * `accent-500` (#1F8A63) is 4.3:1 against white — a FILL and stroke colour
- * (dots, beams, focus rings), never body text. Green text is `text-signal`,
- * which picks the right step for whichever surface it lands on.
+ *   #0e1836 ink        on #f2f2f0 page   15.6:1
+ *   #4a5268 secondary  on #f2f2f0 page    6.9:1
+ *   #00794a green text on #f2f2f0 page    4.9:1   on #ffffff 5.5:1
+ *   #ffffff on #0e1836 (primary button)  17.5:1   on #253c80 hover 10.3:1
+ *   #0e1836 on #00c776 (selected chip)    7.8:1
+ *   #00c776 green      on #0e1836 navy    7.8:1   ← green text on dark
+ *   #00c776 green      on #f2f2f0 page    ~2:1    ← FAILS: fill only on light
  */
 const config: Config = {
   content: [
@@ -43,48 +42,40 @@ const config: Config = {
         },
         // Ink-based hairline; alpha applied at the call site (border-line/15).
         line: "rgb(var(--line) / <alpha-value>)",
-        // The specified subtle border, #DDE3DB on light. Opaque by default.
+        // Opaque subtle border: #d6d9e0 on light.
         hairline: "rgb(var(--hairline) / <alpha-value>)",
-        // Green as TEXT, theme-scoped: #146C50 on light, #6FD3A5 on dark.
+        // Green as TEXT, theme-scoped: #00794a on light, #00c776 on navy.
         signal: "rgb(var(--signal-text) / <alpha-value>)",
-        // Pale mint well — #E5F1EA on light, a deep green tint on dark.
+        // Pale green well.
         mint: "rgb(var(--mint) / <alpha-value>)",
-        // The dark feature surface, #101A15.
+        // Navy ink #0e1836 — text, primary buttons, the dark section.
         ink: "rgb(var(--ink) / <alpha-value>)",
-        emerald: {
-          DEFAULT: "#146C50",
-          hover: "#0F5A42",
-          light: "#6FD3A5",
-        },
         // Accent ramp — the single green. Read the contrast note above.
         accent: {
-          400: "#6FD3A5", // text-safe on dark
-          500: "#1F8A63", // fills and strokes only
-          600: "#17775A",
-          700: "#146C50", // text-safe on light
-          DEFAULT: "#146C50",
+          400: "#3fe0a0",
+          500: "#00c776", // fill only on light; text-safe on navy
+          600: "#00a862",
+          700: "#00794a", // green text on light
+          DEFAULT: "#00c776",
         },
-        /**
-         * Legacy ramp names, re-pointed at deep greens so older call sites
-         * (`hover:bg-brand-600`, the voice orb) land inside the palette rather
-         * than reintroducing navy.
-         */
+        // Brand ramp — navy, hue locked ~226deg.
         brand: {
-          200: "#C9DDD2",
-          300: "#9CC5B0",
-          400: "#4FA27F",
-          500: "#1F8A63",
-          600: "#0F5A42",
-          700: "#0C4835",
-          800: "#0A3628",
-          900: "#101A15",
-          DEFAULT: "#146C50",
+          200: "#b9c8f0",
+          300: "#8ba3e0",
+          400: "#5b77c9",
+          500: "#3d5aa0",
+          600: "#253c80", // LOCKED, fills only
+          700: "#1e3170",
+          800: "#16244f",
+          900: "#0e1836",
+          DEFAULT: "#253c80",
         },
+        // Rationed cobalt, kept for existing call sites.
         technical: {
-          400: "#6FD3A5",
-          500: "#1F8A63",
-          600: "#146C50",
-          DEFAULT: "#1F8A63",
+          400: "#7aa0ff",
+          500: "#3d6bff",
+          600: "#2a4fd7",
+          DEFAULT: "#3d6bff",
         },
         // shadcn semantic aliases (consumed by components/ui/button.tsx)
         border: "hsl(var(--border))",
@@ -132,14 +123,14 @@ const config: Config = {
       },
       boxShadow: {
         // Soft, ink-tinted elevation. Thin borders do most of the work.
-        "glow-sm": "0 1px 2px rgba(17, 24, 20, 0.05), 0 2px 8px -2px rgba(17, 24, 20, 0.06)",
-        "glow-md": "0 1px 2px rgba(17, 24, 20, 0.05), 0 12px 32px -12px rgba(17, 24, 20, 0.16)",
-        "glow-lg": "0 2px 4px rgba(17, 24, 20, 0.04), 0 32px 64px -24px rgba(17, 24, 20, 0.24)",
-        panel: "0 24px 64px -32px rgba(17, 24, 20, 0.35)",
+        "glow-sm": "0 1px 2px rgba(14, 24, 54, 0.05), 0 2px 8px -2px rgba(14, 24, 54, 0.06)",
+        "glow-md": "0 1px 2px rgba(14, 24, 54, 0.05), 0 12px 32px -12px rgba(14, 24, 54, 0.16)",
+        "glow-lg": "0 2px 4px rgba(14, 24, 54, 0.04), 0 32px 64px -24px rgba(14, 24, 54, 0.24)",
+        panel: "0 24px 64px -32px rgba(14, 24, 54, 0.35)",
         // Product frames: a crisp contact shadow plus a long soft fall-off.
         frame:
-          "0 0 0 1px rgba(17, 24, 20, 0.06), 0 2px 6px rgba(17, 24, 20, 0.05), 0 40px 80px -32px rgba(17, 24, 20, 0.28)",
-        accent: "0 8px 24px -10px rgba(20, 108, 80, 0.45)",
+          "0 0 0 1px rgba(14, 24, 54, 0.06), 0 2px 6px rgba(14, 24, 54, 0.05), 0 40px 80px -32px rgba(14, 24, 54, 0.28)",
+        accent: "0 8px 32px -8px rgba(0, 199, 118, 0.4)",
       },
       zIndex: {
         base: "0",

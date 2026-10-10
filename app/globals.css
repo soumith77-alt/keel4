@@ -3,91 +3,94 @@
 @tailwind utilities;
 
 /* ==========================================================================
-   Design tokens — light editorial product studio, one emerald accent.
+   Design tokens — the Keeel brand palette on a light editorial layout.
+
+   BRAND COLOURS (unchanged from the existing site):
+     navy ink    #0e1836   text, primary buttons, the dark section
+     brand navy  #253c80   locked brand colour — hover/active fills
+     green       #00c776   the accent — FILL only on light
+     green text  #00794a   green text on light (4.9:1 on the page)
 
    Surfaces and foregrounds are SPACE-SEPARATED RGB CHANNELS so Tailwind can
-   compose them as rgb(var(--token) / <alpha-value>) and opacity modifiers
-   keep working across themes. A section inverts by swapping one class
-   (`.theme-light` / `.theme-dark`); every child resolves against it.
+   compose them as rgb(var(--token) / <alpha-value>). A section inverts by
+   swapping one class (`.theme-light` / `.theme-dark`).
 
-   Contrast is measured, not eyeballed — see tailwind.config.ts for the table.
-   The one rule worth repeating here: emerald #146C50 is TEXT on light only.
-   On the dark surface it is 2.8:1, so `--signal-text` switches to #6FD3A5.
+   Contrast is measured, not eyeballed — see tailwind.config.ts.
    ========================================================================== */
 
 :root,
 .theme-light {
   color-scheme: light;
 
-  --canvas: 246 245 240; /* #F6F5F0 page */
-  --canvas-raised: 255 255 255; /* #FFFFFF surface */
-  --canvas-overlay: 237 239 233; /* #EDEFE9 recessed well */
+  --canvas: 242 242 240; /* #f2f2f0 page */
+  --canvas-raised: 255 255 255; /* #ffffff surface */
+  --canvas-overlay: 231 231 228;
 
-  --fg: 17 24 20; /* #111814 — 16.5:1 on the page */
-  --fg-muted: 82 97 88; /* #526158 — 6.0:1 */
-  --fg-subtle: 94 107 99; /* #5E6B63 — 5.1:1; labels and metadata */
+  --fg: 14 24 54; /* #0e1836 navy ink — 15.6:1 on the page */
+  --fg-muted: 74 82 104; /* #4a5268 — 6.9:1 */
+  --fg-subtle: 98 104 121; /* #626879 — 5.0:1; labels and metadata */
 
-  --line: 17 24 20; /* ink hairline, alpha at the call site */
-  --hairline: 221 227 219; /* #DDE3DB subtle border */
-  --signal-text: 20 108 80; /* #146C50 — 5.9:1 on the page */
-  --mint: 229 241 234; /* #E5F1EA */
+  --line: 14 24 54; /* ink hairline, alpha at the call site */
+  --hairline: 214 217 224; /* #d6d9e0 subtle border */
+  --signal-text: 0 121 74; /* #00794a — green text, 4.9:1 */
+  --mint: 227 244 236; /* #e3f4ec pale green well */
 
   /* shadcn aliases (consumed by components/ui/button.tsx) */
-  --background: 50 23% 95%;
-  --foreground: 146 17% 8%;
+  --background: 60 7% 95%;
+  --foreground: 226 59% 13%;
   --secondary: 0 0% 100%;
-  --secondary-foreground: 146 17% 8%;
-  --muted: 90 13% 92%;
-  --muted-foreground: 143 8% 35%;
-  --border: 103 13% 88%;
-  --input: 103 13% 88%;
-  --ring: 161 69% 25%;
+  --secondary-foreground: 226 59% 13%;
+  --muted: 60 5% 90%;
+  --muted-foreground: 226 16% 35%;
+  --border: 223 13% 86%;
+  --input: 223 13% 86%;
+  --ring: 158 100% 24%;
 }
 
 /**
- * The dark feature surface, #101A15. `.theme-obsidian` is kept as an alias so
- * older call sites resolve to the same green-black instead of a second dark.
+ * The dark brand surface, navy #0e1836. `.theme-obsidian` is kept as an alias
+ * so older call sites resolve to the same navy.
  */
 .theme-dark,
 .theme-obsidian {
   color-scheme: dark;
 
-  --canvas: 16 26 21; /* #101A15 */
-  --canvas-raised: 24 37 30; /* #18251E */
-  --canvas-overlay: 32 48 40;
+  --canvas: 14 24 54; /* #0e1836 */
+  --canvas-raised: 22 36 79; /* #16244f */
+  --canvas-overlay: 30 49 112;
 
-  --fg: 246 245 240; /* 16.3:1 */
-  --fg-muted: 167 181 172; /* #A7B5AC — 8.3:1 */
-  --fg-subtle: 138 151 143; /* #8A978F — 5.9:1 */
+  --fg: 245 247 250; /* 16.3:1 */
+  --fg-muted: 199 206 220; /* #c7cedc — 11.0:1; supporting copy */
+  --fg-subtle: 168 176 194; /* #a8b0c2 — 8.0:1; labels and metadata */
 
-  --line: 246 245 240;
-  --hairline: 44 61 52; /* #2C3D34 */
-  --signal-text: 111 211 165; /* #6FD3A5 — 9.8:1 */
-  --mint: 26 46 37;
+  --line: 245 247 250;
+  --hairline: 40 56 102; /* #283866 */
+  --signal-text: 0 199 118; /* #00c776 — 7.8:1 on navy */
+  --mint: 18 44 66;
 
-  --background: 150 24% 8%;
-  --foreground: 50 23% 95%;
-  --secondary: 147 21% 12%;
-  --secondary-foreground: 50 23% 95%;
-  --muted: 147 21% 12%;
-  --muted-foreground: 142 9% 68%;
-  --border: 147 16% 21%;
-  --input: 147 16% 21%;
-  --ring: 152 53% 63%;
+  --background: 226 59% 13%;
+  --foreground: 214 25% 97%;
+  --secondary: 224 54% 20%;
+  --secondary-foreground: 214 25% 97%;
+  --muted: 224 54% 20%;
+  --muted-foreground: 222 11% 69%;
+  --border: 225 44% 28%;
+  --input: 225 44% 28%;
+  --ring: 158 100% 39%;
 }
 
 :root {
-  --ink: 16 26 21; /* #101A15 — the dark feature surface */
+  --ink: 14 24 54; /* #0e1836 — navy ink and the dark surface */
 
-  --primary: 161 69% 25%; /* #146C50 */
+  --primary: 226 59% 13%; /* #0e1836 */
   --primary-foreground: 0 0% 100%;
   --destructive: 4 76% 40%; /* #B42318 — 6.0:1 on the page */
   --destructive-foreground: 0 0% 100%;
 
-  /* Legacy CSS-var ramps, re-pointed into the palette. */
-  --brand-600: #0f5a42;
-  --accent-500: #1f8a63;
-  --accent-700: #146c50;
+  --brand-900: #0e1836;
+  --brand-600: #253c80; /* LOCKED brand navy — fills only */
+  --accent-500: #00c776; /* fill only on light; text-safe on navy */
+  --accent-700: #00794a; /* green text on light */
 
   /**
    * Motion — one language, three tiers.
@@ -104,9 +107,10 @@
   --rise: 12px;
 
   /* Layout — a 1240px column with 20px → 56px gutters, and one section
-     rhythm: ~56px on a phone, ~120px on a desktop. */
+     rhythm: ~48px on a phone, ~92px on a desktop (tightened ~22% so the
+     homepage reads as one journey rather than a stack of islands). */
   --gutter: clamp(1.25rem, 4vw, 3.5rem);
-  --section-y: clamp(3.5rem, 2rem + 6vw, 7.5rem);
+  --section-y: clamp(3rem, 1.6rem + 4.6vw, 5.75rem);
 
   /* THE FLUID TYPE SCALE — one scale, every route. The hero headline runs
      ~41px at 390px to ~86px at 1440px. Body sits at 17–19px. */
@@ -158,7 +162,7 @@
   }
 
   ::selection {
-    background: #146c50;
+    background: #253c80;
     color: #fff;
   }
 }

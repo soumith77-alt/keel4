@@ -29,25 +29,25 @@ export function BrowserFrame({
     <div
       className={cn(
         'overflow-hidden rounded-[14px] shadow-frame',
-        dark ? 'bg-[#0B1310] ring-1 ring-white/10' : 'bg-white ring-1 ring-[#111814]/[0.07]',
+        dark ? 'bg-[#0a1128] ring-1 ring-white/10' : 'bg-white ring-1 ring-[#0e1836]/[0.07]',
         className,
       )}
     >
       <div
         className={cn(
           'flex h-[clamp(1.5rem,2.6vw,2rem)] items-center gap-[clamp(0.25rem,0.5vw,0.375rem)] px-[clamp(0.5rem,1vw,0.75rem)]',
-          dark ? 'border-b border-white/[0.06]' : 'border-b border-[#111814]/[0.06] bg-[#FBFBF8]',
+          dark ? 'border-b border-white/[0.06]' : 'border-b border-[#0e1836]/[0.06] bg-[#F8F9FB]',
         )}
         aria-hidden
       >
-        <span className="h-[clamp(0.375rem,0.6vw,0.5rem)] w-[clamp(0.375rem,0.6vw,0.5rem)] rounded-full bg-[#E0E3DD]" />
-        <span className="h-[clamp(0.375rem,0.6vw,0.5rem)] w-[clamp(0.375rem,0.6vw,0.5rem)] rounded-full bg-[#E0E3DD]" />
-        <span className="h-[clamp(0.375rem,0.6vw,0.5rem)] w-[clamp(0.375rem,0.6vw,0.5rem)] rounded-full bg-[#E0E3DD]" />
+        <span className="h-[clamp(0.375rem,0.6vw,0.5rem)] w-[clamp(0.375rem,0.6vw,0.5rem)] rounded-full bg-[#DADDE5]" />
+        <span className="h-[clamp(0.375rem,0.6vw,0.5rem)] w-[clamp(0.375rem,0.6vw,0.5rem)] rounded-full bg-[#DADDE5]" />
+        <span className="h-[clamp(0.375rem,0.6vw,0.5rem)] w-[clamp(0.375rem,0.6vw,0.5rem)] rounded-full bg-[#DADDE5]" />
         {label && (
           <span
             className={cn(
               'mx-auto max-w-[60%] truncate rounded-pill px-[0.75em] py-[0.15em] text-[clamp(0.5625rem,0.8vw,0.6875rem)] font-medium',
-              dark ? 'bg-white/[0.06] text-white/60' : 'bg-[#111814]/[0.045] text-[#526158]',
+              dark ? 'bg-white/[0.06] text-white/60' : 'bg-[#0e1836]/[0.045] text-[#4a5268]',
             )}
           >
             {label}
@@ -70,7 +70,7 @@ export function PhoneFrame({
   return (
     <div
       className={cn(
-        'overflow-hidden rounded-[clamp(1rem,2.4vw,1.75rem)] bg-[#111814] p-[clamp(0.25rem,0.5vw,0.375rem)] shadow-frame',
+        'overflow-hidden rounded-[clamp(1rem,2.4vw,1.75rem)] bg-[#0e1836] p-[clamp(0.25rem,0.5vw,0.375rem)] shadow-frame',
         className,
       )}
     >
@@ -120,6 +120,62 @@ export function Shot({
       decoding="async"
       className={cn('block h-auto w-full', className)}
     />
+  );
+}
+
+/**
+ * A focused region of a screenshot, shown at a fixed ratio. The image is
+ * positioned in percentages of the crop box, so the same rectangle is shown
+ * whichever source the browser picks from `srcSet`. Coordinates are in the
+ * full-size image's pixels.
+ */
+export type Crop = { x: number; y: number; w: number; h: number };
+
+export function CropShot({
+  src,
+  srcSmall,
+  width,
+  height,
+  crop,
+  alt,
+  sizes,
+  priority,
+  className,
+}: {
+  src: string;
+  srcSmall?: string;
+  width: number;
+  height: number;
+  crop: Crop;
+  alt: string;
+  /** Rendered width of the WHOLE image, not the crop box. */
+  sizes: string;
+  priority?: boolean;
+  className?: string;
+}) {
+  return (
+    <div
+      className={cn('relative w-full overflow-hidden', className)}
+      style={{ aspectRatio: `${crop.w} / ${crop.h}` }}
+    >
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src={src}
+        srcSet={srcSmall ? `${srcSmall} 800w, ${src} ${width}w` : undefined}
+        sizes={sizes}
+        width={width}
+        height={height}
+        alt={alt}
+        loading={priority ? 'eager' : 'lazy'}
+        decoding="async"
+        className="absolute h-auto max-w-none"
+        style={{
+          width: `${(width / crop.w) * 100}%`,
+          left: `${(-crop.x / crop.w) * 100}%`,
+          top: `${(-crop.y / crop.h) * 100}%`,
+        }}
+      />
+    </div>
   );
 }
 

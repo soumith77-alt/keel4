@@ -47,7 +47,7 @@ export const services: Service[] = [
     tier: 'primary',
     slug: 'saas-products',
     description:
-      'Product strategy, interface design and full stack engineering for MVPs, customer platforms and subscription products, designed, built and shipped as one product.',
+      'Product strategy, interface design and full stack engineering for MVPs, customer platforms, learning platforms (LMS) and subscription products, designed, built and shipped as one product.',
     shortDescription: 'Turn a product idea into software people can use.',
     icon: 'code',
     features: [
@@ -62,10 +62,11 @@ export const services: Service[] = [
     useCases: [
       'MVPs for new products',
       'Customer platforms and marketplaces',
+      'Learning platforms and LMS',
       'Subscription products'
     ],
     image: '/football-intelligence-os.webp',
-    outcomeStatement: 'MVPs, customer platforms, subscription products.',
+    outcomeStatement: 'MVPs, customer platforms, learning platforms (LMS), subscription products.',
     contactType: 'SaaS product',
   },
   {
@@ -368,6 +369,7 @@ export const serviceFeatureCards: Record<
     { title: 'Full stack engineering', desc: 'Build the application, APIs, database, and deployment layer as one maintainable product.', icon: 'code' },
     { title: 'AI features & integrations', desc: 'Add useful AI capabilities and connect the tools your product depends on.', icon: 'sparkles' },
     { title: 'Authentication, billing & analytics', desc: 'The commercial product foundation: users, permissions, subscriptions, events, and reporting.', icon: 'chart' },
+    { title: 'Learning platforms (LMS)', desc: 'Courses, cohorts, progress tracking and certificates, for training teams or selling education.', icon: 'academic' },
     { title: 'Launch & iteration', desc: 'Ship the first version, observe real usage, and turn what users do into the next build cycle.', icon: 'rocket' },
   ],
 };
@@ -409,6 +411,14 @@ export type Project = {
   category?: string;
   purpose?: string;
   built?: string[];
+  /** Two to three very short phrases for the homepage card. */
+  highlights?: string[];
+  /**
+   * A focused region of `image` for the homepage card, in the full image's
+   * pixels — one meaningful part of the product rather than the whole
+   * dashboard, which the hero already shows.
+   */
+  focus?: { x: number; y: number; w: number; h: number; label: string };
   scope?: string;
   /**
    * Honest project state, NOT a result claim. Allowed vocabulary: Built,
@@ -469,6 +479,8 @@ export const projects: Project[] = [
       'Player profiles built from attendance, wellness and match data, with a confidence score',
       'Access control enforced at the data layer, so medical information stays restricted',
     ],
+    highlights: ['Club operations in one place', 'Living player profiles', 'Data-layer access control'],
+    focus: { x: 541, y: 212, w: 971, h: 472, label: 'Tactical board, recent match and key player profile' },
     year: '2026',
     summary:
       'A platform for football clubs and academies that runs the whole operation in one place: squads, calendar, training, matchday, attendance, availability, finances and messaging. Clubs without a performance department have no reliable picture of a player, so every event logged here builds one, turning attendance, wellness and match data into a living player profile with a confidence score attached. Access is enforced at the data layer rather than in the interface, so sensitive medical information stays visible only to the people entitled to see it.',
@@ -498,6 +510,8 @@ export const projects: Project[] = [
       'A weighted friction model over the paths it genuinely reached',
       'A single page report for each institution',
     ],
+    highlights: ['Live phone-tree crawling', 'Friction scoring', 'Report per institution'],
+    focus: { x: 115, y: 95, w: 875, h: 535, label: 'Call tree mapped from live calls, coloured by outcome' },
     scope: '39 institutions audited',
     year: '2026',
     summary:
@@ -527,12 +541,14 @@ export const projects: Project[] = [
     service: 'SaaS & digital products',
     category: 'Marketplace platform · Trades',
     purpose:
-      'Connects building professionals and clients across the PACA region in both directions, without taking commission.',
+      'A two-way trades marketplace across the PACA region that takes no commission.',
     built: [
       'A two-way marketplace across nineteen trades',
       'Subscription billing across three tiers instead of commission',
       'Matching, messaging, reviews and payment inside the platform',
     ],
+    highlights: ['Two-way marketplace', 'Subscription billing', 'Matching, chat and payments'],
+    focus: { x: 518, y: 85, w: 607, h: 445, label: 'A client project workspace: brief, budget and matching status' },
     year: '2026',
     summary:
       'A marketplace connecting building professionals with clients across the PACA region, working in both directions. Clients post projects for free and receive offers, while artisans also publish their own available services for clients to browse and contact directly. Most trade marketplaces run one way and take a cut of every job, which pushes artisans off the platform the moment a relationship forms, so this one earns from monthly subscriptions across three tiers and takes no commission at all. Matching, messaging, reviews and payment all sit inside the platform, across nineteen trades.',

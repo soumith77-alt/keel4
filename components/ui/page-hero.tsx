@@ -2,6 +2,7 @@ import * as React from "react";
 
 import { cn } from "@/lib/utils";
 import { Reveal } from "@/components/ui/reveal";
+import { Eyebrow } from "@/components/ui/keel";
 
 /**
  * The standard interior-page hero: eyebrow, display headline, lead. Shared by
@@ -25,10 +26,7 @@ export function PageHero({ eyebrow, title, lead, className }: PageHeroProps) {
     >
       <div className="site-container">
         <Reveal>
-          <span className="type-label inline-flex items-center gap-2.5 text-signal">
-            <span aria-hidden className="h-1.5 w-1.5 rounded-full bg-emerald" />
-            {eyebrow}
-          </span>
+          <Eyebrow as="span">{eyebrow}</Eyebrow>
         </Reveal>
         <Reveal delay={0.06}>
           <h1 className="type-display mt-5 max-w-4xl text-fg text-balance">

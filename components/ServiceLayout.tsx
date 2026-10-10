@@ -10,6 +10,7 @@ import { Section } from "@/components/ui/section";
 import { SectionHeading } from "@/components/ui/section-heading";
 import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
+import { KeelMark } from "@/components/ui/keel";
 import { GlowCard } from "@/components/ui/glow-card";
 import { Reveal, RevealGroup, RevealItem } from "@/components/ui/reveal";
 import { DeferredWebGL } from "@/components/ui/deferred-webgl";
@@ -18,10 +19,10 @@ import VoiceDemoPlayer from "@/components/VoiceDemoPlayer";
 import { AutomationDemo, VideoDemo } from "@/components/ServiceDemos";
 import { BrowserFrame, ConceptTag, MockCanvas, PhoneFrame, Shot } from "@/components/home/frames";
 import {
-  BookingPhoneMock,
-  ClinicSiteMock,
   CrmPipelineMock,
   CrmRecordMock,
+  StayPhoneMock,
+  StaySiteMock,
 } from "@/components/home/mocks";
 
 /**
@@ -137,23 +138,20 @@ function ServiceHeroMedia({ service }: ServiceLayoutProps) {
       return (
         <figure>
           <div className="relative pb-[12%]">
-            <BrowserFrame label="Linden Physio">
+            <BrowserFrame label="Halden">
               <MockCanvas ratio={1.5}>
-                <ClinicSiteMock />
+                <StaySiteMock />
               </MockCanvas>
             </BrowserFrame>
             <div className="absolute bottom-0 right-[4%] w-[24%]">
               <PhoneFrame>
                 <MockCanvas ratio={0.5} units={40}>
-                  <BookingPhoneMock />
+                  <StayPhoneMock />
                 </MockCanvas>
               </PhoneFrame>
             </div>
             <ConceptTag className="absolute -top-3 left-4 z-raised" />
           </div>
-          <figcaption className="mt-4 text-sm text-fg-muted">
-            Illustrative concept of a clinic website and booking step. Not client work.
-          </figcaption>
         </figure>
       );
     case "crm-business-systems":
@@ -165,16 +163,13 @@ function ServiceHeroMedia({ service }: ServiceLayoutProps) {
                 <CrmPipelineMock />
               </MockCanvas>
             </BrowserFrame>
-            <div className="absolute bottom-0 left-[-3%] w-[36%] overflow-hidden rounded-[14px] shadow-frame ring-1 ring-[#111814]/[0.07]">
+            <div className="absolute bottom-0 left-[-3%] w-[36%] overflow-hidden rounded-[14px] shadow-frame ring-1 ring-[#0e1836]/[0.07]">
               <MockCanvas ratio={1.05} units={24}>
                 <CrmRecordMock />
               </MockCanvas>
             </div>
             <ConceptTag className="absolute -top-3 right-4 z-raised" />
           </div>
-          <figcaption className="mt-4 text-sm text-fg-muted">
-            Illustrative concept of a custom CRM pipeline and contact record. Not client work.
-          </figcaption>
         </figure>
       );
     case "saas-products":
@@ -227,7 +222,7 @@ export default function ServiceLayout({ service }: ServiceLayoutProps) {
                 href="/services"
                 className="type-label inline-flex items-center gap-2.5 text-signal underline-offset-4 hover:underline"
               >
-                <span aria-hidden className="h-1.5 w-1.5 rounded-full bg-emerald" />
+                <KeelMark className="-translate-y-px" />
                 {service.title}
               </Link>
             </Reveal>
@@ -290,7 +285,7 @@ export default function ServiceLayout({ service }: ServiceLayoutProps) {
               <div className="mt-10 flex flex-col gap-3 sm:flex-row sm:items-center">
                 <Button asChild size="lg">
                   <Link href={contactHref}>
-                    Discuss your project
+                    Start a project
                     <ArrowRight className="h-4 w-4" aria-hidden />
                   </Link>
                 </Button>

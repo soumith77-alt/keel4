@@ -62,6 +62,7 @@ export const metadata: Metadata = {
     "software studio",
     "SaaS development",
     "MVP development",
+    "LMS development",
     "custom CRM development",
     "business systems",
     "client portal development",

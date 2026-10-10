@@ -18,7 +18,7 @@ const WIDTHS = {
  * `theme-dark` re-point the --canvas / --fg / --line variables for the whole
  * subtree, so inverting a band costs one prop and every child follows.
  *
- * `dark` is the #101A15 feature surface, full bleed with a hard edge.
+ * `dark` is the #0e1836 feature surface, full bleed with a hard edge.
  */
 const TONES = {
   light: "theme-light bg-surface text-fg",

@@ -61,7 +61,7 @@ export function GlowCard({ children, className, innerClassName }: GlowCardProps)
         className="pointer-events-none absolute inset-0 rounded-card opacity-0 transition-opacity duration-base ease-out group-hover/glow:opacity-100"
         style={{
           background:
-            "radial-gradient(16rem 16rem at var(--glow-x) var(--glow-y), rgba(20,108,80,0.6), rgba(20,108,80,0.15) 45%, transparent 70%)",
+            "radial-gradient(16rem 16rem at var(--glow-x) var(--glow-y), rgba(0,199,118,0.7), rgba(14,24,54,0.25) 45%, transparent 70%)",
         }}
       />
 

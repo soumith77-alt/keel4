@@ -14,8 +14,8 @@ import { cn } from '@/lib/utils';
  * stay at the base em so spacing never compounds.
  */
 
-const INK = 'text-[#111814]';
-const MUTED = 'text-[#5E6B63]';
+const INK = 'text-[#0e1836]';
+const MUTED = 'text-[#626879]';
 
 /* ------------------------------------------------------------------------ */
 /* CRM pipeline                                                              */
@@ -52,11 +52,11 @@ const PIPELINE: { stage: string; deals: Deal[] }[] = [
   },
 ];
 
-function Avatar({ initials, className }: { initials: string; className?: string }) {
+export function Avatar({ initials, className }: { initials: string; className?: string }) {
   return (
     <span
       className={cn(
-        'inline-flex h-[1.6em] w-[1.6em] items-center justify-center rounded-full bg-[#E5F1EA] text-[0.62em] font-semibold text-[#146C50]',
+        'inline-flex h-[1.6em] w-[1.6em] items-center justify-center rounded-full bg-[#E6EBF7] text-[0.62em] font-semibold text-[#253c80]',
         className,
       )}
     >
@@ -65,11 +65,11 @@ function Avatar({ initials, className }: { initials: string; className?: string 
   );
 }
 
-function SideNav({ items, active, brand }: { items: string[]; active: number; brand: string }) {
+export function SideNav({ items, active, brand }: { items: string[]; active: number; brand: string }) {
   return (
-    <div className="flex w-[10.5em] shrink-0 flex-col border-r border-[#E6EAE4] bg-[#F7F8F5] p-[1em]">
+    <div className="flex w-[10.5em] shrink-0 flex-col border-r border-[#E3E6EC] bg-[#F6F7FA] p-[1em]">
       <div className="flex items-center gap-[0.5em]">
-        <span className="h-[1.4em] w-[1.4em] rounded-[0.35em] bg-[#146C50]" />
+        <span className="h-[1.4em] w-[1.4em] rounded-[0.35em] bg-[#253c80]" />
         <span className={cn('text-[0.8em] font-semibold', INK)}>{brand}</span>
       </div>
       <div className="mt-[1.4em] flex flex-col gap-[0.25em]">
@@ -78,7 +78,7 @@ function SideNav({ items, active, brand }: { items: string[]; active: number; br
             key={item}
             className={cn(
               'rounded-[0.4em] px-[0.6em] py-[0.45em] text-[0.72em]',
-              i === active ? 'bg-white font-semibold text-[#111814] shadow-[0_1px_2px_rgba(17,24,20,0.08)]' : MUTED,
+              i === active ? 'bg-white font-semibold text-[#0e1836] shadow-[0_1px_2px_rgba(14,24,54,0.08)]' : MUTED,
             )}
           >
             {item}
@@ -103,10 +103,10 @@ export function CrmPipelineMock({ compact = false }: { compact?: boolean }) {
             <p className={cn('mt-[0.2em] text-[0.68em]', MUTED)}>8 open deals · this quarter</p>
           </div>
           <div className="flex items-center gap-[0.5em]">
-            <span className={cn('rounded-[0.45em] border border-[#E6EAE4] px-[0.7em] py-[0.35em] text-[0.68em]', MUTED)}>
+            <span className={cn('rounded-[0.45em] border border-[#E3E6EC] px-[0.7em] py-[0.35em] text-[0.68em]', MUTED)}>
               All owners
             </span>
-            <span className="rounded-[0.45em] bg-[#146C50] px-[0.8em] py-[0.35em] text-[0.68em] font-semibold text-white">
+            <span className="rounded-[0.45em] bg-[#253c80] px-[0.8em] py-[0.35em] text-[0.68em] font-semibold text-white">
               New deal
             </span>
           </div>
@@ -117,7 +117,7 @@ export function CrmPipelineMock({ compact = false }: { compact?: boolean }) {
           style={{ gridTemplateColumns: `repeat(${columns.length}, minmax(0, 1fr))` }}
         >
           {columns.map((col) => (
-            <div key={col.stage} className="flex min-w-0 flex-col rounded-[0.6em] bg-[#F4F6F2] p-[0.55em]">
+            <div key={col.stage} className="flex min-w-0 flex-col rounded-[0.6em] bg-[#F2F4F8] p-[0.55em]">
               <div className="flex items-center justify-between px-[0.2em] pb-[0.5em]">
                 <span className={cn('text-[0.66em] font-semibold uppercase tracking-[0.06em]', MUTED)}>
                   {col.stage}
@@ -129,8 +129,8 @@ export function CrmPipelineMock({ compact = false }: { compact?: boolean }) {
                   <div
                     key={d.name}
                     className={cn(
-                      'rounded-[0.5em] border bg-white p-[0.6em] shadow-[0_1px_2px_rgba(17,24,20,0.05)]',
-                      d.hot ? 'border-[#146C50]/40' : 'border-[#E6EAE4]',
+                      'rounded-[0.5em] border bg-white p-[0.6em] shadow-[0_1px_2px_rgba(14,24,54,0.05)]',
+                      d.hot ? 'border-[#253c80]/40' : 'border-[#E3E6EC]',
                     )}
                   >
                     <p className={cn('truncate text-[0.74em] font-semibold', INK)}>{d.name}</p>
@@ -139,7 +139,7 @@ export function CrmPipelineMock({ compact = false }: { compact?: boolean }) {
                       <span className={cn('text-[0.68em] font-semibold tabular-nums', INK)}>{d.value}</span>
                       <span className="flex items-center gap-[0.3em]">
                         {d.tag && !compact && (
-                          <span className="rounded-full bg-[#E5F1EA] px-[0.55em] py-[0.1em] text-[0.56em] font-medium text-[#146C50]">
+                          <span className="rounded-full bg-[#E6EBF7] px-[0.55em] py-[0.1em] text-[0.56em] font-medium text-[#253c80]">
                             {d.tag}
                           </span>
                         )}
@@ -168,7 +168,7 @@ export function CrmRecordMock() {
   return (
     <div className="flex h-full flex-col bg-white p-[1.6em]">
       <div className="flex items-center gap-[0.8em]">
-        <span className="inline-flex h-[2.6em] w-[2.6em] items-center justify-center rounded-[0.7em] bg-[#E5F1EA] text-[1em] font-semibold text-[#146C50]">
+        <span className="inline-flex h-[2.6em] w-[2.6em] items-center justify-center rounded-[0.7em] bg-[#E6EBF7] text-[1em] font-semibold text-[#253c80]">
           N
         </span>
         <div className="min-w-0">
@@ -183,10 +183,10 @@ export function CrmRecordMock() {
               <span
                 className={cn(
                   'mt-[0.35em] h-[0.75em] w-[0.75em] shrink-0 rounded-full',
-                  e.done ? 'bg-[#146C50]' : 'border-[0.15em] border-[#C9D3CB] bg-white',
+                  e.done ? 'bg-[#253c80]' : 'border-[0.15em] border-[#C8CEDA] bg-white',
                 )}
               />
-              {i < events.length - 1 && <span className="w-[0.1em] flex-1 bg-[#E6EAE4]" />}
+              {i < events.length - 1 && <span className="w-[0.1em] flex-1 bg-[#E3E6EC]" />}
             </div>
             <div className="pb-[1em]">
               <p className={cn('text-[0.95em] font-medium', INK)}>{e.t}</p>
@@ -200,201 +200,146 @@ export function CrmRecordMock() {
 }
 
 /* ------------------------------------------------------------------------ */
-/* SaaS application                                                          */
+/* Websites — deliberately NOT in the app idiom: a client's own palette,     */
+/* editorial serif type, full-bleed art and one obvious next step.           */
+/* The wave art is hand-written SVG in the layered-wave style haikei.app     */
+/* generates, so there is no image request and it scales with the canvas.    */
 /* ------------------------------------------------------------------------ */
 
-const BARS = [38, 52, 46, 61, 58, 70, 66, 78, 74, 86, 82, 94];
+const SERIF = 'font-[Georgia,"Times_New_Roman",serif]';
 
-export function SaasAppMock() {
+function SeaArt({ className, sun = true }: { className?: string; sun?: boolean }) {
+  // Unique per instance: the art appears several times on one page.
+  const id = React.useId().replace(/:/g, '');
   return (
-    <div className="flex h-full bg-white">
-      <SideNav brand="Orbit" active={0} items={['Overview', 'Accounts', 'Billing', 'Usage', 'Settings']} />
-      <div className="flex min-w-0 flex-1 flex-col gap-[1em] p-[1.3em]">
-        <div className="flex items-center justify-between">
-          <p className={cn('text-[1.05em] font-semibold tracking-[-0.01em]', INK)}>Overview</p>
-          <span className={cn('rounded-[0.45em] border border-[#E6EAE4] px-[0.7em] py-[0.35em] text-[0.68em]', MUTED)}>
-            Last 30 days
-          </span>
-        </div>
-        <div className="grid grid-cols-3 gap-[0.7em]">
-          {[
-            ['Active accounts', '1,284'],
-            ['Trials started', '136'],
-            ['Plan upgrades', '42'],
-          ].map(([k, v]) => (
-            <div key={k} className="rounded-[0.6em] border border-[#E6EAE4] p-[0.8em]">
-              <p className={cn('text-[0.64em]', MUTED)}>{k}</p>
-              <p className={cn('mt-[0.2em] text-[1.25em] font-semibold tabular-nums tracking-[-0.02em]', INK)}>{v}</p>
-            </div>
-          ))}
-        </div>
-        <div className="flex min-h-0 flex-1 flex-col rounded-[0.6em] border border-[#E6EAE4] p-[0.9em]">
-          <div className="flex items-center justify-between">
-            <p className={cn('text-[0.74em] font-semibold', INK)}>Weekly active usage</p>
-            <span className="flex items-center gap-[0.35em] text-[0.62em] text-[#146C50]">
-              <span className="h-[0.5em] w-[0.5em] rounded-full bg-[#146C50]" />
-              Live
-            </span>
-          </div>
-          <div className="mt-[0.8em] flex min-h-0 flex-1 items-end gap-[0.45em]">
-            {BARS.map((h, i) => (
-              <span
-                key={i}
-                className={cn('flex-1 rounded-t-[0.25em]', i === BARS.length - 1 ? 'bg-[#146C50]' : 'bg-[#CFE3D7]')}
-                style={{ height: `${h}%` }}
-              />
-            ))}
-          </div>
-        </div>
-        <div className="rounded-[0.6em] border border-[#E6EAE4]">
-          {[
-            ['Kestrel Analytics', 'Team', 'Upgraded'],
-            ['Pinecone Legal', 'Starter', 'Trial'],
-          ].map(([n, p, s], i) => (
-            <div
-              key={n}
-              className={cn('flex items-center justify-between px-[0.9em] py-[0.55em]', i > 0 && 'border-t border-[#E6EAE4]')}
-            >
-              <span className={cn('text-[0.7em] font-medium', INK)}>{n}</span>
-              <span className={cn('text-[0.64em]', MUTED)}>{p}</span>
-              <span className="rounded-full bg-[#E5F1EA] px-[0.6em] py-[0.1em] text-[0.6em] font-medium text-[#146C50]">
-                {s}
-              </span>
-            </div>
-          ))}
-        </div>
-      </div>
-    </div>
+    <svg viewBox="0 0 600 340" preserveAspectRatio="xMidYMid slice" className={cn('h-full w-full', className)}>
+      <defs>
+        <linearGradient id={`sky-${id}`} x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stopColor="#F4B48C" />
+          <stop offset="0.45" stopColor="#EE9677" />
+          <stop offset="1" stopColor="#D9786D" />
+        </linearGradient>
+      </defs>
+      <rect width="600" height="340" fill={`url(#sky-${id})`} />
+      {sun && <circle cx="430" cy="150" r="54" fill="#FBE3C8" opacity="0.92" />}
+      <path d="M0 176 C 80 160 150 186 230 174 S 380 150 460 168 S 560 182 600 170 L600 340 L0 340Z" fill="#4E8A93" />
+      <path d="M0 204 C 90 188 170 214 260 200 S 420 182 500 198 S 570 210 600 202 L600 340 L0 340Z" fill="#2F6E7C" />
+      <path d="M0 236 C 70 222 160 246 250 232 S 400 214 480 230 S 560 244 600 236 L600 340 L0 340Z" fill="#1F5464" />
+      <path d="M0 272 C 100 256 190 282 300 268 S 470 252 600 266 L600 340 L0 340Z" fill="#163F4D" />
+      <path d="M0 306 C 120 292 230 316 340 304 S 520 290 600 300 L600 340 L0 340Z" fill="#E9D5B7" />
+    </svg>
   );
 }
 
-/* ------------------------------------------------------------------------ */
-/* Websites — deliberately NOT in the app idiom: warm palette, editorial     */
-/* type, imagery blocks, a single clear next step.                           */
-/* ------------------------------------------------------------------------ */
-
-export function ClinicSiteMock() {
-  return (
-    <div className="flex h-full flex-col bg-[#F4EEE6] text-[#2B2420]">
-      <div className="flex items-center justify-between px-[2.4em] py-[1.2em]">
-        <span className="text-[1em] font-semibold tracking-[-0.02em]">Linden Physio</span>
-        <div className="flex items-center gap-[1.6em] text-[0.72em] text-[#6B5E55]">
-          <span>Treatments</span>
-          <span>Team</span>
-          <span>Prices</span>
-          <span className="rounded-full bg-[#2B2420] px-[1.1em] py-[0.5em] font-semibold text-[#F4EEE6]">Book a visit</span>
-        </div>
-      </div>
-      <div className="grid flex-1 grid-cols-[1.05fr_1fr] gap-[2em] px-[2.4em] pb-[2em] pt-[1.2em]">
-        <div className="flex flex-col justify-center">
-          <span className="text-[0.7em] font-semibold uppercase tracking-[0.14em] text-[#B4532A]">Sports & recovery</span>
-          <p className="mt-[0.4em] text-[3.3em] font-semibold leading-[0.98] tracking-[-0.04em]">Move well again.</p>
-          <p className="mt-[0.9em] max-w-[22em] text-[0.88em] leading-[1.5] text-[#6B5E55]">
-            Assessment, treatment and a plan you can follow at home. Same-week appointments.
-          </p>
-          <div className="mt-[1.4em] flex items-center gap-[0.8em]">
-            <span className="rounded-full bg-[#B4532A] px-[1.4em] py-[0.7em] text-[0.8em] font-semibold text-white">
-              Book an assessment
-            </span>
-            <span className="text-[0.8em] font-medium underline underline-offset-[0.3em]">See treatments</span>
-          </div>
-        </div>
-        <div className="relative overflow-hidden rounded-[1.2em] bg-[linear-gradient(160deg,#E9B892_0%,#C9784E_55%,#8E4A2D_100%)]">
-          <span className="absolute -right-[3em] -top-[3em] h-[14em] w-[14em] rounded-full bg-[#F4D7BE]/60" />
-          <span className="absolute bottom-[2em] left-[2em] h-[6em] w-[6em] rounded-full bg-[#F4EEE6]/25" />
-          <span className="absolute bottom-[1.2em] right-[1.2em] rounded-[0.8em] bg-[#F4EEE6] px-[1em] py-[0.7em] text-[0.7em] font-semibold shadow-[0_0.6em_1.4em_-0.6em_rgba(43,36,32,0.5)]">
-            Next available · Tue 10:30
-          </span>
-        </div>
-      </div>
-      <div className="grid grid-cols-3 border-t border-[#E3D8CB]">
-        {['Sports injury', 'Back & neck', 'Post-surgery rehab'].map((s, i) => (
-          <div key={s} className={cn('px-[2.4em] py-[1em]', i > 0 && 'border-l border-[#E3D8CB]')}>
-            <p className="text-[0.8em] font-semibold">{s}</p>
-            <p className="mt-[0.2em] text-[0.66em] text-[#6B5E55]">45 min · in clinic</p>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-/** Phone view of the same site: the booking step. Canvas ratio ~0.5. */
-export function BookingPhoneMock() {
-  return (
-    <div className="flex h-full flex-col bg-[#F4EEE6] px-[3.6em] pb-[3em] pt-[4em] text-[#2B2420]">
-      <p className="text-[2.2em] font-semibold tracking-[-0.03em]">Choose a time</p>
-      <p className="mt-[0.4em] text-[1.6em] text-[#6B5E55]">Initial assessment · 45 min</p>
-      <div className="mt-[2.4em] grid grid-cols-3 gap-[1.2em]">
-        {['Mon 14', 'Tue 15', 'Wed 16'].map((d, i) => (
-          <span
-            key={d}
-            className={cn(
-              'rounded-[1.2em] py-[1em] text-center text-[1.5em] font-semibold',
-              i === 1 ? 'bg-[#2B2420] text-[#F4EEE6]' : 'bg-white',
-            )}
-          >
-            {d}
-          </span>
-        ))}
-      </div>
-      <div className="mt-[2.4em] grid grid-cols-2 gap-[1.2em]">
-        {['09:00', '10:30', '12:15', '15:45'].map((t) => (
-          <span
-            key={t}
-            className={cn(
-              'rounded-[1.2em] border py-[1.2em] text-center text-[1.6em] font-medium tabular-nums',
-              t === '10:30' ? 'border-[#B4532A] bg-[#B4532A]/10 text-[#8E3D1C]' : 'border-[#E3D8CB] bg-white',
-            )}
-          >
-            {t}
-          </span>
-        ))}
-      </div>
-      <span className="mt-auto rounded-full bg-[#B4532A] py-[1.3em] text-center text-[1.7em] font-semibold text-white">
-        Confirm booking
-      </span>
-    </div>
-  );
-}
-
-/** Ecommerce storefront — the Websites tile in the solutions grid. */
-export function StoreSiteMock() {
-  const products = [
-    { n: 'House blend', p: '$16', c: 'bg-[#2F4B6E]' },
-    { n: 'Single origin', p: '$19', c: 'bg-[#C8873A]' },
-    { n: 'Decaf', p: '$17', c: 'bg-[#7C8F6A]' },
+/** Desktop homepage of a fictional coastal-stays brand. Canvas 60em × 40em. */
+export function StaySiteMock() {
+  const stays = [
+    { n: 'The Dune House', p: 'from $240', tint: 'hue-rotate-0' },
+    { n: 'Harbour Loft', p: 'from $185', tint: 'hue-rotate-[-18deg] saturate-[0.85]' },
+    { n: 'Lighthouse Cottage', p: 'from $310', tint: 'hue-rotate-[14deg]' },
   ];
   return (
-    <div className="flex h-full flex-col bg-[#FBF7F0] text-[#1F2A37]">
-      <div className="flex items-center justify-between px-[2em] py-[1.1em]">
-        <span className="text-[1.05em] font-bold tracking-[-0.02em]">Fieldhouse</span>
-        <div className="flex items-center gap-[1.3em] text-[0.78em] text-[#5B6573]">
-          <span>Shop</span>
-          <span>Subscriptions</span>
-          <span className="rounded-full border border-[#1F2A37] px-[0.9em] py-[0.3em] font-semibold text-[#1F2A37]">Cart · 2</span>
+    <div className="relative flex h-full flex-col bg-[#FBF6EE] text-[#1D3B45]">
+      <div className="relative h-[25em] shrink-0 overflow-hidden">
+        <SeaArt className="absolute inset-0" />
+        <div className="relative flex items-center justify-between px-[2.4em] py-[1.3em] text-white">
+          <span className={cn('text-[1.25em] tracking-[0.02em]', SERIF)}>Halden</span>
+          <div className="flex items-center gap-[1.6em] text-[0.74em] text-white/90">
+            <span>Stays</span>
+            <span>Experiences</span>
+            <span>Journal</span>
+            <span className="rounded-full bg-white px-[1.1em] py-[0.5em] font-semibold text-[#1D3B45]">Book a stay</span>
+          </div>
+        </div>
+        <div className="relative px-[2.4em] pt-[2.6em] text-white">
+          <span className="text-[0.68em] font-semibold uppercase tracking-[0.22em] text-white/85">Coastal stays · Norfolk</span>
+          <p className={cn('mt-[0.35em] max-w-[11em] text-[3.5em] leading-[1.02] tracking-[-0.01em]', SERIF)}>
+            Slow days by the sea.
+          </p>
         </div>
       </div>
-      <div className="mx-[2em] flex items-end justify-between rounded-[1em] bg-[#1F2A37] px-[1.8em] py-[1.6em] text-[#FBF7F0]">
-        <div>
-          <p className="text-[0.66em] font-semibold uppercase tracking-[0.16em] text-[#E9B872]">Roasted this week</p>
-          <p className="mt-[0.3em] text-[2.2em] font-bold leading-[1] tracking-[-0.035em]">Coffee worth the wait.</p>
-        </div>
-        <span className="rounded-full bg-[#E9B872] px-[1.2em] py-[0.6em] text-[0.78em] font-bold text-[#1F2A37]">Shop beans</span>
+
+      {/* The next step: a booking bar straddling the hero edge. */}
+      <div className="relative z-10 mx-[2.4em] -mt-[2.6em] flex items-stretch rounded-[1em] bg-white p-[0.5em] shadow-[0_1.2em_2.4em_-1em_rgba(29,59,69,0.45)]">
+        {[
+          ['Check in', 'Fri 14 Mar'],
+          ['Check out', 'Sun 16 Mar'],
+          ['Guests', '2 adults'],
+        ].map(([k, v], i) => (
+          <div key={k} className={cn('flex-1 px-[1em] py-[0.45em]', i > 0 && 'border-l border-[#EDE3D4]')}>
+            <p className="text-[0.6em] font-semibold uppercase tracking-[0.14em] text-[#8A7A66]">{k}</p>
+            <p className="mt-[0.15em] text-[0.86em] font-semibold">{v}</p>
+          </div>
+        ))}
+        <span className="flex items-center rounded-[0.7em] bg-[#1D3B45] px-[1.4em] text-[0.8em] font-semibold text-white">
+          Check availability
+        </span>
       </div>
-      <div className="grid flex-1 grid-cols-3 gap-[1em] px-[2em] py-[1.2em]">
-        {products.map((p) => (
-          <div key={p.n} className="flex flex-col">
-            <div className="flex flex-1 items-center justify-center rounded-[0.8em] bg-[#EFE7DA]">
-              <span className={cn('h-[62%] w-[42%] rounded-[0.5em_0.5em_0.9em_0.9em]', p.c)} />
+
+      <div className="grid flex-1 grid-cols-3 gap-[1.1em] px-[2.4em] pb-[1.6em] pt-[1.4em]">
+        {stays.map((s) => (
+          <div key={s.n} className="flex min-h-0 flex-col">
+            <div className={cn('min-h-0 flex-1 overflow-hidden rounded-[0.8em]', s.tint)}>
+              <SeaArt sun={false} />
             </div>
-            <div className="mt-[0.5em] flex items-center justify-between">
-              <span className="text-[0.8em] font-semibold">{p.n}</span>
-              <span className="text-[0.8em] text-[#5B6573]">{p.p}</span>
+            <div className="mt-[0.55em] flex items-baseline justify-between">
+              <span className={cn('text-[0.92em]', SERIF)}>{s.n}</span>
+              <span className="text-[0.66em] text-[#8A7A66]">{s.p}</span>
             </div>
           </div>
         ))}
       </div>
+    </div>
+  );
+}
+
+/** The same brand on a phone: choosing dates. Canvas 40em × 80em. */
+export function StayPhoneMock() {
+  const days = ['12', '13', '14', '15', '16', '17', '18'];
+  return (
+    <div className="flex h-full flex-col bg-[#FBF6EE] text-[#1D3B45]">
+      <div className="relative h-[34em] shrink-0 overflow-hidden">
+        <SeaArt className="absolute inset-0" />
+        <div className="relative flex items-center justify-between px-[2.4em] pt-[3em] text-white">
+          <span className={cn('text-[2em]', SERIF)}>Halden</span>
+          <span className="flex flex-col gap-[0.35em]">
+            <span className="block h-[0.22em] w-[2em] rounded bg-white" />
+            <span className="block h-[0.22em] w-[2em] rounded bg-white" />
+          </span>
+        </div>
+        {/* Margin on the wrapper, not the text: em margins on a 3.4em
+            element would compound. */}
+        <div className="relative mt-[5em] px-[2.4em]">
+          <p className={cn('text-[3.4em] leading-[1.05] text-white', SERIF)}>The Dune House</p>
+        </div>
+      </div>
+      <div className="relative z-10 mx-[1.6em] -mt-[4em] rounded-[1.6em] bg-white p-[2em] shadow-[0_1.4em_3em_-1.4em_rgba(29,59,69,0.5)]">
+        <p className="text-[1.2em] font-semibold uppercase tracking-[0.14em] text-[#8A7A66]">March</p>
+        <div className="mt-[1em] grid grid-cols-7 gap-[0.5em]">
+          {days.map((d) => {
+            const inRange = d === '14' || d === '15' || d === '16';
+            const edge = d === '14' || d === '16';
+            return (
+              <span
+                key={d}
+                className={cn(
+                  'rounded-[0.8em] py-[0.7em] text-center text-[1.5em] font-semibold tabular-nums',
+                  edge ? 'bg-[#1D3B45] text-white' : inRange ? 'bg-[#E6EEF0]' : 'text-[#8A7A66]',
+                )}
+              >
+                {d}
+              </span>
+            );
+          })}
+        </div>
+        <div className="mt-[1.6em] flex items-center justify-between border-t border-[#EDE3D4] pt-[1.4em]">
+          <span className="text-[1.5em]">2 nights · 2 adults</span>
+          <span className="text-[1.6em] font-semibold">$480</span>
+        </div>
+      </div>
+      <span className="mx-[1.6em] mb-[2.4em] mt-auto rounded-full bg-[#E07A5F] py-[1.3em] text-center text-[1.7em] font-semibold text-white">
+        Book a stay
+      </span>
     </div>
   );
 }
